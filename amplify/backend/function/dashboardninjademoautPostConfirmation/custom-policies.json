@@ -1,0 +1,11 @@
+[
+  {
+    "Effect": "Allow",
+    "Action": ["dynamodb:PutItem", "cognito-idp:*"],
+    "Resource": [
+      "arn:aws:dynamodb:ap-southeast-1:847054957517:table/Agent-7witoydctvhqlhvfuo7tg2hvtq-dev",
+      "arn:aws:dynamodb:ap-southeast-1:847054957517:table/Client-7witoydctvhqlhvfuo7tg2hvtq-dev",
+      "arn:aws:cognito-idp:ap-southeast-1:847054957517:userpool/ap-southeast-1_vtgyeapTf"
+    ]
+  }
+]

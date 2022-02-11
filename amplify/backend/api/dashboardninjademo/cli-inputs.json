@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "dashboardninjademo",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/sedatif2/dashboard-gamification-demo/amplify/backend/api/dashboardninjademo/schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authdashboardninjademoaut"
+    },
+    "conflictResolution": {},
+    "additionalAuthTypes": []
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "AppSyncApiName": "dashboardninjademo",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authdashboardninjademoaut",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2022-02-11T10:17:02.132Z"
+}

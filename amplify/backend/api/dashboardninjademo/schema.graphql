@@ -1,0 +1,212 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+# input AMPLIFY {
+#   globalAuthRule: AuthRule = { allow: public }
+# } # FOR TESTING ONLY!
+
+type Client @model @searchable {
+  id: ID
+  category: String
+    @index(
+      name: "clientByfirstName"
+      sortKeyFields: ["firstName"]
+      queryField: "clientByfirstName"
+    )
+    @index(
+      name: "clientBylastName"
+      sortKeyFields: ["lastName"]
+      queryField: "clientBylastName"
+    )
+  firstName: String!
+  lastName: String!
+  email: AWSEmail!
+  phone: AWSPhone!
+  companyName: String!
+  website: AWSURL!
+  country: String!
+  campaigns: [Campaign]! @hasMany # @hasMany(indexName: "byEndDate", fields: "id") #field could be category, firstName, LastName
+  notes: String
+}
+# add campaigns together
+type Agent @model {
+  # @auth(
+  #   rules: [
+  #     { allow: groups, groups: ["Admin"] }
+  #     { allow: owner, ownerField: "username", operations: [read] }
+  #   ]
+  # )
+  id: ID
+  category: String
+    @index(
+      name: "agentByDailyPoints"
+      sortKeyFields: ["dailyPoints"]
+      queryField: "agentByDailyPoints"
+    )
+    @index(
+      name: "agentByWeeklyPoints"
+      sortKeyFields: ["weeklyPoints"]
+      queryField: "agentByWeeklyPoints"
+    )
+    @index(
+      name: "agentByMonthlyPoints"
+      sortKeyFields: ["monthlyPoints"]
+      queryField: "agentByMonthlyPoints"
+    )
+    @index(
+      name: "agentByTotalPoints"
+      sortKeyFields: ["totalPoints"]
+      queryField: "agentByTotalPoints"
+    )
+    @index(
+      name: "agentByName"
+      sortKeyFields: ["name"]
+      queryField: "agentByName"
+    )
+  name: String!
+  email: AWSEmail!
+  teamID: ID @index(name: "byTeam", sortKeyFields: ["name"]) # or teamName: Team @belongsTo
+  campaigns: [Campaign]! @hasMany # before @connection(name: "CampaignAgent")
+  kpis: [Kpi]! @manyToMany(relationName: "AgentKpis") # kpis: [Kpi]! @connection(name: "AgentKpis", sortField: "target")
+  dailyReports: [DailyReport]! @hasMany # dailyReports: [DailyReport]! @connection(name: "AgentDailyReports")
+  dailyPoints: Int
+  weeklyPoints: Int
+  monthlyPoints: Int
+  # yearPoints: [YearPoints]! @connection(name: "YearPoints", sortField: "date")
+  totalPoints: Int
+}
+
+type Campaign @model @searchable {
+  id: ID
+  name: String!
+  category: String
+    @index(
+      name: "campaignById"
+      sortKeyFields: ["id"]
+      queryField: "campaignById"
+    )
+    @index(
+      name: "campaignByCreatedAt"
+      sortKeyFields: ["createdAt"]
+      queryField: "campaignByCreatedAt"
+    )
+  type: String!
+    @index(
+      name: "campaignByType"
+      sortKeyFields: ["length"]
+      queryField: "campaignTypeByLength"
+    )
+    @index(
+      name: "byEndDate"
+      sortKeyFields: ["endDate"]
+      queryField: "campaignByEndDate"
+    )
+  client: Client! @belongsTo
+  agent: Agent! @belongsTo
+  startDate: AWSDate!
+  endDate: AWSDate!
+  createdAt: AWSDateTime
+  status: String #cannot put Boolean for sorting, will be "true"/"false/"not yet"/"done"
+  length: Float!
+  notes: String
+  dailyReports: [DailyReport!]! @hasMany #  or @connection(name: "CampaignDailyReports", sortField: "createdAt")
+  weeklyReports: [WeeklyReport!]! @hasMany
+  monthlyReports: [MonthlyReport!]! @hasMany
+  kpis: [Kpi!]! @manyToMany(relationName: "CampaignKpis") # kpis: [Kpi!]! @connection(name: "CampaignKpis")
+}
+type Team @model {
+  id: ID
+  name: String!
+  agents: [Agent]! @hasMany(indexName: "byTeam", fields: ["id"]) # or agents: [Agent]! @connection(name: "TeamAgent")
+  dailyPoints: Int
+  weeklyPoints: Int
+  monthlyPoint: Int
+  totalPoints: Int
+}
+
+type YearPoints @model {
+  id: ID
+  # agent: Agent! @connection(name: "YearPoints")
+  month: String
+  date: AWSDate!
+}
+# ####################################################################
+# #                           REPORTS                               #
+# ####################################################################
+##--------------- WEEKLY -----------------------##
+type WeeklyReport @model @searchable {
+  id: ID
+  # campaignID: ID
+  #   @index(
+  #     name: "byCampaignWeeklyReports"
+  #     queryField: "weeklyReportByCampaign"
+  #   )
+  campaign: Campaign! @belongsTo #(fields: ["campaignID"])
+  dailyReports: [DailyReport]! @hasMany
+  createdAt: AWSDateTime
+  weeklyTarget: Int!
+  ## monthlyReport: MonthlyReport @belongsTo
+  weeklyPoints: Int
+  willBeActiveOn: AWSDateTime
+}
+##--------------- MONTHLY -----------------------##
+type MonthlyReport @model @searchable {
+  id: ID
+  # campaignID: ID
+  #   @index(
+  #     name: "byCampaignMonthlyReports"
+  #     queryField: "monthlyReportByCampaign"
+  #   )
+  campaign: Campaign! @belongsTo #(fields: ["campaignID"]) # campaign: Campaign! @connection(name: "CampaignMonthlyReports")
+  createdAt: AWSDateTime
+  monthlyTarget: Int!
+  weeklyReports: [WeeklyReport]! @hasMany
+  monthlyPoints: Int
+}
+
+# ##--------------- DAIlY -----------------------##
+type DailyReport @model @searchable {
+  id: ID
+  campaign: Campaign! @belongsTo
+  kpis: [Kpi!]! @manyToMany(relationName: "DailyReportKpis")
+  agent: Agent! @belongsTo # agent: Agent! @connection(name: "AgentDailyReports")
+  date: AWSDate
+  createdAt: AWSDateTime
+  dailyTarget: Int
+  ## weeklyReport: WeeklyReport @belongsTo
+  dailyPoints: Int
+  weeklyTarget: Int #it might be taken off
+}
+###################################################################
+
+###################################################################
+type Kpi @model @searchable {
+  id: ID
+  name: String!  #category
+    @index(
+      name: "byResult"
+      sortKeyFields: ["result"]
+      queryField: "kpiByResult"
+    )
+    @index(
+      name: "byTarget"
+      sortKeyFields: ["target"]
+      queryField: "kpiByTarget"
+    )
+  campaigns: [Campaign!] @manyToMany(relationName: "CampaignKpis") # OR campaign: Campaign! @connection(ame: "CampaignKpis")
+  result: Int
+  target: Int!
+  coeff: Int!
+  nextWeekTarget: Int
+  dailyReports: [DailyReport!] @manyToMany(relationName: "DailyReportKpis") # dailyReport: DailyReport! @connection(name: "DailyReportKpis")
+  agents: [Agent!] @manyToMany(relationName: "AgentKpis") # agent: Agent! @connection(name: "AgentKpis", sortField: "name")
+}
+
+type Timezone {
+  # timezoneJSON: AWSJSON
+  timezone: String
+  # abbreviation: String
+  datetime: String
+}
+type Query {
+  getTimezone(timezone: String): Timezone @function(name: "timeApi-${env}")
+}
