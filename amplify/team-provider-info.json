@@ -29,7 +29,8 @@
         }
       },
       "auth": {
-        "dashboardninjademoaut": {}
+        "dashboardninjademoaut": {},
+        "userPoolGroups": {}
       }
     }
   }

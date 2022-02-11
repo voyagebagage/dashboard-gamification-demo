@@ -1,0 +1,41 @@
+.logo-log-in {
+  /* animation: drop; */
+  animation: squeeze 1s ease-in-out forwards;
+  /* fill-mode; */
+}
+
+.log-in-form {
+  animation: show-up 1s ease-in;
+}
+
+/* --------------Key Frames--------------- */
+
+@keyframes show-up {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/* drop {
+  transform: translateY(0%, -20%);
+} */
+@keyframes squeeze {
+  0% {
+    transform: translateY(0);
+    transform: scale(0.4);
+    transform: scaleX(-0.3);
+  }
+  50% {
+    /* motion-rotation: reverse; */
+    transform: translateY(100%);
+    transform: scaleX(-0.8);
+    transform: scale(0.8);
+    transform: scaleY(0.5);
+  }
+  100% {
+    transform: scale(1.2);
+    transform: translateY(0);
+  }
+}
