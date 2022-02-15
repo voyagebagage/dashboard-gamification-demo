@@ -110,6 +110,7 @@ export const searchCampaigns = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -327,6 +328,7 @@ export const searchDailyReports = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         date
         createdAt
@@ -509,6 +511,7 @@ export const getAgent = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -533,6 +536,7 @@ export const getAgent = /* GraphQL */ `
       totalPoints
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -564,6 +568,7 @@ export const listAgents = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -614,6 +619,7 @@ export const getCampaign = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       startDate
       endDate
@@ -714,6 +720,7 @@ export const listCampaigns = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -759,6 +766,7 @@ export const getTeam = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -859,6 +867,7 @@ export const getWeeklyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -981,6 +990,7 @@ export const getMonthlyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1097,6 +1107,7 @@ export const getDailyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1151,6 +1162,7 @@ export const getDailyReport = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       date
       createdAt
@@ -1203,6 +1215,7 @@ export const listDailyReports = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         date
         createdAt
@@ -1254,6 +1267,7 @@ export const getKpi = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -1319,6 +1333,7 @@ export const getAgentKpis = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       kpi {
         id
@@ -1341,6 +1356,7 @@ export const getAgentKpis = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -1367,6 +1383,7 @@ export const listAgentKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         kpi {
           id
@@ -1380,6 +1397,7 @@ export const listAgentKpis = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -1422,6 +1440,7 @@ export const getCampaignKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1550,6 +1569,7 @@ export const getDailyReportKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         date
         createdAt
@@ -1739,6 +1759,7 @@ export const agentByDailyPoints = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -1782,6 +1803,7 @@ export const agentByWeeklyPoints = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -1825,6 +1847,7 @@ export const agentByMonthlyPoints = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -1868,6 +1891,7 @@ export const agentByTotalPoints = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -1911,6 +1935,7 @@ export const agentByName = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -1964,6 +1989,7 @@ export const campaignById = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -2039,6 +2065,7 @@ export const campaignByCreatedAt = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -2114,6 +2141,7 @@ export const campaignTypeByLength = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -2189,6 +2217,7 @@ export const campaignByEndDate = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate

@@ -87,7 +87,7 @@ function Dashboard() {
       <Segment basic style={{ width: "50vw", height: "100%" }}>
         <Segment
           as="div"
-          fluid
+          fluid="true"
           className="dFlex-fEnd"
           // floated="rigth"
           style={{
@@ -98,7 +98,7 @@ function Dashboard() {
             // backgroundColor: "brown",
           }}
         >
-          {/* <TimeComponent /> */}
+          <TimeComponent />
         </Segment>
 
         <div className="dFlex-sBetween">
@@ -120,7 +120,7 @@ function Dashboard() {
                 : null
             }
           >
-            <Menu fluid widths={3}>
+            <Menu fluid="true" widths={3}>
               <Menu.Item
                 name="Daily"
                 active={activeItem === "daily"}
@@ -151,7 +151,7 @@ function Dashboard() {
               <Table.Header>
                 <Segment
                   as="div"
-                  fluid
+                  fluid="true"
                   className="dFlex-fEnd"
                   // floated="rigth"
                   style={{
@@ -161,7 +161,7 @@ function Dashboard() {
                     backgroundColor: "cyan",
                   }}
                 >
-                  <Updates />
+                  {/* <Updates /> */}
                 </Segment>
                 <Table.Row>
                   <Table.HeaderCell>RANK</Table.HeaderCell>
@@ -170,13 +170,14 @@ function Dashboard() {
                   {/* <Table.HeaderCell>% TO TARGET</Table.HeaderCell> */}
                 </Table.Row>
               </Table.Header>
-              {agents.map((agent, idx) => {
-                // if (agent.dailyPoints === null) {
-                //   agent.noPoints = "not updated";
-                // }
-                return (
-                  <Table.Body>
+              <Table.Body>
+                {agents.map((agent, idx) => {
+                  // if (agent.dailyPoints === null) {
+                  //   agent.noPoints = "not updated";
+                  // }
+                  return (
                     <Table.Row
+                      key={agent.id}
                       positive={idx < 3 && agents.length > 3 ? true : false}
                       negative={
                         idx >= agents.length - 3 && agents.length > 3
@@ -209,9 +210,9 @@ function Dashboard() {
                         pts
                       </Table.Cell>
                     </Table.Row>
-                  </Table.Body>
-                );
-              })}
+                  );
+                })}
+              </Table.Body>
             </Table>
             {/* <PaginationLong /> */}
           </div>
@@ -228,22 +229,22 @@ function Dashboard() {
         </Segment>
         <Grid floated columns={4}>
           <Grid.Column>
-            <Segment fluid piled>
+            <Segment fluid="true" piled>
               <Statistic label="Out Reached" value="7,550" size="small" />
             </Segment>
           </Grid.Column>
           <Grid.Column>
-            <Segment fluid piled>
+            <Segment fluid="true" piled>
               <Statistic label="Interest" value="453" size="small" />
             </Segment>
           </Grid.Column>
           <Grid.Column>
-            <Segment fluid piled>
+            <Segment fluid="true" piled>
               <Statistic label="Meetings" value="7,550" size="small" />
             </Segment>
           </Grid.Column>
           <Grid.Column>
-            <Segment fluid piled>
+            <Segment fluid="true" piled>
               <Statistic label="% of Targer" value="9,550" size="small" />
             </Segment>
           </Grid.Column>

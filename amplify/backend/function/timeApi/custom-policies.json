@@ -1,6 +1,10 @@
 [
   {
-    "Action": [],
-    "Resource": []
+    "Effect": "Allow",
+    "Action": ["appsync:GraphQL"],
+    "Resource": [
+      "arn:aws:appsync:ap-southeast-1:847054957517:apis/7witoydctvhqlhvfuo7tg2hvtq/types/Query/fields/getTimezone",
+      "arn:aws:appsync:ap-southeast-1:847054957517:apis/7witoydctvhqlhvfuo7tg2hvtq/types/Timezone/*"
+    ]
   }
 ]

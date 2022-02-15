@@ -110,8 +110,8 @@ export const onDeleteClient = /* GraphQL */ `
   }
 `;
 export const onCreateAgent = /* GraphQL */ `
-  subscription OnCreateAgent {
-    onCreateAgent {
+  subscription OnCreateAgent($owner: String) {
+    onCreateAgent(owner: $owner) {
       id
       category
       name
@@ -142,6 +142,7 @@ export const onCreateAgent = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -166,12 +167,13 @@ export const onCreateAgent = /* GraphQL */ `
       totalPoints
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateAgent = /* GraphQL */ `
-  subscription OnUpdateAgent {
-    onUpdateAgent {
+  subscription OnUpdateAgent($owner: String) {
+    onUpdateAgent(owner: $owner) {
       id
       category
       name
@@ -202,6 +204,7 @@ export const onUpdateAgent = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -226,12 +229,13 @@ export const onUpdateAgent = /* GraphQL */ `
       totalPoints
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteAgent = /* GraphQL */ `
-  subscription OnDeleteAgent {
-    onDeleteAgent {
+  subscription OnDeleteAgent($owner: String) {
+    onDeleteAgent(owner: $owner) {
       id
       category
       name
@@ -262,6 +266,7 @@ export const onDeleteAgent = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -286,6 +291,7 @@ export const onDeleteAgent = /* GraphQL */ `
       totalPoints
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -334,6 +340,7 @@ export const onCreateCampaign = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       startDate
       endDate
@@ -441,6 +448,7 @@ export const onUpdateCampaign = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       startDate
       endDate
@@ -548,6 +556,7 @@ export const onDeleteCampaign = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       startDate
       endDate
@@ -628,6 +637,7 @@ export const onCreateTeam = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -658,6 +668,7 @@ export const onUpdateTeam = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -688,6 +699,7 @@ export const onDeleteTeam = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -768,6 +780,7 @@ export const onCreateWeeklyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -851,6 +864,7 @@ export const onUpdateWeeklyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -934,6 +948,7 @@ export const onDeleteWeeklyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1017,6 +1032,7 @@ export const onCreateMonthlyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1096,6 +1112,7 @@ export const onUpdateMonthlyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1175,6 +1192,7 @@ export const onDeleteMonthlyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1254,6 +1272,7 @@ export const onCreateDailyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1308,6 +1327,7 @@ export const onCreateDailyReport = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       date
       createdAt
@@ -1356,6 +1376,7 @@ export const onUpdateDailyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1410,6 +1431,7 @@ export const onUpdateDailyReport = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       date
       createdAt
@@ -1458,6 +1480,7 @@ export const onDeleteDailyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1512,6 +1535,7 @@ export const onDeleteDailyReport = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       date
       createdAt
@@ -1561,6 +1585,7 @@ export const onCreateKpi = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -1605,6 +1630,7 @@ export const onUpdateKpi = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -1649,6 +1675,7 @@ export const onDeleteKpi = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -1658,8 +1685,8 @@ export const onDeleteKpi = /* GraphQL */ `
   }
 `;
 export const onCreateAgentKpis = /* GraphQL */ `
-  subscription OnCreateAgentKpis {
-    onCreateAgentKpis {
+  subscription OnCreateAgentKpis($owner: String) {
+    onCreateAgentKpis(owner: $owner) {
       id
       agentID
       kpiID
@@ -1684,6 +1711,7 @@ export const onCreateAgentKpis = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       kpi {
         id
@@ -1706,12 +1734,13 @@ export const onCreateAgentKpis = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateAgentKpis = /* GraphQL */ `
-  subscription OnUpdateAgentKpis {
-    onUpdateAgentKpis {
+  subscription OnUpdateAgentKpis($owner: String) {
+    onUpdateAgentKpis(owner: $owner) {
       id
       agentID
       kpiID
@@ -1736,6 +1765,7 @@ export const onUpdateAgentKpis = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       kpi {
         id
@@ -1758,12 +1788,13 @@ export const onUpdateAgentKpis = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteAgentKpis = /* GraphQL */ `
-  subscription OnDeleteAgentKpis {
-    onDeleteAgentKpis {
+  subscription OnDeleteAgentKpis($owner: String) {
+    onDeleteAgentKpis(owner: $owner) {
       id
       agentID
       kpiID
@@ -1788,6 +1819,7 @@ export const onDeleteAgentKpis = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       kpi {
         id
@@ -1810,6 +1842,7 @@ export const onDeleteAgentKpis = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -1850,6 +1883,7 @@ export const onCreateCampaignKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1934,6 +1968,7 @@ export const onUpdateCampaignKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -2018,6 +2053,7 @@ export const onDeleteCampaignKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -2103,6 +2139,7 @@ export const onCreateDailyReportKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         date
         createdAt
@@ -2176,6 +2213,7 @@ export const onUpdateDailyReportKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         date
         createdAt
@@ -2249,6 +2287,7 @@ export const onDeleteDailyReportKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         date
         createdAt

@@ -69,7 +69,7 @@ function Agent() {
         {/* -----------------TABLE BODY----------------- */}
         {agents.map((agent, idx) => {
           return (
-            <Table.Body>
+            <Table.Body key={agent.id}>
               <Table.Row>
                 <Table.Cell>{agent.name}</Table.Cell>
                 <Table.Cell

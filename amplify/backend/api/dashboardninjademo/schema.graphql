@@ -3,8 +3,10 @@
 # input AMPLIFY {
 #   globalAuthRule: AuthRule = { allow: public }
 # } # FOR TESTING ONLY!
-
-type Client @model @searchable {
+type Client
+  @model
+  @searchable
+  @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
   category: String
     @index(
@@ -28,10 +30,23 @@ type Client @model @searchable {
   notes: String
 }
 # add campaigns together
-type Agent @model {
-  # @auth(
+type Agent
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Admin", "Agent", "Client"]
+        # operations: [create, read, update]
+        # provider: userPools
+      }
+      { allow: owner }
+      { allow: private, provider: userPools, operations: [read] }
+    ]
+  ) {
+  # @auth(#
   #   rules: [
-  #     { allow: groups, groups: ["Admin"] }
+  # { allow: groups, groups: ["Admin", "Agent"] }
   #     { allow: owner, ownerField: "username", operations: [read] }
   #   ]
   # )
@@ -75,7 +90,10 @@ type Agent @model {
   totalPoints: Int
 }
 
-type Campaign @model @searchable {
+type Campaign
+  @model
+  @searchable
+  @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
   name: String!
   category: String
@@ -113,7 +131,9 @@ type Campaign @model @searchable {
   monthlyReports: [MonthlyReport!]! @hasMany
   kpis: [Kpi!]! @manyToMany(relationName: "CampaignKpis") # kpis: [Kpi!]! @connection(name: "CampaignKpis")
 }
-type Team @model {
+type Team
+  @model
+  @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
   name: String!
   agents: [Agent]! @hasMany(indexName: "byTeam", fields: ["id"]) # or agents: [Agent]! @connection(name: "TeamAgent")
@@ -123,7 +143,9 @@ type Team @model {
   totalPoints: Int
 }
 
-type YearPoints @model {
+type YearPoints
+  @model
+  @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
   # agent: Agent! @connection(name: "YearPoints")
   month: String
@@ -133,7 +155,10 @@ type YearPoints @model {
 # #                           REPORTS                               #
 # ####################################################################
 ##--------------- WEEKLY -----------------------##
-type WeeklyReport @model @searchable {
+type WeeklyReport
+  @model
+  @searchable
+  @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
   # campaignID: ID
   #   @index(
@@ -149,7 +174,10 @@ type WeeklyReport @model @searchable {
   willBeActiveOn: AWSDateTime
 }
 ##--------------- MONTHLY -----------------------##
-type MonthlyReport @model @searchable {
+type MonthlyReport
+  @model
+  @searchable
+  @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
   # campaignID: ID
   #   @index(
@@ -164,7 +192,10 @@ type MonthlyReport @model @searchable {
 }
 
 # ##--------------- DAIlY -----------------------##
-type DailyReport @model @searchable {
+type DailyReport
+  @model
+  @searchable
+  @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
   campaign: Campaign! @belongsTo
   kpis: [Kpi!]! @manyToMany(relationName: "DailyReportKpis")
@@ -179,7 +210,10 @@ type DailyReport @model @searchable {
 ###################################################################
 
 ###################################################################
-type Kpi @model @searchable {
+type Kpi
+  @model
+  @searchable
+  @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
   name: String!  #category
     @index(
@@ -202,11 +236,42 @@ type Kpi @model @searchable {
 }
 
 type Timezone {
-  # timezoneJSON: AWSJSON
+  # @auth(
+  #   rules: [
+  #     { allow: private, provider: userPools }
+  #     { allow: groups, groups: ["Agent", "Admin", "Client"] }
+  #   ]
+  # )
   timezone: String
-  # abbreviation: String
   datetime: String
 }
 type Query {
-  getTimezone(timezone: String): Timezone @function(name: "timeApi-${env}")
+  getTimezone(timezone: String): Timezone
+    @function(name: "timeApi-${env}")
+    @auth(
+      rules: [
+        {
+          allow: groups
+          groups: ["Admin", "Agent", "Client"]
+          # operations: [create, read, update]
+          # provider: userPools
+        }
+        { allow: owner }
+        { allow: private, provider: userPools }
+      ]
+    )
 }
+# type Location {
+#   # @auth(
+#   #   rules: [
+#   #     { allow: private, provider: userPools }
+#   #     { allow: groups, groups: ["Agent", "Admin", "Client"] }
+#   #   ]
+#   # )
+#   timezone: String
+#   datetime: String
+# }
+# type Query {
+#   getLocation: Location
+#     @http(url: "https://worldtimeapi.org/api/timezone/${env}:location")
+# }

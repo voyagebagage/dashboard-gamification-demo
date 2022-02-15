@@ -22,7 +22,7 @@ const SidebarComponent = ({ sidebarItem }) => {
           // stackable
           vertical
           visible
-          width={sidebarItem ? "thin" : "large"}
+          width={sidebarItem ? "thin" : "wide"}
           className="sidebar-menu"
           style={{ backgroundColor: "#8CABA0" }}
         >
@@ -76,6 +76,7 @@ const SidebarComponent = ({ sidebarItem }) => {
               <Route
                 exact={route.exact}
                 path={route.path}
+                key={route.path}
                 render={(props) => <route.component {...props} />}
               />
             ))}

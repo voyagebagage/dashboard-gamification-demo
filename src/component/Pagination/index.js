@@ -12,7 +12,7 @@ export const PaginationShortCentered = ({
     <div className="dFlex-center">
       <Pagination
         activePage={targetPage}
-        defaultActivePage={1}
+        // defaultActivePage={1} //warnings
         boundaryRange={undefined}
         // ellipsisItem={null}
         // maxPages / 2 >= targetPage && maxPages % 2 === 0

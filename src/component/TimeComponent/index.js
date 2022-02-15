@@ -1,35 +1,36 @@
 import API, { graphqlOperation } from "@aws-amplify/api";
 import { useEffect, useState } from "react";
 import { getTimezone } from "../../graphql/queries";
-// import axios from "axios";
+import axios from "axios";
 import { Icon, Dropdown, Statistic, Header, Segment } from "semantic-ui-react";
 const TimeComponent = () => {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [timezone, setTimezone] = useState("Asia/Bangkok");
   useEffect(() => fetchTime(), []);
-  // const fetchTime = async () => {
-  //   const response = await axios.get(
-  //     `http://worldtimeapi.org/api/timezone/${timezone}/`
-  //   );
-  //   // console.log(response.data);
-  //   setData(response.data);
-  //   setIsLoading(false);
-  ////// };
   const fetchTime = async () => {
-    try {
-      const newTimezone = await API.graphql(
-        graphqlOperation(getTimezone, timezone)
-      );
-      setData(newTimezone);
-      console.log("data", newTimezone);
-      setIsLoading(false);
-    } catch (error) {
-      let errorObject = JSON.parse(JSON.stringify(error));
-      console.log("there is an error with timezones", errorObject);
-      // console.log("there is an error with timezones", error);
-    }
+    const response = await axios.get(
+      `http://worldtimeapi.org/api/timezone/${timezone}/`
+    );
+    // console.log(response.data);
+    setData(response.data);
+    setIsLoading(false);
   };
+  // const fetchTime = async () => {
+  //   try {
+  //     console.log("data00", timezone);
+  //     const newTimezone = await API.graphql(
+  //       graphqlOperation(getTimezone, timezone)
+  //     );
+  //     setData(newTimezone);
+  //     console.log("data", newTimezone || "unsucessful");
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     let errorObject = JSON.parse(JSON.stringify(error));
+  //     console.log("there is an error with timezones", errorObject);
+  //     // console.log("there is an error with timezones", error);
+  //   }
+  // };
   let date = new Date(data.datetime).toString().split(" ");
   // console.log("data", date[0] + date[2]);
   console.log("timezone", timezone);

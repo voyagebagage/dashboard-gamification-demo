@@ -154,6 +154,7 @@ export const createAgent = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -178,6 +179,7 @@ export const createAgent = /* GraphQL */ `
       totalPoints
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -217,6 +219,7 @@ export const updateAgent = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -241,6 +244,7 @@ export const updateAgent = /* GraphQL */ `
       totalPoints
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -280,6 +284,7 @@ export const deleteAgent = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -304,6 +309,7 @@ export const deleteAgent = /* GraphQL */ `
       totalPoints
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -355,6 +361,7 @@ export const createCampaign = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       startDate
       endDate
@@ -465,6 +472,7 @@ export const updateCampaign = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       startDate
       endDate
@@ -575,6 +583,7 @@ export const deleteCampaign = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       startDate
       endDate
@@ -658,6 +667,7 @@ export const createTeam = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -691,6 +701,7 @@ export const updateTeam = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -724,6 +735,7 @@ export const deleteTeam = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -816,6 +828,7 @@ export const createWeeklyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -902,6 +915,7 @@ export const updateWeeklyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -988,6 +1002,7 @@ export const deleteWeeklyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1074,6 +1089,7 @@ export const createMonthlyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1156,6 +1172,7 @@ export const updateMonthlyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1238,6 +1255,7 @@ export const deleteMonthlyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1320,6 +1338,7 @@ export const createDailyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1374,6 +1393,7 @@ export const createDailyReport = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       date
       createdAt
@@ -1425,6 +1445,7 @@ export const updateDailyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1479,6 +1500,7 @@ export const updateDailyReport = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       date
       createdAt
@@ -1530,6 +1552,7 @@ export const deleteDailyReport = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -1584,6 +1607,7 @@ export const deleteDailyReport = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       date
       createdAt
@@ -1636,6 +1660,7 @@ export const createKpi = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -1683,6 +1708,7 @@ export const updateKpi = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -1730,6 +1756,7 @@ export const deleteKpi = /* GraphQL */ `
           kpiID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -1768,6 +1795,7 @@ export const createAgentKpis = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       kpi {
         id
@@ -1790,6 +1818,7 @@ export const createAgentKpis = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -1823,6 +1852,7 @@ export const updateAgentKpis = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       kpi {
         id
@@ -1845,6 +1875,7 @@ export const updateAgentKpis = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -1878,6 +1909,7 @@ export const deleteAgentKpis = /* GraphQL */ `
         totalPoints
         createdAt
         updatedAt
+        owner
       }
       kpi {
         id
@@ -1900,6 +1932,7 @@ export const deleteAgentKpis = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -1943,6 +1976,7 @@ export const createCampaignKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -2030,6 +2064,7 @@ export const updateCampaignKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -2117,6 +2152,7 @@ export const deleteCampaignKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         startDate
         endDate
@@ -2205,6 +2241,7 @@ export const createDailyReportKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         date
         createdAt
@@ -2281,6 +2318,7 @@ export const updateDailyReportKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         date
         createdAt
@@ -2357,6 +2395,7 @@ export const deleteDailyReportKpis = /* GraphQL */ `
           totalPoints
           createdAt
           updatedAt
+          owner
         }
         date
         createdAt
