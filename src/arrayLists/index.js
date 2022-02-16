@@ -117,7 +117,7 @@ export const countries = [
   { text: "Ecuador", key: "ec", value: "Ecuador", flag: "ec" },
   { text: "Egypt", key: "eg", value: "Egypt", flag: "eg" },
   { text: "El Salvador", key: "sv", value: "El Salvador", flag: "sv" },
-  { text: "England", key: "gb eng", value: "England", flag: "gb  eng" },
+  { text: "England", key: "gb eng", value: "England", flag: "gb eng" },
   {
     text: "Equatorial Guinea",
     key: "gq",
@@ -304,7 +304,7 @@ export const countries = [
   },
   { text: "Sao Tome", key: "st", value: "Sao Tome", flag: "st" },
   { text: "Saudi Arabia", key: "sa", value: "Saudi Arabia", flag: "sa" },
-  { text: "Scotland", key: "gb  sct", value: "Scotland", flag: "gb  sct" },
+  { text: "Scotland", key: "gb sct", value: "Scotland", flag: "gb sct" },
   { text: "Senegal", key: "sn", value: "Senegal", flag: "sn" },
   { text: "Serbia", key: "cs", value: "Serbia", flag: "cs" },
   { text: "Serbia", key: "rs", value: "Serbia", flag: "rs" },
@@ -379,7 +379,7 @@ export const countries = [
   { text: "Vatican City", key: "va", value: "Vatican City", flag: "va" },
   { text: "Venezuela", key: "ve", value: "Venezuela", flag: "ve" },
   { text: "Vietnam", key: "vn", value: "Vietnam", flag: "vn" },
-  { text: "Wales", key: "gb wls", value: "Wales", flag: "gb  wls" },
+  { text: "Wales", key: "gb wls", value: "Wales", flag: "gb wls" },
   {
     text: "Wallis and Futuna",
     key: "wf",

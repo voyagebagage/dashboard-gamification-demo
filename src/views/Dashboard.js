@@ -85,21 +85,7 @@ function Dashboard() {
   return !isLoading ? (
     <>
       <Segment basic style={{ width: "50vw", height: "100%" }}>
-        <Segment
-          as="div"
-          fluid="true"
-          className="dFlex-fEnd"
-          // floated="rigth"
-          style={{
-            position: "absolute",
-            left: "105%",
-            paddingTop: "1%",
-            paddingBottom: 0,
-            // backgroundColor: "brown",
-          }}
-        >
-          <TimeComponent />
-        </Segment>
+        <TimeComponent />
 
         <div className="dFlex-sBetween">
           <Header as="h2">Leaderboard</Header>
