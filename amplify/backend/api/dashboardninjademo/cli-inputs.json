@@ -9,6 +9,10 @@
       "cognitoUserPoolId": "authdashboardninjademoaut"
     },
     "conflictResolution": {},
-    "additionalAuthTypes": []
+    "additionalAuthTypes": [
+      {
+        "mode": "AWS_IAM"
+      }
+    ]
   }
 }

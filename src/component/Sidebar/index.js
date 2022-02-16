@@ -22,7 +22,7 @@ const SidebarComponent = ({ sidebarItem }) => {
           // stackable
           vertical
           visible
-          width={sidebarItem ? "thin" : "wide"}
+          width={sidebarItem ? "thin" : "large"}
           className="sidebar-menu"
           style={{ backgroundColor: "#8CABA0" }}
         >

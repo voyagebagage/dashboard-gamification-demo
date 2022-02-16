@@ -236,17 +236,11 @@ type Kpi
 }
 
 type Timezone {
-  # @auth(
-  #   rules: [
-  #     { allow: private, provider: userPools }
-  #     { allow: groups, groups: ["Agent", "Admin", "Client"] }
-  #   ]
-  # )
-  timezone: String
   datetime: String
+  timezone: String
 }
 type Query {
-  getTimezone(timezone: String): Timezone
+  getTimezone(timezone: String!): Timezone
     @function(name: "timeApi-${env}")
     @auth(
       rules: [
@@ -257,6 +251,7 @@ type Query {
           # provider: userPools
         }
         { allow: owner }
+        # { allow: private, provider: iam }
         { allow: private, provider: userPools }
       ]
     )

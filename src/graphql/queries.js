@@ -1,419 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getTimezone = /* GraphQL */ `
-  query GetTimezone($timezone: String) {
-    getTimezone(timezone: $timezone) {
-      timezone
-      datetime
-    }
-  }
-`;
-export const searchClients = /* GraphQL */ `
-  query SearchClients(
-    $filter: SearchableClientFilterInput
-    $sort: [SearchableClientSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableClientAggregationInput]
-  ) {
-    searchClients(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        category
-        firstName
-        lastName
-        email
-        phone
-        companyName
-        website
-        country
-        campaigns {
-          nextToken
-        }
-        notes
-        createdAt
-        updatedAt
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export const searchCampaigns = /* GraphQL */ `
-  query SearchCampaigns(
-    $filter: SearchableCampaignFilterInput
-    $sort: [SearchableCampaignSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableCampaignAggregationInput]
-  ) {
-    searchCampaigns(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        name
-        category
-        type
-        client {
-          id
-          category
-          firstName
-          lastName
-          email
-          phone
-          companyName
-          website
-          country
-          notes
-          createdAt
-          updatedAt
-        }
-        agent {
-          id
-          category
-          name
-          email
-          teamID
-          dailyPoints
-          weeklyPoints
-          monthlyPoints
-          totalPoints
-          createdAt
-          updatedAt
-          owner
-        }
-        startDate
-        endDate
-        createdAt
-        status
-        length
-        notes
-        dailyReports {
-          nextToken
-        }
-        weeklyReports {
-          nextToken
-        }
-        monthlyReports {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        updatedAt
-        clientCampaignsId
-        agentCampaignsId
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export const searchWeeklyReports = /* GraphQL */ `
-  query SearchWeeklyReports(
-    $filter: SearchableWeeklyReportFilterInput
-    $sort: [SearchableWeeklyReportSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableWeeklyReportAggregationInput]
-  ) {
-    searchWeeklyReports(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        campaign {
-          id
-          name
-          category
-          type
-          startDate
-          endDate
-          createdAt
-          status
-          length
-          notes
-          updatedAt
-          clientCampaignsId
-          agentCampaignsId
-        }
-        dailyReports {
-          nextToken
-        }
-        createdAt
-        weeklyTarget
-        weeklyPoints
-        willBeActiveOn
-        updatedAt
-        campaignWeeklyReportsId
-        monthlyReportWeeklyReportsId
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export const searchMonthlyReports = /* GraphQL */ `
-  query SearchMonthlyReports(
-    $filter: SearchableMonthlyReportFilterInput
-    $sort: [SearchableMonthlyReportSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableMonthlyReportAggregationInput]
-  ) {
-    searchMonthlyReports(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        campaign {
-          id
-          name
-          category
-          type
-          startDate
-          endDate
-          createdAt
-          status
-          length
-          notes
-          updatedAt
-          clientCampaignsId
-          agentCampaignsId
-        }
-        createdAt
-        monthlyTarget
-        weeklyReports {
-          nextToken
-        }
-        monthlyPoints
-        updatedAt
-        campaignMonthlyReportsId
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export const searchDailyReports = /* GraphQL */ `
-  query SearchDailyReports(
-    $filter: SearchableDailyReportFilterInput
-    $sort: [SearchableDailyReportSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableDailyReportAggregationInput]
-  ) {
-    searchDailyReports(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        campaign {
-          id
-          name
-          category
-          type
-          startDate
-          endDate
-          createdAt
-          status
-          length
-          notes
-          updatedAt
-          clientCampaignsId
-          agentCampaignsId
-        }
-        kpis {
-          nextToken
-        }
-        agent {
-          id
-          category
-          name
-          email
-          teamID
-          dailyPoints
-          weeklyPoints
-          monthlyPoints
-          totalPoints
-          createdAt
-          updatedAt
-          owner
-        }
-        date
-        createdAt
-        dailyTarget
-        dailyPoints
-        weeklyTarget
-        updatedAt
-        agentDailyReportsId
-        campaignDailyReportsId
-        weeklyReportDailyReportsId
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export const searchKpis = /* GraphQL */ `
-  query SearchKpis(
-    $filter: SearchableKpiFilterInput
-    $sort: [SearchableKpiSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableKpiAggregationInput]
-  ) {
-    searchKpis(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        name
-        campaigns {
-          nextToken
-        }
-        result
-        target
-        coeff
-        nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-            }
-          }
-        }
-      }
-    }
-  }
-`;
 export const getClient = /* GraphQL */ `
   query GetClient($id: ID!) {
     getClient(id: $id) {
@@ -475,6 +62,135 @@ export const listClients = /* GraphQL */ `
         updatedAt
       }
       nextToken
+    }
+  }
+`;
+export const clientByfirstName = /* GraphQL */ `
+  query ClientByfirstName(
+    $category: String!
+    $firstName: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelClientFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    clientByfirstName(
+      category: $category
+      firstName: $firstName
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        category
+        firstName
+        lastName
+        email
+        phone
+        companyName
+        website
+        country
+        campaigns {
+          nextToken
+        }
+        notes
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const clientBylastName = /* GraphQL */ `
+  query ClientBylastName(
+    $category: String!
+    $lastName: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelClientFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    clientBylastName(
+      category: $category
+      lastName: $lastName
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        category
+        firstName
+        lastName
+        email
+        phone
+        companyName
+        website
+        country
+        campaigns {
+          nextToken
+        }
+        notes
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const searchClients = /* GraphQL */ `
+  query SearchClients(
+    $filter: SearchableClientFilterInput
+    $sort: [SearchableClientSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableClientAggregationInput]
+  ) {
+    searchClients(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        category
+        firstName
+        lastName
+        email
+        phone
+        companyName
+        website
+        country
+        campaigns {
+          nextToken
+        }
+        notes
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -547,6 +263,226 @@ export const listAgents = /* GraphQL */ `
     $nextToken: String
   ) {
     listAgents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        category
+        name
+        email
+        teamID
+        campaigns {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        dailyReports {
+          nextToken
+        }
+        dailyPoints
+        weeklyPoints
+        monthlyPoints
+        totalPoints
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const agentByDailyPoints = /* GraphQL */ `
+  query AgentByDailyPoints(
+    $category: String!
+    $dailyPoints: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAgentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    agentByDailyPoints(
+      category: $category
+      dailyPoints: $dailyPoints
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        category
+        name
+        email
+        teamID
+        campaigns {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        dailyReports {
+          nextToken
+        }
+        dailyPoints
+        weeklyPoints
+        monthlyPoints
+        totalPoints
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const agentByWeeklyPoints = /* GraphQL */ `
+  query AgentByWeeklyPoints(
+    $category: String!
+    $weeklyPoints: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAgentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    agentByWeeklyPoints(
+      category: $category
+      weeklyPoints: $weeklyPoints
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        category
+        name
+        email
+        teamID
+        campaigns {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        dailyReports {
+          nextToken
+        }
+        dailyPoints
+        weeklyPoints
+        monthlyPoints
+        totalPoints
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const agentByMonthlyPoints = /* GraphQL */ `
+  query AgentByMonthlyPoints(
+    $category: String!
+    $monthlyPoints: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAgentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    agentByMonthlyPoints(
+      category: $category
+      monthlyPoints: $monthlyPoints
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        category
+        name
+        email
+        teamID
+        campaigns {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        dailyReports {
+          nextToken
+        }
+        dailyPoints
+        weeklyPoints
+        monthlyPoints
+        totalPoints
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const agentByTotalPoints = /* GraphQL */ `
+  query AgentByTotalPoints(
+    $category: String!
+    $totalPoints: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAgentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    agentByTotalPoints(
+      category: $category
+      totalPoints: $totalPoints
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        category
+        name
+        email
+        teamID
+        campaigns {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        dailyReports {
+          nextToken
+        }
+        dailyPoints
+        weeklyPoints
+        monthlyPoints
+        totalPoints
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const agentByName = /* GraphQL */ `
+  query AgentByName(
+    $category: String!
+    $name: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAgentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    agentByName(
+      category: $category
+      name: $name
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
       items {
         id
         category
@@ -745,6 +681,401 @@ export const listCampaigns = /* GraphQL */ `
         agentCampaignsId
       }
       nextToken
+    }
+  }
+`;
+export const campaignById = /* GraphQL */ `
+  query CampaignById(
+    $category: String!
+    $id: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCampaignFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    campaignById(
+      category: $category
+      id: $id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        category
+        type
+        client {
+          id
+          category
+          firstName
+          lastName
+          email
+          phone
+          companyName
+          website
+          country
+          notes
+          createdAt
+          updatedAt
+        }
+        agent {
+          id
+          category
+          name
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
+          createdAt
+          updatedAt
+          owner
+        }
+        startDate
+        endDate
+        createdAt
+        status
+        length
+        notes
+        dailyReports {
+          nextToken
+        }
+        weeklyReports {
+          nextToken
+        }
+        monthlyReports {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        updatedAt
+        clientCampaignsId
+        agentCampaignsId
+      }
+      nextToken
+    }
+  }
+`;
+export const campaignByCreatedAt = /* GraphQL */ `
+  query CampaignByCreatedAt(
+    $category: String!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCampaignFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    campaignByCreatedAt(
+      category: $category
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        category
+        type
+        client {
+          id
+          category
+          firstName
+          lastName
+          email
+          phone
+          companyName
+          website
+          country
+          notes
+          createdAt
+          updatedAt
+        }
+        agent {
+          id
+          category
+          name
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
+          createdAt
+          updatedAt
+          owner
+        }
+        startDate
+        endDate
+        createdAt
+        status
+        length
+        notes
+        dailyReports {
+          nextToken
+        }
+        weeklyReports {
+          nextToken
+        }
+        monthlyReports {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        updatedAt
+        clientCampaignsId
+        agentCampaignsId
+      }
+      nextToken
+    }
+  }
+`;
+export const campaignTypeByLength = /* GraphQL */ `
+  query CampaignTypeByLength(
+    $type: String!
+    $length: ModelFloatKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCampaignFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    campaignTypeByLength(
+      type: $type
+      length: $length
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        category
+        type
+        client {
+          id
+          category
+          firstName
+          lastName
+          email
+          phone
+          companyName
+          website
+          country
+          notes
+          createdAt
+          updatedAt
+        }
+        agent {
+          id
+          category
+          name
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
+          createdAt
+          updatedAt
+          owner
+        }
+        startDate
+        endDate
+        createdAt
+        status
+        length
+        notes
+        dailyReports {
+          nextToken
+        }
+        weeklyReports {
+          nextToken
+        }
+        monthlyReports {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        updatedAt
+        clientCampaignsId
+        agentCampaignsId
+      }
+      nextToken
+    }
+  }
+`;
+export const campaignByEndDate = /* GraphQL */ `
+  query CampaignByEndDate(
+    $type: String!
+    $endDate: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCampaignFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    campaignByEndDate(
+      type: $type
+      endDate: $endDate
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        category
+        type
+        client {
+          id
+          category
+          firstName
+          lastName
+          email
+          phone
+          companyName
+          website
+          country
+          notes
+          createdAt
+          updatedAt
+        }
+        agent {
+          id
+          category
+          name
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
+          createdAt
+          updatedAt
+          owner
+        }
+        startDate
+        endDate
+        createdAt
+        status
+        length
+        notes
+        dailyReports {
+          nextToken
+        }
+        weeklyReports {
+          nextToken
+        }
+        monthlyReports {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        updatedAt
+        clientCampaignsId
+        agentCampaignsId
+      }
+      nextToken
+    }
+  }
+`;
+export const searchCampaigns = /* GraphQL */ `
+  query SearchCampaigns(
+    $filter: SearchableCampaignFilterInput
+    $sort: [SearchableCampaignSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableCampaignAggregationInput]
+  ) {
+    searchCampaigns(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        name
+        category
+        type
+        client {
+          id
+          category
+          firstName
+          lastName
+          email
+          phone
+          companyName
+          website
+          country
+          notes
+          createdAt
+          updatedAt
+        }
+        agent {
+          id
+          category
+          name
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
+          createdAt
+          updatedAt
+          owner
+        }
+        startDate
+        endDate
+        createdAt
+        status
+        length
+        notes
+        dailyReports {
+          nextToken
+        }
+        weeklyReports {
+          nextToken
+        }
+        monthlyReports {
+          nextToken
+        }
+        kpis {
+          nextToken
+        }
+        updatedAt
+        clientCampaignsId
+        agentCampaignsId
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -955,6 +1286,70 @@ export const listWeeklyReports = /* GraphQL */ `
     }
   }
 `;
+export const searchWeeklyReports = /* GraphQL */ `
+  query SearchWeeklyReports(
+    $filter: SearchableWeeklyReportFilterInput
+    $sort: [SearchableWeeklyReportSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableWeeklyReportAggregationInput]
+  ) {
+    searchWeeklyReports(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        campaign {
+          id
+          name
+          category
+          type
+          startDate
+          endDate
+          createdAt
+          status
+          length
+          notes
+          updatedAt
+          clientCampaignsId
+          agentCampaignsId
+        }
+        dailyReports {
+          nextToken
+        }
+        createdAt
+        weeklyTarget
+        weeklyPoints
+        willBeActiveOn
+        updatedAt
+        campaignWeeklyReportsId
+        monthlyReportWeeklyReportsId
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 export const getMonthlyReport = /* GraphQL */ `
   query GetMonthlyReport($id: ID!) {
     getMonthlyReport(id: $id) {
@@ -1069,6 +1464,68 @@ export const listMonthlyReports = /* GraphQL */ `
         campaignMonthlyReportsId
       }
       nextToken
+    }
+  }
+`;
+export const searchMonthlyReports = /* GraphQL */ `
+  query SearchMonthlyReports(
+    $filter: SearchableMonthlyReportFilterInput
+    $sort: [SearchableMonthlyReportSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableMonthlyReportAggregationInput]
+  ) {
+    searchMonthlyReports(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        campaign {
+          id
+          name
+          category
+          type
+          startDate
+          endDate
+          createdAt
+          status
+          length
+          notes
+          updatedAt
+          clientCampaignsId
+          agentCampaignsId
+        }
+        createdAt
+        monthlyTarget
+        weeklyReports {
+          nextToken
+        }
+        monthlyPoints
+        updatedAt
+        campaignMonthlyReportsId
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -1231,6 +1688,86 @@ export const listDailyReports = /* GraphQL */ `
     }
   }
 `;
+export const searchDailyReports = /* GraphQL */ `
+  query SearchDailyReports(
+    $filter: SearchableDailyReportFilterInput
+    $sort: [SearchableDailyReportSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableDailyReportAggregationInput]
+  ) {
+    searchDailyReports(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        campaign {
+          id
+          name
+          category
+          type
+          startDate
+          endDate
+          createdAt
+          status
+          length
+          notes
+          updatedAt
+          clientCampaignsId
+          agentCampaignsId
+        }
+        kpis {
+          nextToken
+        }
+        agent {
+          id
+          category
+          name
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
+          createdAt
+          updatedAt
+          owner
+        }
+        date
+        createdAt
+        dailyTarget
+        dailyPoints
+        weeklyTarget
+        updatedAt
+        agentDailyReportsId
+        campaignDailyReportsId
+        weeklyReportDailyReportsId
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 export const getKpi = /* GraphQL */ `
   query GetKpi($id: ID!) {
     getKpi(id: $id) {
@@ -1303,6 +1840,141 @@ export const listKpis = /* GraphQL */ `
         updatedAt
       }
       nextToken
+    }
+  }
+`;
+export const kpiByResult = /* GraphQL */ `
+  query KpiByResult(
+    $name: String!
+    $result: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelKpiFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    kpiByResult(
+      name: $name
+      result: $result
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        campaigns {
+          nextToken
+        }
+        result
+        target
+        coeff
+        nextWeekTarget
+        dailyReports {
+          nextToken
+        }
+        agents {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const kpiByTarget = /* GraphQL */ `
+  query KpiByTarget(
+    $name: String!
+    $target: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelKpiFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    kpiByTarget(
+      name: $name
+      target: $target
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        campaigns {
+          nextToken
+        }
+        result
+        target
+        coeff
+        nextWeekTarget
+        dailyReports {
+          nextToken
+        }
+        agents {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const searchKpis = /* GraphQL */ `
+  query SearchKpis(
+    $filter: SearchableKpiFilterInput
+    $sort: [SearchableKpiSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableKpiAggregationInput]
+  ) {
+    searchKpis(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        name
+        campaigns {
+          nextToken
+        }
+        result
+        target
+        coeff
+        nextWeekTarget
+        dailyReports {
+          nextToken
+        }
+        agents {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -1645,683 +2317,11 @@ export const listDailyReportKpis = /* GraphQL */ `
     }
   }
 `;
-export const clientByfirstName = /* GraphQL */ `
-  query ClientByfirstName(
-    $category: String!
-    $firstName: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelClientFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    clientByfirstName(
-      category: $category
-      firstName: $firstName
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        category
-        firstName
-        lastName
-        email
-        phone
-        companyName
-        website
-        country
-        campaigns {
-          nextToken
-        }
-        notes
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const clientBylastName = /* GraphQL */ `
-  query ClientBylastName(
-    $category: String!
-    $lastName: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelClientFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    clientBylastName(
-      category: $category
-      lastName: $lastName
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        category
-        firstName
-        lastName
-        email
-        phone
-        companyName
-        website
-        country
-        campaigns {
-          nextToken
-        }
-        notes
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const agentByDailyPoints = /* GraphQL */ `
-  query AgentByDailyPoints(
-    $category: String!
-    $dailyPoints: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelAgentFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    agentByDailyPoints(
-      category: $category
-      dailyPoints: $dailyPoints
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        category
-        name
-        email
-        teamID
-        campaigns {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        dailyReports {
-          nextToken
-        }
-        dailyPoints
-        weeklyPoints
-        monthlyPoints
-        totalPoints
-        createdAt
-        updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const agentByWeeklyPoints = /* GraphQL */ `
-  query AgentByWeeklyPoints(
-    $category: String!
-    $weeklyPoints: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelAgentFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    agentByWeeklyPoints(
-      category: $category
-      weeklyPoints: $weeklyPoints
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        category
-        name
-        email
-        teamID
-        campaigns {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        dailyReports {
-          nextToken
-        }
-        dailyPoints
-        weeklyPoints
-        monthlyPoints
-        totalPoints
-        createdAt
-        updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const agentByMonthlyPoints = /* GraphQL */ `
-  query AgentByMonthlyPoints(
-    $category: String!
-    $monthlyPoints: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelAgentFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    agentByMonthlyPoints(
-      category: $category
-      monthlyPoints: $monthlyPoints
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        category
-        name
-        email
-        teamID
-        campaigns {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        dailyReports {
-          nextToken
-        }
-        dailyPoints
-        weeklyPoints
-        monthlyPoints
-        totalPoints
-        createdAt
-        updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const agentByTotalPoints = /* GraphQL */ `
-  query AgentByTotalPoints(
-    $category: String!
-    $totalPoints: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelAgentFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    agentByTotalPoints(
-      category: $category
-      totalPoints: $totalPoints
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        category
-        name
-        email
-        teamID
-        campaigns {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        dailyReports {
-          nextToken
-        }
-        dailyPoints
-        weeklyPoints
-        monthlyPoints
-        totalPoints
-        createdAt
-        updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const agentByName = /* GraphQL */ `
-  query AgentByName(
-    $category: String!
-    $name: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelAgentFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    agentByName(
-      category: $category
-      name: $name
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        category
-        name
-        email
-        teamID
-        campaigns {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        dailyReports {
-          nextToken
-        }
-        dailyPoints
-        weeklyPoints
-        monthlyPoints
-        totalPoints
-        createdAt
-        updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const campaignById = /* GraphQL */ `
-  query CampaignById(
-    $category: String!
-    $id: ModelIDKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelCampaignFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    campaignById(
-      category: $category
-      id: $id
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        category
-        type
-        client {
-          id
-          category
-          firstName
-          lastName
-          email
-          phone
-          companyName
-          website
-          country
-          notes
-          createdAt
-          updatedAt
-        }
-        agent {
-          id
-          category
-          name
-          email
-          teamID
-          dailyPoints
-          weeklyPoints
-          monthlyPoints
-          totalPoints
-          createdAt
-          updatedAt
-          owner
-        }
-        startDate
-        endDate
-        createdAt
-        status
-        length
-        notes
-        dailyReports {
-          nextToken
-        }
-        weeklyReports {
-          nextToken
-        }
-        monthlyReports {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        updatedAt
-        clientCampaignsId
-        agentCampaignsId
-      }
-      nextToken
-    }
-  }
-`;
-export const campaignByCreatedAt = /* GraphQL */ `
-  query CampaignByCreatedAt(
-    $category: String!
-    $createdAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelCampaignFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    campaignByCreatedAt(
-      category: $category
-      createdAt: $createdAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        category
-        type
-        client {
-          id
-          category
-          firstName
-          lastName
-          email
-          phone
-          companyName
-          website
-          country
-          notes
-          createdAt
-          updatedAt
-        }
-        agent {
-          id
-          category
-          name
-          email
-          teamID
-          dailyPoints
-          weeklyPoints
-          monthlyPoints
-          totalPoints
-          createdAt
-          updatedAt
-          owner
-        }
-        startDate
-        endDate
-        createdAt
-        status
-        length
-        notes
-        dailyReports {
-          nextToken
-        }
-        weeklyReports {
-          nextToken
-        }
-        monthlyReports {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        updatedAt
-        clientCampaignsId
-        agentCampaignsId
-      }
-      nextToken
-    }
-  }
-`;
-export const campaignTypeByLength = /* GraphQL */ `
-  query CampaignTypeByLength(
-    $type: String!
-    $length: ModelFloatKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelCampaignFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    campaignTypeByLength(
-      type: $type
-      length: $length
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        category
-        type
-        client {
-          id
-          category
-          firstName
-          lastName
-          email
-          phone
-          companyName
-          website
-          country
-          notes
-          createdAt
-          updatedAt
-        }
-        agent {
-          id
-          category
-          name
-          email
-          teamID
-          dailyPoints
-          weeklyPoints
-          monthlyPoints
-          totalPoints
-          createdAt
-          updatedAt
-          owner
-        }
-        startDate
-        endDate
-        createdAt
-        status
-        length
-        notes
-        dailyReports {
-          nextToken
-        }
-        weeklyReports {
-          nextToken
-        }
-        monthlyReports {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        updatedAt
-        clientCampaignsId
-        agentCampaignsId
-      }
-      nextToken
-    }
-  }
-`;
-export const campaignByEndDate = /* GraphQL */ `
-  query CampaignByEndDate(
-    $type: String!
-    $endDate: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelCampaignFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    campaignByEndDate(
-      type: $type
-      endDate: $endDate
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        category
-        type
-        client {
-          id
-          category
-          firstName
-          lastName
-          email
-          phone
-          companyName
-          website
-          country
-          notes
-          createdAt
-          updatedAt
-        }
-        agent {
-          id
-          category
-          name
-          email
-          teamID
-          dailyPoints
-          weeklyPoints
-          monthlyPoints
-          totalPoints
-          createdAt
-          updatedAt
-          owner
-        }
-        startDate
-        endDate
-        createdAt
-        status
-        length
-        notes
-        dailyReports {
-          nextToken
-        }
-        weeklyReports {
-          nextToken
-        }
-        monthlyReports {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        updatedAt
-        clientCampaignsId
-        agentCampaignsId
-      }
-      nextToken
-    }
-  }
-`;
-export const kpiByResult = /* GraphQL */ `
-  query KpiByResult(
-    $name: String!
-    $result: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelKpiFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    kpiByResult(
-      name: $name
-      result: $result
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        campaigns {
-          nextToken
-        }
-        result
-        target
-        coeff
-        nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const kpiByTarget = /* GraphQL */ `
-  query KpiByTarget(
-    $name: String!
-    $target: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelKpiFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    kpiByTarget(
-      name: $name
-      target: $target
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        campaigns {
-          nextToken
-        }
-        result
-        target
-        coeff
-        nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
+export const getTimezone = /* GraphQL */ `
+  query GetTimezone($timezone: String!) {
+    getTimezone(timezone: $timezone) {
+      timezone
+      datetime
     }
   }
 `;

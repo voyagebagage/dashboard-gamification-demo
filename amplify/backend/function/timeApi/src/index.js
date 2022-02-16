@@ -19,28 +19,18 @@ exports.handler = async (event) => {
   }
   console.log("2", apiUrl);
   try {
-    const response = await axios.get(apiUrl, {
+    const response = await axios.get(apiUrl);
+    const data = {
+      statusCode: 200,
+      datetime: response.data.datetime,
+      timezone: response.data.timezone,
       headers: {
         "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
       },
-    });
-    const data = {
-      // statusCode: 200,
-      timezone: response.data.timezone,
-      datetime: response.data.datetime,
-      // headers: {
-      //   "Access-Control-Allow-Origin": "*",
-      // },
     };
     console.log("response", data);
     return data;
-    // {
-    //   statusCode: 200,
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    // };
   } catch (error) {
     console.log("there is an error with timeApi (Lamda function)", error);
   }

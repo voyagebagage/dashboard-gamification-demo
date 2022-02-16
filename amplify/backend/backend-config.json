@@ -93,7 +93,11 @@
               "userPoolId": "authdashboardninjademoaut"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ]
         }
       }
     }
