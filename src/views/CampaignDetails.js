@@ -36,7 +36,7 @@ function CampaignDetails() {
       const campaignData = await API.graphql(
         graphqlOperation(getCampaign, { id: id })
       );
-      console.log(campaignData.data.getCampaign.status, "status");
+      console.log(campaignData.data.getCampaign, "status");
       setCampaignDetails(campaignData.data.getCampaign);
       setDailyReports(campaignData.data.getCampaign.dailyReports.items);
       setKpis(
@@ -204,6 +204,12 @@ function CampaignDetails() {
     },
   ];
   //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  console.log(
+    "dailyReports[dailyReports.length - 2]?.id",
+    dailyReports[dailyReports.length - 1]?.id
+  );
+  //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
   return (
     <>
       <div className="dFlex">

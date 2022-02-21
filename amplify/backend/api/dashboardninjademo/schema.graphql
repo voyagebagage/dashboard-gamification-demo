@@ -34,12 +34,7 @@ type Agent
   @model
   @auth(
     rules: [
-      {
-        allow: groups
-        groups: ["Admin", "Agent", "Client"]
-        # operations: [create, read, update]
-        # provider: userPools
-      }
+      { allow: groups, groups: ["Admin", "Agent", "Client"] }
       { allow: owner }
       { allow: private, provider: userPools, operations: [read] }
     ]
@@ -81,12 +76,12 @@ type Agent
   email: AWSEmail!
   teamID: ID @index(name: "byTeam", sortKeyFields: ["name"]) # or teamName: Team @belongsTo
   campaigns: [Campaign]! @hasMany # before @connection(name: "CampaignAgent")
-  kpis: [Kpi]! @manyToMany(relationName: "AgentKpis") # kpis: [Kpi]! @connection(name: "AgentKpis", sortField: "target")
+  kpis: [Kpi]! @hasMany(indexName: "byKpiName", fields: ["id"]) # kpis: [Kpi]! @connection(name: "AgentKpis", sortField: "target")
   dailyReports: [DailyReport]! @hasMany # dailyReports: [DailyReport]! @connection(name: "AgentDailyReports")
   dailyPoints: Int
   weeklyPoints: Int
   monthlyPoints: Int
-  # yearPoints: [YearPoints]! @connection(name: "YearPoints", sortField: "date")
+  yearPoints: [YearPoints]! @hasMany(indexName: "byDate", fields: ["id"]) #@connection(name: "YearPoints", sortField: "date")
   totalPoints: Int
 }
 
@@ -126,10 +121,11 @@ type Campaign
   status: String #cannot put Boolean for sorting, will be "true"/"false/"not yet"/"done"
   length: Float!
   notes: String
-  dailyReports: [DailyReport!]! @hasMany #  or @connection(name: "CampaignDailyReports", sortField: "createdAt")
+  dailyReports: [DailyReport!]!
+    @hasMany(indexName: "byCreatedAt", fields: ["id"]) #  or @connection(name: "CampaignDailyReports", sortField: "createdAt")
   weeklyReports: [WeeklyReport!]! @hasMany
   monthlyReports: [MonthlyReport!]! @hasMany
-  kpis: [Kpi!]! @manyToMany(relationName: "CampaignKpis") # kpis: [Kpi!]! @connection(name: "CampaignKpis")
+  kpis: [Kpi!]! @hasMany # kpis: [Kpi!]! @connection(name: "CampaignKpis")
 }
 type Team
   @model
@@ -147,7 +143,7 @@ type YearPoints
   @model
   @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
-  # agent: Agent! @connection(name: "YearPoints")
+  agentID: ID @index(name: "byDate", sortKeyFields: ["date"])
   month: String
   date: AWSDate!
 }
@@ -160,13 +156,13 @@ type WeeklyReport
   @searchable
   @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
-  # campaignID: ID
-  #   @index(
-  #     name: "byCampaignWeeklyReports"
-  #     queryField: "weeklyReportByCampaign"
-  #   )
-  campaign: Campaign! @belongsTo #(fields: ["campaignID"])
-  dailyReports: [DailyReport]! @hasMany
+  campaignID: ID!
+    @index(
+      name: "byCampaignWeeklyReports"
+      queryField: "weeklyReportByCampaign"
+    )
+  campaign: Campaign! @belongsTo(fields: ["campaignID"])
+  dailyReports: [DailyReport] @hasMany
   createdAt: AWSDateTime
   weeklyTarget: Int!
   ## monthlyReport: MonthlyReport @belongsTo
@@ -179,12 +175,12 @@ type MonthlyReport
   @searchable
   @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
-  # campaignID: ID
-  #   @index(
-  #     name: "byCampaignMonthlyReports"
-  #     queryField: "monthlyReportByCampaign"
-  #   )
-  campaign: Campaign! @belongsTo #(fields: ["campaignID"]) # campaign: Campaign! @connection(name: "CampaignMonthlyReports")
+  campaignID: ID!
+    @index(
+      name: "byCampaignMonthlyReports"
+      queryField: "monthlyReportByCampaign"
+    )
+  campaign: Campaign! @belongsTo(fields: ["campaignID"]) # campaign: Campaign! @connection(name: "CampaignMonthlyReports")
   createdAt: AWSDateTime
   monthlyTarget: Int!
   weeklyReports: [WeeklyReport]! @hasMany
@@ -197,9 +193,10 @@ type DailyReport
   @searchable
   @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
-  campaign: Campaign! @belongsTo
-  kpis: [Kpi!]! @manyToMany(relationName: "DailyReportKpis")
+  campaignID: ID! @index(name: "byCreatedAt", sortKeyFields: ["createdAt"])
+  campaign: Campaign! @belongsTo(fields: ["campaignID"])
   agent: Agent! @belongsTo # agent: Agent! @connection(name: "AgentDailyReports")
+  kpis: [Kpi!]! @hasMany
   date: AWSDate
   createdAt: AWSDateTime
   dailyTarget: Int
@@ -215,6 +212,7 @@ type Kpi
   @searchable
   @auth(rules: [{ allow: groups, groups: ["Admin", "Agent", "Client"] }]) {
   id: ID
+  agentID: ID! @index(name: "byKpiName", sortKeyFields: ["name"])
   name: String!  #category
     @index(
       name: "byResult"
@@ -226,15 +224,18 @@ type Kpi
       sortKeyFields: ["target"]
       queryField: "kpiByTarget"
     )
-  campaigns: [Campaign!] @manyToMany(relationName: "CampaignKpis") # OR campaign: Campaign! @connection(ame: "CampaignKpis")
+  campaign: Campaign! @belongsTo # OR campaign: Campaign! @connection(ame: "CampaignKpis")
   result: Int
   target: Int!
   coeff: Int!
   nextWeekTarget: Int
-  dailyReports: [DailyReport!] @manyToMany(relationName: "DailyReportKpis") # dailyReport: DailyReport! @connection(name: "DailyReportKpis")
-  agents: [Agent!] @manyToMany(relationName: "AgentKpis") # agent: Agent! @connection(name: "AgentKpis", sortField: "name")
+  dailyReport: DailyReport! @belongsTo # dailyReport: DailyReport! @connection(name: "DailyReportKpis")
+  agent: Agent! @belongsTo(fields: ["agentID"]) # agent: Agent! @connection(name: "AgentKpis", sortField: "name")
 }
 
+###################################################################
+#Functions
+###################################################################
 type Timezone {
   datetime: String
   timezone: String
@@ -244,29 +245,9 @@ type Query {
     @function(name: "timeApi-${env}")
     @auth(
       rules: [
-        {
-          allow: groups
-          groups: ["Admin", "Agent", "Client"]
-          # operations: [create, read, update]
-          # provider: userPools
-        }
+        { allow: groups, groups: ["Admin", "Agent", "Client"] }
         { allow: owner }
-        # { allow: private, provider: iam }
         { allow: private, provider: userPools }
       ]
     )
 }
-# type Location {
-#   # @auth(
-#   #   rules: [
-#   #     { allow: private, provider: userPools }
-#   #     { allow: groups, groups: ["Agent", "Admin", "Client"] }
-#   #   ]
-#   # )
-#   timezone: String
-#   datetime: String
-# }
-# type Query {
-#   getLocation: Location
-#     @http(url: "https://worldtimeapi.org/api/timezone/${env}:location")
-# }

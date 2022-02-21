@@ -224,16 +224,22 @@ export const getAgent = /* GraphQL */ `
         items {
           id
           agentID
-          kpiID
+          name
+          result
+          target
+          coeff
+          nextWeekTarget
           createdAt
           updatedAt
-          owner
+          campaignKpisId
+          dailyReportKpisId
         }
         nextToken
       }
       dailyReports {
         items {
           id
+          campaignID
           date
           createdAt
           dailyTarget
@@ -241,7 +247,6 @@ export const getAgent = /* GraphQL */ `
           weeklyTarget
           updatedAt
           agentDailyReportsId
-          campaignDailyReportsId
           weeklyReportDailyReportsId
         }
         nextToken
@@ -249,6 +254,17 @@ export const getAgent = /* GraphQL */ `
       dailyPoints
       weeklyPoints
       monthlyPoints
+      yearPoints {
+        items {
+          id
+          agentID
+          month
+          date
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       totalPoints
       createdAt
       updatedAt
@@ -281,6 +297,9 @@ export const listAgents = /* GraphQL */ `
         dailyPoints
         weeklyPoints
         monthlyPoints
+        yearPoints {
+          nextToken
+        }
         totalPoints
         createdAt
         updatedAt
@@ -325,6 +344,9 @@ export const agentByDailyPoints = /* GraphQL */ `
         dailyPoints
         weeklyPoints
         monthlyPoints
+        yearPoints {
+          nextToken
+        }
         totalPoints
         createdAt
         updatedAt
@@ -369,6 +391,9 @@ export const agentByWeeklyPoints = /* GraphQL */ `
         dailyPoints
         weeklyPoints
         monthlyPoints
+        yearPoints {
+          nextToken
+        }
         totalPoints
         createdAt
         updatedAt
@@ -413,6 +438,9 @@ export const agentByMonthlyPoints = /* GraphQL */ `
         dailyPoints
         weeklyPoints
         monthlyPoints
+        yearPoints {
+          nextToken
+        }
         totalPoints
         createdAt
         updatedAt
@@ -457,6 +485,9 @@ export const agentByTotalPoints = /* GraphQL */ `
         dailyPoints
         weeklyPoints
         monthlyPoints
+        yearPoints {
+          nextToken
+        }
         totalPoints
         createdAt
         updatedAt
@@ -501,6 +532,9 @@ export const agentByName = /* GraphQL */ `
         dailyPoints
         weeklyPoints
         monthlyPoints
+        yearPoints {
+          nextToken
+        }
         totalPoints
         createdAt
         updatedAt
@@ -552,6 +586,9 @@ export const getCampaign = /* GraphQL */ `
         dailyPoints
         weeklyPoints
         monthlyPoints
+        yearPoints {
+          nextToken
+        }
         totalPoints
         createdAt
         updatedAt
@@ -572,15 +609,26 @@ export const getCampaign = /* GraphQL */ `
           dailyPoints
           weeklyTarget
           updatedAt
-          agentDailyReportsId
-          campaignDailyReportsId
-          weeklyReportDailyReportsId
+          kpis {
+            items {
+              id
+              name
+              result
+              target
+              nextWeekTarget
+              coeff
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
         }
         nextToken
       }
       weeklyReports {
         items {
           id
+          campaignID
           createdAt
           weeklyTarget
           weeklyPoints
@@ -594,6 +642,7 @@ export const getCampaign = /* GraphQL */ `
       monthlyReports {
         items {
           id
+          campaignID
           createdAt
           monthlyTarget
           monthlyPoints
@@ -605,10 +654,16 @@ export const getCampaign = /* GraphQL */ `
       kpis {
         items {
           id
-          campaignID
-          kpiID
+          agentID
+          name
+          result
+          target
+          coeff
+          nextWeekTarget
           createdAt
           updatedAt
+          campaignKpisId
+          dailyReportKpisId
         }
         nextToken
       }
@@ -1138,6 +1193,7 @@ export const getYearPoints = /* GraphQL */ `
   query GetYearPoints($id: ID!) {
     getYearPoints(id: $id) {
       id
+      agentID
       month
       date
       createdAt
@@ -1154,6 +1210,7 @@ export const listYearPoints = /* GraphQL */ `
     listYearPoints(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        agentID
         month
         date
         createdAt
@@ -1167,6 +1224,7 @@ export const getWeeklyReport = /* GraphQL */ `
   query GetWeeklyReport($id: ID!) {
     getWeeklyReport(id: $id) {
       id
+      campaignID
       campaign {
         id
         name
@@ -1225,6 +1283,7 @@ export const getWeeklyReport = /* GraphQL */ `
       dailyReports {
         items {
           id
+          campaignID
           date
           createdAt
           dailyTarget
@@ -1232,7 +1291,6 @@ export const getWeeklyReport = /* GraphQL */ `
           weeklyTarget
           updatedAt
           agentDailyReportsId
-          campaignDailyReportsId
           weeklyReportDailyReportsId
         }
         nextToken
@@ -1256,6 +1314,55 @@ export const listWeeklyReports = /* GraphQL */ `
     listWeeklyReports(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        campaignID
+        campaign {
+          id
+          name
+          category
+          type
+          startDate
+          endDate
+          createdAt
+          status
+          length
+          notes
+          updatedAt
+          clientCampaignsId
+          agentCampaignsId
+        }
+        dailyReports {
+          nextToken
+        }
+        createdAt
+        weeklyTarget
+        weeklyPoints
+        willBeActiveOn
+        updatedAt
+        campaignWeeklyReportsId
+        monthlyReportWeeklyReportsId
+      }
+      nextToken
+    }
+  }
+`;
+export const weeklyReportByCampaign = /* GraphQL */ `
+  query WeeklyReportByCampaign(
+    $campaignID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelWeeklyReportFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    weeklyReportByCampaign(
+      campaignID: $campaignID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        campaignID
         campaign {
           id
           name
@@ -1305,6 +1412,7 @@ export const searchWeeklyReports = /* GraphQL */ `
     ) {
       items {
         id
+        campaignID
         campaign {
           id
           name
@@ -1354,6 +1462,7 @@ export const getMonthlyReport = /* GraphQL */ `
   query GetMonthlyReport($id: ID!) {
     getMonthlyReport(id: $id) {
       id
+      campaignID
       campaign {
         id
         name
@@ -1414,6 +1523,7 @@ export const getMonthlyReport = /* GraphQL */ `
       weeklyReports {
         items {
           id
+          campaignID
           createdAt
           weeklyTarget
           weeklyPoints
@@ -1439,6 +1549,53 @@ export const listMonthlyReports = /* GraphQL */ `
     listMonthlyReports(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        campaignID
+        campaign {
+          id
+          name
+          category
+          type
+          startDate
+          endDate
+          createdAt
+          status
+          length
+          notes
+          updatedAt
+          clientCampaignsId
+          agentCampaignsId
+        }
+        createdAt
+        monthlyTarget
+        weeklyReports {
+          nextToken
+        }
+        monthlyPoints
+        updatedAt
+        campaignMonthlyReportsId
+      }
+      nextToken
+    }
+  }
+`;
+export const monthlyReportByCampaign = /* GraphQL */ `
+  query MonthlyReportByCampaign(
+    $campaignID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelMonthlyReportFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    monthlyReportByCampaign(
+      campaignID: $campaignID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        campaignID
         campaign {
           id
           name
@@ -1486,6 +1643,7 @@ export const searchMonthlyReports = /* GraphQL */ `
     ) {
       items {
         id
+        campaignID
         campaign {
           id
           name
@@ -1533,6 +1691,7 @@ export const getDailyReport = /* GraphQL */ `
   query GetDailyReport($id: ID!) {
     getDailyReport(id: $id) {
       id
+      campaignID
       campaign {
         id
         name
@@ -1588,16 +1747,6 @@ export const getDailyReport = /* GraphQL */ `
         clientCampaignsId
         agentCampaignsId
       }
-      kpis {
-        items {
-          id
-          dailyReportID
-          kpiID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       agent {
         id
         category
@@ -1616,10 +1765,29 @@ export const getDailyReport = /* GraphQL */ `
         dailyPoints
         weeklyPoints
         monthlyPoints
+        yearPoints {
+          nextToken
+        }
         totalPoints
         createdAt
         updatedAt
         owner
+      }
+      kpis {
+        items {
+          id
+          agentID
+          name
+          result
+          target
+          coeff
+          nextWeekTarget
+          createdAt
+          updatedAt
+          campaignKpisId
+          dailyReportKpisId
+        }
+        nextToken
       }
       date
       createdAt
@@ -1628,7 +1796,6 @@ export const getDailyReport = /* GraphQL */ `
       weeklyTarget
       updatedAt
       agentDailyReportsId
-      campaignDailyReportsId
       weeklyReportDailyReportsId
     }
   }
@@ -1642,6 +1809,7 @@ export const listDailyReports = /* GraphQL */ `
     listDailyReports(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        campaignID
         campaign {
           id
           name
@@ -1657,9 +1825,6 @@ export const listDailyReports = /* GraphQL */ `
           clientCampaignsId
           agentCampaignsId
         }
-        kpis {
-          nextToken
-        }
         agent {
           id
           category
@@ -1674,6 +1839,22 @@ export const listDailyReports = /* GraphQL */ `
           updatedAt
           owner
         }
+        kpis {
+          items {
+            id
+            agentID
+            name
+            result
+            target
+            coeff
+            nextWeekTarget
+            createdAt
+            updatedAt
+            campaignKpisId
+            dailyReportKpisId
+          }
+          nextToken
+        }
         date
         createdAt
         dailyTarget
@@ -1681,7 +1862,6 @@ export const listDailyReports = /* GraphQL */ `
         weeklyTarget
         updatedAt
         agentDailyReportsId
-        campaignDailyReportsId
         weeklyReportDailyReportsId
       }
       nextToken
@@ -1707,6 +1887,7 @@ export const searchDailyReports = /* GraphQL */ `
     ) {
       items {
         id
+        campaignID
         campaign {
           id
           name
@@ -1722,9 +1903,6 @@ export const searchDailyReports = /* GraphQL */ `
           clientCampaignsId
           agentCampaignsId
         }
-        kpis {
-          nextToken
-        }
         agent {
           id
           category
@@ -1739,6 +1917,9 @@ export const searchDailyReports = /* GraphQL */ `
           updatedAt
           owner
         }
+        kpis {
+          nextToken
+        }
         date
         createdAt
         dailyTarget
@@ -1746,7 +1927,6 @@ export const searchDailyReports = /* GraphQL */ `
         weeklyTarget
         updatedAt
         agentDailyReportsId
-        campaignDailyReportsId
         weeklyReportDailyReportsId
       }
       nextToken
@@ -1772,315 +1952,8 @@ export const getKpi = /* GraphQL */ `
   query GetKpi($id: ID!) {
     getKpi(id: $id) {
       id
-      name
-      campaigns {
-        items {
-          id
-          campaignID
-          kpiID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      result
-      target
-      coeff
-      nextWeekTarget
-      dailyReports {
-        items {
-          id
-          dailyReportID
-          kpiID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      agents {
-        items {
-          id
-          agentID
-          kpiID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listKpis = /* GraphQL */ `
-  query ListKpis(
-    $filter: ModelKpiFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listKpis(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        campaigns {
-          nextToken
-        }
-        result
-        target
-        coeff
-        nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const kpiByResult = /* GraphQL */ `
-  query KpiByResult(
-    $name: String!
-    $result: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelKpiFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    kpiByResult(
-      name: $name
-      result: $result
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        campaigns {
-          nextToken
-        }
-        result
-        target
-        coeff
-        nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const kpiByTarget = /* GraphQL */ `
-  query KpiByTarget(
-    $name: String!
-    $target: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelKpiFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    kpiByTarget(
-      name: $name
-      target: $target
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        campaigns {
-          nextToken
-        }
-        result
-        target
-        coeff
-        nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const searchKpis = /* GraphQL */ `
-  query SearchKpis(
-    $filter: SearchableKpiFilterInput
-    $sort: [SearchableKpiSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableKpiAggregationInput]
-  ) {
-    searchKpis(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        name
-        campaigns {
-          nextToken
-        }
-        result
-        target
-        coeff
-        nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export const getAgentKpis = /* GraphQL */ `
-  query GetAgentKpis($id: ID!) {
-    getAgentKpis(id: $id) {
-      id
       agentID
-      kpiID
-      agent {
-        id
-        category
-        name
-        email
-        teamID
-        campaigns {
-          nextToken
-        }
-        kpis {
-          nextToken
-        }
-        dailyReports {
-          nextToken
-        }
-        dailyPoints
-        weeklyPoints
-        monthlyPoints
-        totalPoints
-        createdAt
-        updatedAt
-        owner
-      }
-      kpi {
-        id
-        name
-        campaigns {
-          nextToken
-        }
-        result
-        target
-        coeff
-        nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const listAgentKpis = /* GraphQL */ `
-  query ListAgentKpis(
-    $filter: ModelAgentKpisFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listAgentKpis(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        agentID
-        kpiID
-        agent {
-          id
-          category
-          name
-          email
-          teamID
-          dailyPoints
-          weeklyPoints
-          monthlyPoints
-          totalPoints
-          createdAt
-          updatedAt
-          owner
-        }
-        kpi {
-          id
-          name
-          result
-          target
-          coeff
-          nextWeekTarget
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const getCampaignKpis = /* GraphQL */ `
-  query GetCampaignKpis($id: ID!) {
-    getCampaignKpis(id: $id) {
-      id
-      campaignID
-      kpiID
+      name
       campaign {
         id
         name
@@ -2136,81 +2009,13 @@ export const getCampaignKpis = /* GraphQL */ `
         clientCampaignsId
         agentCampaignsId
       }
-      kpi {
-        id
-        name
-        campaigns {
-          nextToken
-        }
-        result
-        target
-        coeff
-        nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listCampaignKpis = /* GraphQL */ `
-  query ListCampaignKpis(
-    $filter: ModelCampaignKpisFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listCampaignKpis(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        campaignID
-        kpiID
-        campaign {
-          id
-          name
-          category
-          type
-          startDate
-          endDate
-          createdAt
-          status
-          length
-          notes
-          updatedAt
-          clientCampaignsId
-          agentCampaignsId
-        }
-        kpi {
-          id
-          name
-          result
-          target
-          coeff
-          nextWeekTarget
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getDailyReportKpis = /* GraphQL */ `
-  query GetDailyReportKpis($id: ID!) {
-    getDailyReportKpis(id: $id) {
-      id
-      dailyReportID
-      kpiID
+      result
+      target
+      coeff
+      nextWeekTarget
       dailyReport {
         id
+        campaignID
         campaign {
           id
           name
@@ -2225,9 +2030,6 @@ export const getDailyReportKpis = /* GraphQL */ `
           updatedAt
           clientCampaignsId
           agentCampaignsId
-        }
-        kpis {
-          nextToken
         }
         agent {
           id
@@ -2243,6 +2045,9 @@ export const getDailyReportKpis = /* GraphQL */ `
           updatedAt
           owner
         }
+        kpis {
+          nextToken
+        }
         date
         createdAt
         dailyTarget
@@ -2250,46 +2055,74 @@ export const getDailyReportKpis = /* GraphQL */ `
         weeklyTarget
         updatedAt
         agentDailyReportsId
-        campaignDailyReportsId
         weeklyReportDailyReportsId
       }
-      kpi {
+      agent {
         id
+        category
         name
+        email
+        teamID
         campaigns {
           nextToken
+        }
+        kpis {
+          nextToken
+        }
+        dailyReports {
+          nextToken
+        }
+        dailyPoints
+        weeklyPoints
+        monthlyPoints
+        yearPoints {
+          nextToken
+        }
+        totalPoints
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      campaignKpisId
+      dailyReportKpisId
+    }
+  }
+`;
+export const listKpis = /* GraphQL */ `
+  query ListKpis(
+    $filter: ModelKpiFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listKpis(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        agentID
+        name
+        campaign {
+          id
+          name
+          category
+          type
+          startDate
+          endDate
+          createdAt
+          status
+          length
+          notes
+          updatedAt
+          clientCampaignsId
+          agentCampaignsId
         }
         result
         target
         coeff
         nextWeekTarget
-        dailyReports {
-          nextToken
-        }
-        agents {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listDailyReportKpis = /* GraphQL */ `
-  query ListDailyReportKpis(
-    $filter: ModelDailyReportKpisFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listDailyReportKpis(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        dailyReportID
-        kpiID
         dailyReport {
           id
+          campaignID
           date
           createdAt
           dailyTarget
@@ -2297,31 +2130,276 @@ export const listDailyReportKpis = /* GraphQL */ `
           weeklyTarget
           updatedAt
           agentDailyReportsId
-          campaignDailyReportsId
           weeklyReportDailyReportsId
         }
-        kpi {
+        agent {
           id
+          category
           name
-          result
-          target
-          coeff
-          nextWeekTarget
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
           createdAt
           updatedAt
+          owner
         }
         createdAt
         updatedAt
+        campaignKpisId
+        dailyReportKpisId
       }
       nextToken
+    }
+  }
+`;
+export const kpiByResult = /* GraphQL */ `
+  query KpiByResult(
+    $name: String!
+    $result: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelKpiFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    kpiByResult(
+      name: $name
+      result: $result
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        agentID
+        name
+        campaign {
+          id
+          name
+          category
+          type
+          startDate
+          endDate
+          createdAt
+          status
+          length
+          notes
+          updatedAt
+          clientCampaignsId
+          agentCampaignsId
+        }
+        result
+        target
+        coeff
+        nextWeekTarget
+        dailyReport {
+          id
+          campaignID
+          date
+          createdAt
+          dailyTarget
+          dailyPoints
+          weeklyTarget
+          updatedAt
+          agentDailyReportsId
+          weeklyReportDailyReportsId
+        }
+        agent {
+          id
+          category
+          name
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        campaignKpisId
+        dailyReportKpisId
+      }
+      nextToken
+    }
+  }
+`;
+export const kpiByTarget = /* GraphQL */ `
+  query KpiByTarget(
+    $name: String!
+    $target: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelKpiFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    kpiByTarget(
+      name: $name
+      target: $target
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        agentID
+        name
+        campaign {
+          id
+          name
+          category
+          type
+          startDate
+          endDate
+          createdAt
+          status
+          length
+          notes
+          updatedAt
+          clientCampaignsId
+          agentCampaignsId
+        }
+        result
+        target
+        coeff
+        nextWeekTarget
+        dailyReport {
+          id
+          campaignID
+          date
+          createdAt
+          dailyTarget
+          dailyPoints
+          weeklyTarget
+          updatedAt
+          agentDailyReportsId
+          weeklyReportDailyReportsId
+        }
+        agent {
+          id
+          category
+          name
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        campaignKpisId
+        dailyReportKpisId
+      }
+      nextToken
+    }
+  }
+`;
+export const searchKpis = /* GraphQL */ `
+  query SearchKpis(
+    $filter: SearchableKpiFilterInput
+    $sort: [SearchableKpiSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableKpiAggregationInput]
+  ) {
+    searchKpis(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        agentID
+        name
+        campaign {
+          id
+          name
+          category
+          type
+          startDate
+          endDate
+          createdAt
+          status
+          length
+          notes
+          updatedAt
+          clientCampaignsId
+          agentCampaignsId
+        }
+        result
+        target
+        coeff
+        nextWeekTarget
+        dailyReport {
+          id
+          campaignID
+          date
+          createdAt
+          dailyTarget
+          dailyPoints
+          weeklyTarget
+          updatedAt
+          agentDailyReportsId
+          weeklyReportDailyReportsId
+        }
+        agent {
+          id
+          category
+          name
+          email
+          teamID
+          dailyPoints
+          weeklyPoints
+          monthlyPoints
+          totalPoints
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        campaignKpisId
+        dailyReportKpisId
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
     }
   }
 `;
 export const getTimezone = /* GraphQL */ `
   query GetTimezone($timezone: String!) {
     getTimezone(timezone: $timezone) {
-      timezone
       datetime
+      timezone
     }
   }
 `;

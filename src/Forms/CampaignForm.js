@@ -52,13 +52,13 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
   //                     DROPDOWNs
   //#########################################################
   const selectClient = async (e) => {
-    // console.log(form.campaignClientId, "campaignClientId");
+    // console.log(form.clientCampaignsId, "clientCampaignsId");
     try {
       const filteredClientNames = await API.graphql(
         graphqlOperation(clientByfirstName, {
           category: "client",
           //getting ID as value because it is the required key to create Campaign
-          firstName: { beginsWith: form.campaignClientId },
+          firstName: { beginsWith: form.clientCampaignsId },
           sortDirection: "ASC",
           // limit: 5000,
         })
@@ -69,7 +69,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
         "filteredClientNames"
       );
     } catch (error) {
-      console.log("Error with select ClientByFirstName", error);
+      console.log("E R R O R with select ClientByFirstName", error);
     }
   };
   //----------------------------------------------------------
@@ -78,7 +78,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
       const filteredAgentNames = await API.graphql(
         graphqlOperation(agentByName, {
           category: "agent",
-          name: { beginsWith: form.campaignAgentId },
+          name: { beginsWith: form.agentCampaignsId },
           sortDirection: "ASC",
         })
       );
@@ -133,7 +133,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
         console.log(newCampaignData.data.createCampaign, "newCampaignData");
         console.log("succes createCampaign");
       } catch (error) {
-        console.log("Error with create new Campaign", error);
+        console.log("E R R O R with create new Campaign", error);
         setErrors(error.errors[0].message);
         setIsSubmitting(false);
       }
@@ -144,16 +144,20 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
         const newDailyReport = await API.graphql(
           graphqlOperation(createDailyReport, {
             input: {
-              dailyReportCampaignId: idDailyReport,
-              dailyReportAgentId: idAgent,
+              campaignID: idDailyReport, //campaignDailyReportsId
+              agentDailyReportsId: idAgent,
             },
           })
         );
         setDailyReport(newDailyReport.data.createDailyReport);
-        console.log("success daily report");
+        console.log("success creating a daily report");
         console.log(newDailyReport.data.createDailyReport, "newDailyReport");
       } catch (error) {
-        console.log("error creating a DailyReport", error);
+        let errorObject = JSON.parse(JSON.stringify(error));
+        console.log(
+          "E R R O R creating a DailyReport",
+          errorObject.errors[0].message
+        );
       }
     }
     //------~~~~~~~~~~~~~--if BACK BUTTON---~~~~~~~~~~~~~--------
@@ -169,9 +173,18 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
         //------removing fields
         delete form.agent; //update will regenerate the agent
         delete form.client; //update will regenerate the client
+        delete form.dailyReportKpisId; //v2 change
         delete form.dailyReports;
+        delete form.weeklyReports;
+        delete form.monthlyReports;
+        delete form.kpis;
         delete form.createdAt;
         delete form.updatedAt;
+        form.name = "";
+        if (form.coeff || form.target) {
+          delete form.coeff;
+          delete form.target;
+        }
         //---upgrading status
         const now = new Date().getTime();
         const startTime = new Date(form.startDate).getTime();
@@ -180,6 +193,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
         if (now >= startTime && now <= endTime) form.status = "true";
         if (now > endTime) form.status = "done";
         //----------
+        console.log("F O R M before UPDATING", form);
         const campaignUpdate = await API.graphql(
           graphqlOperation(updateCampaign, { input: form })
         );
@@ -191,7 +205,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
         console.log("succes update");
         setBackButton(false);
       } catch (error) {
-        console.log("error updating a campaign", error);
+        console.log("E R R O R  updating a campaign", error.errors[0].message);
       }
     }
   };
@@ -203,12 +217,14 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
   const handleAddKpi = async () => {
     setNewKpi(true);
     try {
+      console.log("COUCOU FROM ADDKPI", dailyReport);
       // setIsSubmitting(true);
-      form.kpiDailyReportId = dailyReport.id;
-      form.kpiAgentId = dailyReport.campaign.agent.id;
-      form.kpiCampaignId = newCampaign.id;
+      form.dailyReportKpisId = dailyReport.id;
+      form.agentID = dailyReport.campaign.agent.id;
+      form.campaignKpisId = newCampaign.id;
       form.coeff = Number(form.coeff);
       form.target = Number(form.target);
+      console.log("F O R M before AddKpi", form);
       const newKpi = await API.graphql(
         graphqlOperation(createKpi, { input: form })
       );
@@ -226,7 +242,8 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
       setListKpi(newArr);
       setForm({});
     } catch (error) {
-      console.log("error creating a KPI", error);
+      let errorObject = JSON.parse(JSON.stringify(error));
+      console.log("E R R O R creating a KPI", errorObject.errors[0].message);
     }
     //----------------------~~~~~~~~~~~~~----------------
   };
@@ -248,7 +265,10 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
       newKpiDelete.splice(idx, 1); //spotting the kpi to remove
       setListKpi(newKpiDelete); //updating
     } catch (error) {
-      console.log("there is a Error with Deleting KPI", error);
+      console.log(
+        "there is a E R R O R with Deleting KPI",
+        error.errors[0].message
+      );
     }
   };
   // console.log(clientName, "clientName");
@@ -265,9 +285,10 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
     let idWeeklyReport = "";
     let sum = 0;
     console.log(sum, "SUM+++++======");
+    console.log("list OF KPI", listKpi);
     for (let i = 0; i < listKpi.length; i++) {
       sum += listKpi[i].target * listKpi[i].coeff;
-      console.log(sum, "SUM+++++======");
+      console.log(sum, "SUM+++++====== for iiii");
     }
     dailyReport.weeklyTarget = sum;
     console.log(dailyReport.weeklyTarget, "dailyReport.weeklyTarget");
@@ -280,11 +301,15 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
       const d = (y, m) => new Date(y, m, 0).getDate();
       let daysInMonth = d(newD.getFullYear(), newD.getMonth() + 1);
       console.log(daysInMonth, "----  daysInMonth ----");
+      console.log("dailyReport", dailyReport);
+      console.log("newCampaign.id", newCampaign.id);
       const newMonthlyReport = await API.graphql(
         graphqlOperation(createMonthlyReport, {
           input: {
             monthlyTarget: dailyReport.dailyTarget * daysInMonth,
-            monthlyReportCampaignId: newCampaign.id,
+            campaignMonthlyReportsId: newCampaign.id,
+            campaignID: newCampaign.id,
+            // campaignID:
           },
         })
       );
@@ -295,7 +320,10 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
       );
       console.log("success creating MonthlyReport");
     } catch (error) {
-      console.log("there is an error with creating MonthlyReport,", error);
+      console.log(
+        "there is an E R R O R with creating MonthlyReport,",
+        error.errors[0].message
+      );
     }
 
     //-------------=========== Create newWeeklyReport============------------
@@ -303,9 +331,11 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
       const newWeeklyReport = await API.graphql(
         graphqlOperation(createWeeklyReport, {
           input: {
-            weeklyReportMonthlyReportId: idMonthlyReport,
-            weeklyReportCampaignId: newCampaign.id,
+            monthlyReportWeeklyReportsId: idMonthlyReport,
+            campaignWeeklyReportsId: newCampaign.id,
+            campaignID: newCampaign.id,
             weeklyTarget: dailyReport.weeklyTarget,
+            // campaignID:
           },
         })
       );
@@ -316,7 +346,11 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
       );
       console.log("success creating WeeklyReport");
     } catch (error) {
-      console.log("there is an error with creating WeeklyReport,", error);
+      let errorObject = JSON.parse(JSON.stringify(error));
+      console.log(
+        "there is an error with creating WeeklyReport,",
+        errorObject.errors[0].message
+      );
     }
 
     //----------------------========== Update DR ============------
@@ -330,7 +364,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
             id: dailyReport.id,
             weeklyTarget: dailyReport.weeklyTarget,
             dailyTarget: dailyReport.dailyTarget,
-            dailyReportWeeklyReportId: idWeeklyReport,
+            weeklyReportDailyReportsId: idWeeklyReport,
           },
         })
       );
@@ -341,7 +375,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
       );
       console.log("success updating DR");
     } catch (error) {
-      console.log("there is an error with updating DR,", error);
+      console.log("there is an E R R O R with updating DR,", error);
     }
 
     setForm({});
@@ -429,8 +463,8 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                   // padded
                 >
                   {/* //################################
-                  //################################ 
-                  //######## COLUMN 1 FORM ######### 
+                  //################################
+                  //######## COLUMN 1 FORM #########
                   //################################
                   //################################ */}
                   {/* ------------------------name-------------------------- */}
@@ -461,12 +495,12 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                         })}
                         label="Client Name"
                         placeholder="Select Client"
-                        name="campaignClientId"
-                        value={form.campaignClientId || ""}
+                        name="clientCampaignsId"
+                        value={form.clientCampaignsId || ""}
                         onChange={
                           onChange
                           // (event, data) =>
-                          //   setForm({ campaignClientId: data.options[0].key })
+                          //   setForm({ clientCampaignsId: data.options[0].key })
                           // console.log(data.options[0].key, "data")
                         }
                         onFocus={selectClient}
@@ -485,7 +519,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                       />
                     </Grid.Column>
                     {/* //########################
-                  //################################ 
+                  //################################
                   //######## COLUMN 2 FORM #########
                    //################################
                   //################################ */}
@@ -528,12 +562,12 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                         label="Assign Agent"
                         placeholder="Select Agent"
                         onFocus={selectAgent}
-                        name="campaignAgentId"
-                        value={form.campaignAgentId || ""}
+                        name="agentCampaignsId"
+                        value={form.agentCampaignsId || ""}
                         onChange={
                           onChange
                           // (event, data) =>
-                          // (form.campaignAgentId = data.options[0].key)
+                          // (form.agentCampaignsId = data.options[0].key)
                         }
                         disabled={step2}
                       />
@@ -630,41 +664,40 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                       {/* //=============ROW================ */}
                       {listKpi?.length
                         ? listKpi.map((oneKpi, idx) => (
-                            <>
-                              <Grid.Row
-                                columns={4}
-                                stretched
-                                // centered
-                              >
-                                <Grid.Column key={idx}>
-                                  <strong className="kpi-header">
-                                    {oneKpi.name}
-                                  </strong>
-                                </Grid.Column>
-                                <Grid.Column>
-                                  <strong className="kpi-header">
-                                    {oneKpi.coeff}
-                                  </strong>
-                                </Grid.Column>
-                                <Grid.Column>
-                                  <strong className="kpi-header">
-                                    {oneKpi.target}
-                                  </strong>
-                                </Grid.Column>
-                                <Grid.Column width={1}>
-                                  <div className="centerSized">
-                                    <Icon
-                                      inverted
-                                      name="remove circle"
-                                      fitted
-                                      link
-                                      size="large"
-                                      onClick={() => handleDeleteKpi(idx)}
-                                    />
-                                  </div>
-                                </Grid.Column>
-                              </Grid.Row>
-                            </>
+                            <Grid.Row
+                              key={idx}
+                              columns={4}
+                              stretched
+                              // centered
+                            >
+                              <Grid.Column>
+                                <strong className="kpi-header">
+                                  {oneKpi.name}
+                                </strong>
+                              </Grid.Column>
+                              <Grid.Column>
+                                <strong className="kpi-header">
+                                  {oneKpi.coeff}
+                                </strong>
+                              </Grid.Column>
+                              <Grid.Column>
+                                <strong className="kpi-header">
+                                  {oneKpi.target}
+                                </strong>
+                              </Grid.Column>
+                              <Grid.Column width={1}>
+                                <div className="centerSized">
+                                  <Icon
+                                    inverted
+                                    name="remove circle"
+                                    fitted
+                                    link
+                                    size="large"
+                                    onClick={() => handleDeleteKpi(idx)}
+                                  />
+                                </div>
+                              </Grid.Column>
+                            </Grid.Row>
                           ))
                         : null}
 
@@ -731,21 +764,21 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                                   link
                                   disabled={addKpiButtonValid}
                                   style={{ borderWidth: 0 }}
-                                  onClick={handleAddKpi}
+                                  onClick={() => handleAddKpi()}
                                 />
                               </div>
                             </>
                           ) : (
                             <>
                               <div className="center">
-                                <Label labelPosition="left">
+                                <Label labelposition="left">
                                   Add a new KPI
                                 </Label>
                                 <Icon
                                   size="big"
                                   name="add circle"
                                   link
-                                  // labelPosition="left"
+                                  // labelposition="left"
                                   inverted
                                   onClick={() => setNewKpi(true)}
                                 />
@@ -772,8 +805,9 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                                   setStep2(false);
                                   setBackButton(true);
                                   setNewKpi(false);
-                                  form.campaignAgentId = newCampaign.agent.id;
-                                  form.campaignClientId = newCampaign.client.id;
+                                  form.agentCampaignsId = newCampaign.agent.id;
+                                  form.clientCampaignsId =
+                                    newCampaign.client.id;
                                   setForm({ ...newCampaign, ...form });
                                   setIsSubmitting(false);
                                 }}

@@ -22,7 +22,6 @@ function Agent() {
 
   const variables = {
     // nextToken,
-    //
     limit,
     // filter,
     // sortDirection,
@@ -41,7 +40,7 @@ function Agent() {
       setAgents(agentData.data.agentByMonthlyPoints.items);
       setIsLoading(false);
     } catch (error) {
-      console.log("error with get clients :", error);
+      console.log("error with get clients :", error.errors[0].message);
     }
   };
   useEffect(() => {

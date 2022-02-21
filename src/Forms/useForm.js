@@ -53,13 +53,13 @@ export default () => {
     !form.name?.length ||
     !form.type?.length ||
     !form.length?.length ||
-    !form.campaignAgentId?.length ||
-    !form.campaignClientId?.length ||
+    !form.agentCampaignsId?.length ||
+    !form.clientCampaignsId?.length ||
     !form.endDate?.length ||
     !form.startDate?.length;
 
   // const campaignFormUpdateValid =
-  //   !form.campaignAgentId?.length || !form.campaignClientId?.length;
+  //   !form.agentCampaignsId?.length || !form.clientCampaignsId?.length;
 
   //******************KPI-Dailyreport******************** */
   const addKpiButtonValid =

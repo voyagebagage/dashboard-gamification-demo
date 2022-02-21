@@ -14,6 +14,7 @@ import {
 import { useKpis } from "../../../context/Provider";
 import useForm from "../../../Forms/useForm";
 import { getDailyReports } from "../../../graphql/custom-queries";
+import { listDailyReports } from "../../../graphql/queries";
 import {
   createDailyReport,
   createKpi,
@@ -112,18 +113,27 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
   //#####################################################
   const fetchDailyReport = async () => {
     try {
-      const listDailyReports = await API.graphql(
-        graphqlOperation(getDailyReports, { id: campId })
+      console.log("campId", campId);
+      const variables = {
+        filter: { campaignID: { contains: campId } },
+      };
+      const listDailyReportsData = await API.graphql(
+        graphqlOperation(listDailyReports, variables)
+      );
+      console.log(
+        "list daily reports:",
+        listDailyReportsData.data.listDailyReports.items
       );
       //---shortening----
-      const dailyReportsPath =
-        listDailyReports.data.getCampaign.dailyReports.items;
+      const dailyReportsPath = listDailyReportsData.data.listDailyReports.items;
+      console.log("dailyReportsPath", dailyReportsPath);
       const itemsLength = dailyReportsPath.length;
-      const kpisLastDailyReport = dailyReportsPath[itemsLength - 1]?.kpis.items;
-      const kpisOneBeforeLastDailyReport =
-        dailyReportsPath[itemsLength - 2]?.kpis.items;
+      const kpisLastDailyReport = dailyReportsPath[0]?.kpis.items;
+      console.log("kpisLastDailyReport", kpisLastDailyReport);
+      const kpisOneBeforeLastDailyReport = dailyReportsPath[1]?.kpis.items;
+      console.log("kpisOneBeforeLastDailyReport", kpisOneBeforeLastDailyReport);
       //------sets-------
-      setDailyReports(listDailyReports.data.getCampaign.dailyReports.items);
+      setDailyReports(listDailyReportsData.data.listDailyReports.items);
       if (kpisLastDailyReport) setKpis(kpisLastDailyReport);
       else {
         kpisOneBeforeLastDailyReport.forEach((e) => {
@@ -131,11 +141,12 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
         });
         setKpis(kpisOneBeforeLastDailyReport);
       }
-      setDailyReport(dailyReportsPath[itemsLength - 1]);
+      setDailyReport(dailyReportsPath[0]);
+      console.log("dailyReportsPath[0]", dailyReportsPath[0]);
       const report = await getDaysArray(
         startWeekDate,
         endWeekDate,
-        listDailyReports.data.getCampaign.dailyReports.items
+        listDailyReportsData.data.listDailyReports.items
       );
       setWeekArray(report);
       setIsLoading(false);
@@ -162,8 +173,9 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
       delete form.updatedAt;
       delete form.weeklyReport;
       delete form.monthlyReport;
-      form.dailyReportCampaignId = id;
-      form.dailyReportAgentId = agent.id;
+      console.log("form addDailyReport", form);
+      form.campaignID = id;
+      form.agentDailyReportsId = agent.id;
       form.date = date;
       const createNewDR = await API.graphql(
         graphqlOperation(createDailyReport, {
@@ -173,13 +185,17 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
       const newDReport = createNewDR.data.createDailyReport;
       copyWeekArray[idx].dReport = newDReport;
       setDailyReport(newDReport);
+      console.log("******newDReport*****", newDReport.id);
       setDailyReports([...dailyReports, newDReport]);
       setWeekArray(copyWeekArray);
       console.log(createNewDR.data.createDailyReport, "createNewDR");
       setForm({});
       console.log("succes");
     } catch (error) {
-      console.log("there is an error with create DR :", error);
+      console.log(
+        "there is an error with create DR :",
+        error.errors[0].message
+      );
     }
   };
   //#####################################################
@@ -188,6 +204,8 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
   const newDailyReport = async (e) => {
     e.preventDefault();
     try {
+      console.log("DR ID", dailyReport.id);
+      console.log("KPI", kpis);
       //~~~~~~~~~ CREATE NEW KPIS ~~~~~~~~~~
       let total = 0;
       let target = 0;
@@ -198,19 +216,21 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
         delete kpis[i].id;
         total += kpis[i].result * kpis[i].coeff;
         target += (kpis[i].result * 100) / kpis[i].target;
+        console.log("DR ID", i, dailyReport.id);
         const newKpi = await API.graphql(
           graphqlOperation(createKpi, {
             input: {
-              kpiAgentId: agent.id,
-              kpiCampaignId: id,
-              kpiDailyReportId: dailyReport.id,
+              agentID: agent.id,
+              campaignKpisId: id,
+              dailyReportKpisId: dailyReport.id,
               ...kpis[i],
             },
           })
         );
         elem.push(newKpi.data.createKpi);
-        console.log(newKpi.data.createKpi, "kpi");
+        console.log(newKpi.data, "kpi");
       }
+      // setKpis(elem);
       setKpis(elem.reverse());
       //    ===============================================
       const updateDailyPoints = await API.graphql(
@@ -230,7 +250,10 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
       ]);
       console.log("succes with updating A L L RESULTS");
     } catch (error) {
-      console.log("There is an error with create Kpi ", error);
+      console.log(
+        "There is an error with create Kpi :",
+        error.errors[0].message
+      );
     }
   };
 
@@ -276,11 +299,10 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
             <Table.HeaderCell className="dFlex-sBetween">
               Week {currentWeekNumber(new Date())}
             </Table.HeaderCell>
-            {campId &&
-              !isLoading &&
-              !isLoading &&
+            {!isLoading &&
+              campId &&
               kpis.map((oneKpi) => (
-                <Table.HeaderCell width={2} key={oneKpi.name}>
+                <Table.HeaderCell width={2} key={oneKpi.id}>
                   {oneKpi.name}
                 </Table.HeaderCell>
               ))}
@@ -292,7 +314,12 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
         <Table.Body style={{ backgroundColor: "#566A63" }}>
           {weekArray &&
             weekArray.map((oneDay, idx) => {
-              if (!oneDay.future && !oneDay.past && dReportCount === idx)
+              if (
+                !oneDay.future &&
+                !oneDay.past &&
+                dReportCount !== 0 &&
+                dReportCount === idx
+              )
                 oneDay.disable = true;
               if (oneDay.showAddButton) oneDay.addButtonCount = true;
               console.log(
@@ -310,133 +337,129 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
               // console.log("0 R E P O R T :", oneDay.dReport?.kpis);
               // console.log(idx, "d d d", d, typeof d);
               return (
-                <>
-                  <Table.Row>
-                    <Table.Cell width={3}>
-                      <Header
-                        as="h4"
-                        inverted
-                        color={oneDay.date.slice(5, 15) === d ? "green" : null}
-                      >
-                        {oneDay.date}
-                      </Header>
+                <Table.Row key={idx}>
+                  <Table.Cell width={3}>
+                    <Header
+                      as="h4"
+                      inverted
+                      color={oneDay.date.slice(5, 15) === d ? "green" : null}
+                    >
+                      {oneDay.date}
+                    </Header>
+                  </Table.Cell>
+                  {oneDay.dReport &&
+                    oneDay.dReport.dailyPoints &&
+                    oneDay.dReport?.kpis?.items.map((oneKpi) => (
+                      <Table.Cell>{oneKpi.result}</Table.Cell>
+                    ))}
+                  {(!oneDay.showAddButton && !oneDay.future) ||
+                  oneDay.dReport?.dailyPoints ? (
+                    <>
+                      {!oneDay.dReport?.kpis?.items[0] &&
+                        status === "true" &&
+                        kpis.map((oneKpi) => {
+                          return (
+                            <Table.Cell width={2} key={oneKpi.id}>
+                              <Form.Input
+                                type="number"
+                                style={{ maxWidth: "5vw" }}
+                                placeholder={`${oneKpi.name}`}
+                                disabled={oneDay.future}
+                                inverted
+                                transparent
+                                onChange={(e) => {
+                                  console.log([e.target.value]);
+                                  const result = e.target.value;
+                                  console.log(result, "R  E  S");
+                                  setKpis((currentKpis) =>
+                                    currentKpis.map((x) =>
+                                      x.id === oneKpi.id ? { ...x, result } : x
+                                    )
+                                  );
+                                }}
+                                value={oneKpi.result || ""}
+                              />
+                            </Table.Cell>
+                          );
+                        })}
+                      {oneDay.dReport &&
+                      !oneDay.dReport?.kpis?.items[0] &&
+                      status === "true" ? (
+                        <TableCell colSpan="2">
+                          <Form.Button type="submit" color="green" fluid>
+                            Submit your work
+                          </Form.Button>
+                        </TableCell>
+                      ) : (
+                        oneDay.dReport && (
+                          <>
+                            <Table.Cell width={3}>
+                              {oneDay.dReport?.dailyPoints}
+                            </Table.Cell>
+                            <Table.Cell width={3}>
+                              {oneDay.dReport?.dailyTarget}
+                            </Table.Cell>
+                          </>
+                        )
+                      )}
+                    </>
+                  ) : oneDay.showAddButton && status === "true" ? (
+                    <Table.Cell
+                      colSpan="5"
+                      style={{ backgroundColor: "#333333" }}
+                    >
+                      <div className="dFlex-center">
+                        <Icon
+                          size="big"
+                          name="add circle"
+                          disabled={oneDay.disable}
+                          style={{
+                            color: "#8CABA0",
+                            cursor: !oneDay.disable && "pointer",
+                          }}
+                          onClick={() =>
+                            addDailyReport(
+                              idx,
+                              oneDay.date
+                                .slice(5, 15)
+                                .split("-")
+                                .reverse()
+                                .join("-"),
+                              oneDay
+                            )
+                          }
+                        />
+                      </div>
                     </Table.Cell>
-                    {oneDay.dReport &&
-                      oneDay.dReport.dailyPoints &&
-                      oneDay.dReport?.kpis?.items.map((oneKpi) => (
-                        <Table.Cell>{oneKpi.result}</Table.Cell>
-                      ))}
-                    {(!oneDay.showAddButton && !oneDay.future) ||
-                    oneDay.dReport?.dailyPoints ? (
-                      <>
-                        {!oneDay.dReport?.kpis?.items[0] &&
-                          status === "true" &&
-                          kpis.map((oneKpi, idx) => {
-                            return (
-                              <Table.Cell width={2}>
-                                <Form.Input
-                                  type="number"
-                                  style={{ maxWidth: "5vw" }}
-                                  placeholder={`${oneKpi.name}`}
-                                  disabled={oneDay.future}
-                                  inverted
-                                  transparent
-                                  onChange={(e) => {
-                                    console.log([e.target.value]);
-                                    const result = e.target.value;
-                                    console.log(result, "R  E  S");
-                                    setKpis((currentKpis) =>
-                                      currentKpis.map((x) =>
-                                        x.id === oneKpi.id
-                                          ? { ...x, result }
-                                          : x
-                                      )
-                                    );
-                                  }}
-                                  value={oneKpi.result || ""}
-                                />
-                              </Table.Cell>
-                            );
-                          })}
-                        {oneDay.dReport &&
-                        !oneDay.dReport?.kpis?.items[0] &&
-                        status === "true" ? (
-                          <TableCell colSpan="2">
-                            <Form.Button type="submit" color="green" fluid>
-                              Submit your work
-                            </Form.Button>
-                          </TableCell>
-                        ) : (
-                          oneDay.dReport && (
-                            <>
-                              <Table.Cell width={3}>
-                                {oneDay.dReport?.dailyPoints}
-                              </Table.Cell>
-                              <Table.Cell width={3}>
-                                {oneDay.dReport?.dailyTarget}
-                              </Table.Cell>
-                            </>
-                          )
-                        )}
-                      </>
-                    ) : oneDay.showAddButton && status === "true" ? (
+                  ) : (
+                    //----------------------------------------Status & Week End------
+                    (status === "not yet" && idx === 2 && (
                       <Table.Cell
                         colSpan="5"
                         style={{ backgroundColor: "#333333" }}
                       >
-                        <div className="dFlex-center">
-                          <Icon
-                            size="big"
-                            name="add circle"
-                            disabled={oneDay.disable}
-                            style={{
-                              color: "#8CABA0",
-                              cursor: !oneDay.disable && "pointer",
-                            }}
-                            onClick={() =>
-                              addDailyReport(
-                                idx,
-                                oneDay.date
-                                  .slice(5, 15)
-                                  .split("-")
-                                  .reverse()
-                                  .join("-"),
-                                oneDay
-                              )
-                            }
-                          />
-                        </div>
+                        <h3 className="center">it haven't started yet</h3>
                       </Table.Cell>
-                    ) : (
-                      //----------------------------------------Status & Week End------
-                      (status === "not yet" && idx === 2 && (
-                        <Table.Cell
-                          colSpan="5"
-                          style={{ backgroundColor: "#333333" }}
-                        >
-                          <h3 className="center">it haven't started yet</h3>
-                        </Table.Cell>
-                      )) ||
-                      (status === "done" && idx === 2 && (
-                        <Table.Cell
-                          colSpan="5"
-                          style={{ backgroundColor: "#333333" }}
-                        >
-                          <h3 className="center">Campaign is over</h3>
-                        </Table.Cell>
-                      )) ||
-                      (oneDay.addButtonCount && status === "true" && idx === 2 && (
-                        <Table.Cell
-                          colSpan="5"
-                          style={{ backgroundColor: "#333333" }}
-                        >
-                          <h3 className="center">it's the Week End chill-Ax</h3>
-                        </Table.Cell>
-                      ))
-                      //---------------------------------------------------------------
-                    )}
-                  </Table.Row>
-                </>
+                    )) ||
+                    (status === "done" && idx === 2 && (
+                      <Table.Cell
+                        colSpan="5"
+                        style={{ backgroundColor: "#333333" }}
+                      >
+                        <h3 className="center">Campaign is over</h3>
+                      </Table.Cell>
+                    )) ||
+                    (oneDay.addButtonCount && status === "true" && idx === 2 && (
+                      <Table.Cell
+                        colSpan="5"
+                        style={{ backgroundColor: "#333333" }}
+                      >
+                        <h3 className="center">it's the Week End chill-Ax</h3>
+                      </Table.Cell>
+                    ))
+                    //---------------------------------------------------------------
+                  )}
+                </Table.Row>
               );
             })}
         </Table.Body>

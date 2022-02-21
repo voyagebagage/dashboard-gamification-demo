@@ -9,7 +9,7 @@ const KpiPointsTab = ({ kpis }) => (
         </Table.Row>
         <Table.Body>
           {kpis.map((kpi) => (
-            <Table.Row>
+            <Table.Row key={kpi.id}>
               <Table.Cell>{kpi.name}</Table.Cell>
               <Table.Cell textAlign="center">{kpi.coeff}</Table.Cell>
             </Table.Row>

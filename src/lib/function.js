@@ -1,5 +1,5 @@
 import API, { graphqlOperation } from "@aws-amplify/api";
-import { updateAgent } from "../graphql/mutations";
+import { updateAgentForUpdatePoints } from "../graphql/custom-mutations";
 var currentWeekNumber = require("current-week-number");
 
 export const getYYYYMMDD = (date) => {
@@ -68,10 +68,10 @@ export function getDateOfISOWeek(w, y) {
 export const updatePoints = async (agent, dailyPoints, dailyReportDate) => {
   try {
     let date = new Date();
-    console.log(agent);
+    console.log("agent in updatePoints", agent);
     date = toISOStr(date);
     const updateDailyPoints = await API.graphql(
-      graphqlOperation(updateAgent, {
+      graphqlOperation(updateAgentForUpdatePoints, {
         input: {
           id: agent.id,
           dailyPoints: date === dailyReportDate ? dailyPoints : 0,
@@ -82,7 +82,10 @@ export const updatePoints = async (agent, dailyPoints, dailyReportDate) => {
     );
     console.log("NEXT:", updateDailyPoints.data.updateAgent);
   } catch (error) {
-    console.log("there is a suscribtion issue:", error);
+    console.log(
+      "there is a suscribtion issue onUpdateDailyReport (updatePoints function):",
+      error
+    );
   }
 };
 
