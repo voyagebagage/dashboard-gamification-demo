@@ -131,7 +131,7 @@ function Layout() {
       <Switch>
         <GlobalProvider>
           <Route path="/login">
-            {!token && (
+            {!token ? (
               <LoginCustom
                 setUser={setUser}
                 formState={formState}
@@ -143,6 +143,8 @@ function Layout() {
                 confirmSignUpValid={confirmSignUpValid}
                 signInValid={signInValid}
               />
+            ) : (
+              <Redirect to="/" />
             )}
           </Route>
 
