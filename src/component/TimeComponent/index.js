@@ -8,37 +8,17 @@ const TimeComponent = () => {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [timezone, setTimezone] = useState("Asia/Bangkok");
+  const [date, setDate] = useState("");
   useEffect(() => fetchTime(), [timezone]);
-  // const fetchTime = async () => {
-  //   const user = await Auth.currentAuthenticatedUser();
-  //   const token = user.signInUserSession.idToken.jwtToken;
-  //   // const requestInfo = { headers: { Authorization: token } };
-  //   const response = await axios.get(
-  //     `http://worldtimeapi.org/api/timezone/${timezone}`,
-  //     {
-  //       headers: {
-  //         "Access-Control-Allow-Origin": "*",
-  //         "Access-Control-Allow-Headers": "*",
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //     }
-  //   );
-  //   console.log({ response });
-  //   setData(response.data);
-  //   setIsLoading(false);
-  //  };
+
   const fetchTime = async () => {
     try {
-      console.log("data00", timezone);
       const newTimezone = await API.graphql(
         graphqlOperation(getTimezone, { timezone: timezone })
       );
       setData(newTimezone.data.getTimezone);
-      console.log("data", newTimezone || "unsucessful");
-      console.log(
-        "datetime",
-        newTimezone.data.getTimezone.datetime || "unsucessful"
+      setDate(
+        new Date(newTimezone.data.getTimezone.datetime).toString().split(" ")
       );
       setIsLoading(false);
     } catch (error) {
@@ -46,10 +26,6 @@ const TimeComponent = () => {
       console.log("there is an error with timezones", errorObject);
     }
   };
-  let date = new Date(data.datetime).toString().split(" ");
-  // console.log("data", date[0] + date[2]);
-  console.log("timezone", timezone);
-  console.log("dataBeforeReturn", data);
   return !isLoading ? (
     <Segment
       as="div"
@@ -142,3 +118,25 @@ const TimeComponent = () => {
 };
 
 export default TimeComponent;
+
+// let date = new Date(data.datetime).toString().split(" ");
+
+// const fetchTime = async () => {
+//   const user = await Auth.currentAuthenticatedUser();
+//   const token = user.signInUserSession.idToken.jwtToken;
+//   // const requestInfo = { headers: { Authorization: token } };
+//   const response = await axios.get(
+//     `http://worldtimeapi.org/api/timezone/${timezone}`,
+//     {
+//       headers: {
+//         "Access-Control-Allow-Origin": "*",
+//         "Access-Control-Allow-Headers": "*",
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+//   console.log({ response });
+//   setData(response.data);
+//   setIsLoading(false);
+//  };

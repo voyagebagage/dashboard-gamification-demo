@@ -104,8 +104,12 @@ function Layout() {
       //     user?.attributes?.name
       //   );
       updateUser(user);
-      console.log("checkUSER FORM STATE:", formState.formType);
       updateFormState(() => ({ ...formState, formType: "signedIn" }));
+      console.log(
+        "%ccheckUSER FORM STATE:",
+        "background-color:pink;color:black",
+        formState.formType
+      );
     } catch (error) {
       updateUser(null);
       // console.log("checkUser", error);
@@ -120,24 +124,26 @@ function Layout() {
     Cookies.set("username", username, { expires: 1 });
   };
 
-  console.log("formtype LaYOUT:", formState);
+  console.log("%cformtype LaYOUT:", "background-color:purple", formType);
   console.log("LAYOUT USER", user);
   return (
     <Router>
       <Switch>
         <GlobalProvider>
           <Route path="/login">
-            <LoginCustom
-              setUser={setUser}
-              formState={formState}
-              updateFormState={updateFormState}
-              onChangeSignUp={onChangeSignUp}
-              user={user}
-              updateUser={updateUser}
-              signUpValid={signUpValid}
-              confirmSignUpValid={confirmSignUpValid}
-              signInValid={signInValid}
-            />
+            {!token && (
+              <LoginCustom
+                setUser={setUser}
+                formState={formState}
+                updateFormState={updateFormState}
+                onChangeSignUp={onChangeSignUp}
+                user={user}
+                updateUser={updateUser}
+                signUpValid={signUpValid}
+                confirmSignUpValid={confirmSignUpValid}
+                signInValid={signInValid}
+              />
+            )}
           </Route>
 
           <Route

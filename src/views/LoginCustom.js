@@ -79,19 +79,31 @@ function LoginCustom({
     }
   }
   console.log("Auth OUT", Auth);
+  console.log("%cFORM TYPE LOGIN", "background-color:crimson", formType);
 
   return (
     <>
       <div
-        className="dFlex-aCenter"
+        className="dFlex"
         style={{
           height: "100vh",
-          gap: "18%",
+          // gap: "18%",
           backgroundColor: "#F0F4F5",
         }}
       >
-        <Image src={loginPic} style={{ height: "100%" }} />
-        <div>
+        <Image
+          src={loginPic}
+          style={{ height: "100%", width: "50%", objectFit: "cover" }}
+        />
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "75%",
+            transform: "translate(-50%, -50%)",
+            // width: "100%",
+          }}
+        >
           <Image src={logoDash} size="medium" className="logo-log-in" />
           <Form className="log-in-form">
             {formType === "signUp" && (
