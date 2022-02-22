@@ -39,6 +39,7 @@ export const GlobalProvider = ({ children }) => {
   //   contactsInitialState
   // );
   //----------
+  // const regex = new RegExp('(abc)', 'i');
   const initialState = { isLoading: false, results: [], value: "" };
   const [search, setSearch] = useState(initialState);
   const [filteredResults, setFilteredResults] = useState([]);

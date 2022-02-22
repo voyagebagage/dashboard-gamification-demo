@@ -125,7 +125,7 @@ function ClientDetails() {
       clientDetails.firstName = form.firstName;
       clientDetails.lastName = form.lastName;
       clientDetails.phone = form.phone;
-      clientDetails.website = form.website;
+      clientDetails.website = form.website && `https://${form.website}`;
       clientDetails.email = form.email;
       clientDetails.companyName = form.companyName;
       clientDetails.country = form.country;

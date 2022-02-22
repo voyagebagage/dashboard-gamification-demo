@@ -43,7 +43,7 @@ function LoginCustom({
             "custom:admin_code": adminCode,
           },
         });
-        console.log("user:", user);
+        // console.log("user:", user);
         updateFormState(() => ({ ...formState, formType: "confirmSignUp" }));
       }
     } catch (error) {
@@ -78,8 +78,8 @@ function LoginCustom({
       console.log("signIn error", error);
     }
   }
-  console.log("Auth OUT", Auth);
-  console.log("%cFORM TYPE LOGIN", "background-color:crimson", formType);
+  // console.log("Auth OUT", Auth);
+  // console.log("%cFORM TYPE LOGIN", "background-color:crimson", formType);
 
   return (
     <>

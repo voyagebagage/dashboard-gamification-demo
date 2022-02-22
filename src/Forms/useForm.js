@@ -78,11 +78,11 @@ export default () => {
   //********************SIGN IN****************** */
   const signInValid = !formState.password?.length || !formState.email?.length;
 
-  console.log(
-    "%cformState useform",
-    "background-color:fuchsia",
-    formState.formType
-  );
+  // console.log(
+  //   "%cformState useform",
+  //   "background-color:fuchsia",
+  //   formState.formType
+  // );
 
   return {
     //--signup--login

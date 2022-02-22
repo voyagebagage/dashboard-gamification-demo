@@ -48,6 +48,8 @@ function Client() {
   //xxxxxxxxxxxxxxxxxxxx
   const { filteredResults } = useSearch();
   //xxxxxxxxxxxxxxxxxxxx
+  const { fieldDropDown, directionDropDown } = useDropDownFilter();
+  //xxxxxxxxxxxxxxxxxxxx
   const {
     isLoading,
     setIsLoading,
@@ -62,8 +64,6 @@ function Client() {
     maxPages,
     setMaxPages,
   } = useFetch();
-  //xxxxxxxxxxxxxxxxxxxx
-  const { fieldDropDown, directionDropDown } = useDropDownFilter();
   //------------------------States------------------------------
   // const [totalClients, setTotalClients] = useState(0);
   // const [targetPage, setTargetPage] = useState(1);
@@ -101,8 +101,6 @@ function Client() {
         setTotalClients(clientData.data.searchClients.total);
         setMaxPages(Math.ceil(clientData.data.searchClients.total / limit));
       }
-
-      console.log("=========USEEFFECT==========");
       console.log(clients, "CLIENT USEEFFECT");
       setFrom(limit * (targetPage - 1));
       setIsLoading(false);
@@ -121,7 +119,6 @@ function Client() {
       maxPages,
     ]
   );
-  console.log(clients.length);
   //#################################################
   //           RENDER
   //################################################

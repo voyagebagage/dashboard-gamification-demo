@@ -97,7 +97,7 @@ function Layout() {
         (e) => e.Name !== "custom:admin_code"
       );
       user.storage[user.userDataKey] = JSON.stringify(rItem);
-      console.log("checkUSER", user);
+      // console.log("checkUSER", user);
       // if (!token)
       //   setUser(
       //     user?.signInUserSession?.idToken.jwtToken,
@@ -105,11 +105,11 @@ function Layout() {
       //   );
       updateUser(user);
       updateFormState(() => ({ ...formState, formType: "signedIn" }));
-      console.log(
-        "%ccheckUSER FORM STATE:",
-        "background-color:pink;color:black",
-        formState.formType
-      );
+      // console.log(
+      //   "%ccheckUSER FORM STATE:",
+      //   "background-color:pink;color:black",
+      //   formState.formType
+      // );
     } catch (error) {
       updateUser(null);
       // console.log("checkUser", error);
@@ -124,8 +124,8 @@ function Layout() {
     Cookies.set("username", username, { expires: 1 });
   };
 
-  console.log("%cformtype LaYOUT:", "background-color:purple", formType);
-  console.log("LAYOUT USER", user);
+  // console.log("%cformtype LaYOUT:", "background-color:purple", formType);
+  // console.log("LAYOUT USER", user);
   return (
     <Router>
       <Switch>

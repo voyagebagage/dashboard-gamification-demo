@@ -28,41 +28,89 @@ const SearchClients = () => {
 
   const fetchResults = async () => {
     try {
-      if (search.value.length > 2) {
-        const filteredRes = await API.graphql(
-          graphqlOperation(listClients, {
-            filter: {
-              or: [
-                { firstName: { beginsWith: search.value } },
-                { lastName: { beginsWith: search.value } },
-                { companyName: { beginsWith: search.value } },
-                { phone: { beginsWith: search.value } },
-                { email: { beginsWith: search.value } },
-                { website: { beginsWith: search.value } },
-              ],
-            },
-            // limit: limit,
-          })
-        );
-        // }
-        setFilteredResults(filteredRes.data.listClients.items);
-        setSearch({
-          results: filteredRes.data.listClients.items.map((result, idx) => {
-            return {
-              //these are ONLY to display Suggestions
-              title: `${result.firstName}     ${result.lastName}`,
-              description: result.email,
-              // image: result.lastName, could add one in the future
-              price: result.companyName,
-              key: result.id,
-              //and the rest to setClientDetails, when go to the detail page
-              ...result,
-            };
-          }),
-          isLoading: false,
-        });
-        console.log(filteredRes.data.listClients.items, "filteredRes-IN");
-      }
+      // if (search.value.length > 2) {
+      console.log(
+        "%csearch.value.charAt(0).toUpperCase()",
+        "color:red",
+        search.value.charAt(0).toUpperCase() + search.value.slice(1)
+      );
+      const filteredRes = await API.graphql(
+        graphqlOperation(listClients, {
+          filter: {
+            or: [
+              { firstName: { beginsWith: search.value } },
+              {
+                firstName: {
+                  beginsWith:
+                    search.value.charAt(0).toUpperCase() +
+                    search.value.slice(1),
+                },
+              },
+              { lastName: { beginsWith: search.value } },
+              {
+                lastName: {
+                  beginsWith:
+                    search.value.charAt(0).toUpperCase() +
+                    search.value.slice(1),
+                },
+              },
+              { companyName: { beginsWith: search.value } },
+              {
+                companyName: {
+                  beginsWith:
+                    search.value.charAt(0).toUpperCase() +
+                    search.value.slice(1),
+                },
+              },
+              { phone: { beginsWith: search.value } },
+              {
+                phone: {
+                  beginsWith:
+                    search.value.charAt(0).toUpperCase() +
+                    search.value.slice(1),
+                },
+              },
+              { email: { beginsWith: search.value } },
+              {
+                email: {
+                  beginsWith:
+                    search.value.charAt(0).toUpperCase() +
+                    search.value.slice(1),
+                },
+              },
+              { website: { beginsWith: search.value } },
+              {
+                website: {
+                  beginsWith:
+                    search.value.charAt(0).toUpperCase() +
+                    search.value.slice(1),
+                },
+              },
+            ],
+          },
+          // limit: limit,
+        })
+      );
+      // }
+      console.log("filteredRes.data", filteredRes.data);
+      setFilteredResults(filteredRes.data.listClients.items);
+      setSearch({
+        results: filteredRes.data.listClients.items.map((result) => {
+          return {
+            //these are ONLY to display Suggestions
+            title: `${result.firstName}     ${result.lastName}`,
+            description: result.email,
+            // image: result.lastName, could add one in the future
+            price: result.companyName,
+            key: result.id,
+            //and the rest to setClientDetails, when go to the detail page
+            ...result,
+          };
+        }),
+        isLoading: false,
+      });
+      console.log(filteredRes.data.listClients.items, "filteredRes-IN");
+      // }
     } catch (error) {
       console.log("error with list clients :", error);
     }
