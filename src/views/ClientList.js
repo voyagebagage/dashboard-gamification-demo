@@ -24,9 +24,15 @@ import {
   Dimmer,
   Loader,
   Image,
+  Button,
+  Icon,
+  Confirm,
 } from "semantic-ui-react";
-// import useForm from "../Forms/useForm";
+
 import NewClientForm from "../Forms/NewClientForm";
+import useForm from "../Forms/useForm";
+import { onDeleteClient } from "../graphql/subscriptions";
+import { deleteClient } from "../graphql/mutations";
 
 //------------------------context & custom hooks----------------------
 
@@ -35,12 +41,6 @@ import NewClientForm from "../Forms/NewClientForm";
 ------------------------------------------------------------- */
 function Client() {
   let history = useHistory();
-  const sort = {
-    field: "companyName",
-    direction: "asc",
-    // ASC: "asc",
-    // DESC: "desc",
-  };
   //------------------------context & custom hooks----------------------
   const { clients, setClients } = useClient();
   //xxxxxxxxxxxxxxxxxxxx
@@ -54,20 +54,33 @@ function Client() {
     isLoading,
     setIsLoading,
     limit,
-    // setLimit,
     from,
     setFrom,
-    // totalClients,
     setTotalClients,
     targetPage,
     setTargetPage,
     maxPages,
     setMaxPages,
   } = useFetch();
+  //Xxxxxxxxxxxxxxxx
+  const { setIsSubmitting } = useForm();
+  //xxxxxxxxxxxxxxxxxxxx
+
   //------------------------States------------------------------
-  // const [totalClients, setTotalClients] = useState(0);
-  // const [targetPage, setTargetPage] = useState(1);
-  // const [maxPages, setMaxPages] = useState(0);
+  const [areYouSure, setAreYouSure] = useState(false);
+  const [index, setIndex] = useState(0);
+  const show = (idx) => {
+    setAreYouSure(true);
+    setIndex(idx);
+    console.log("%ci", "font-weight:bolder;color:pink", idx);
+  };
+  const handleCancel = () => setAreYouSure(false);
+  const handleConfirm = (index) => {
+    setIsSubmitting(true);
+    removeClient(index);
+    console.log("%ci", "font-weight:bolder;color:pink", index);
+    setAreYouSure(false);
+  };
 
   const variables = {
     //filter
@@ -88,9 +101,9 @@ function Client() {
         graphqlOperation(searchClients, variables)
         // listClients, variables)
       );
-
       //----------------------setStates-----------
       setClients(clientData.data.searchClients.items);
+      // console.lo(clientData.data.searchClients.items);
       //----onKeyPress === "Enter"---------------
       if (filteredResults.length) {
         setTotalClients(filteredResults.length);
@@ -101,24 +114,57 @@ function Client() {
         setTotalClients(clientData.data.searchClients.total);
         setMaxPages(Math.ceil(clientData.data.searchClients.total / limit));
       }
-      console.log(clients, "CLIENT USEEFFECT");
       setFrom(limit * (targetPage - 1));
       setIsLoading(false);
     } catch (error) {
       console.log("error with get clients :", error);
     }
   };
-  useEffect(
-    () => fetchClients(),
-    [
-      from,
-      targetPage,
-      fieldDropDown,
-      directionDropDown,
-      filteredResults,
-      maxPages,
-    ]
-  );
+  const removeClient = async (idx) => {
+    try {
+      console.log("idx", idx);
+      console.log("clients[idx].id", clients[idx].id);
+
+      const inputDel = { id: clients[idx].id };
+      console.log("inputDel", inputDel);
+      const clientDelete = await API.graphql(
+        graphqlOperation(deleteClient, {
+          input: inputDel,
+        })
+      );
+      console.log(clientDelete, "clientDelete");
+      console.log("clients", clients);
+      console.log("succes");
+      // history.push("/client-list");
+    } catch (error) {
+      console.log("error erasing a Campaign", error);
+    }
+  };
+  useEffect(() => {
+    fetchClients();
+    const subscription = API.graphql(
+      graphqlOperation(onDeleteClient)
+    ).subscribe({
+      next: (eventData) => {
+        const delClientId = eventData.value.data.onDeleteClient.id;
+        let newTab = [...clients];
+        newTab = newTab.filter((e) => e.id !== delClientId);
+        setClients(newTab);
+      },
+    });
+    return () => subscription.unsubscribe();
+  }, [
+    from,
+    targetPage,
+    fieldDropDown,
+    directionDropDown,
+    filteredResults,
+    maxPages,
+  ]);
+
+  console.log(clients, "CLIENT ");
+  // console.log(index, "INDEX ");
+
   //#################################################
   //           RENDER
   //################################################
@@ -134,18 +180,20 @@ function Client() {
           {/* ---------------------TABLE HEADER-------------------- */}
           <Table.Header>
             <Table.Row singleLine>
+              {/* <Table.HeaderCell>index</Table.HeaderCell> */}
               <Table.HeaderCell>COMPANY</Table.HeaderCell>
               <Table.HeaderCell>NAME</Table.HeaderCell>
               <Table.HeaderCell>E-mail</Table.HeaderCell>
-              <Table.HeaderCell collapsing>WEBSITE</Table.HeaderCell>
-              <Table.HeaderCell textAlign="center">LOCATION</Table.HeaderCell>
+              <Table.HeaderCell>WEBSITE</Table.HeaderCell>
+              <Table.HeaderCell colSpan="2">LOCATION</Table.HeaderCell>
               {/* <Table.HeaderCell>ON CAMPAIGN</Table.HeaderCell> */}
             </Table.Row>
           </Table.Header>
           {/* ---------------------TABLE BODY------------------------ */}
           <Table.Body>
-            {clients.map((client, idx) => (
-              <Table.Row key={client.id} style={{ cursor: "pointer" }}>
+            {clients.map((client, i) => (
+              <Table.Row key={i} style={{ cursor: "pointer" }}>
+                {/* <Table.Cell singleLine>{i}</Table.Cell> */}
                 <Table.Cell
                   singleLine
                   onClick={() =>
@@ -157,7 +205,7 @@ function Client() {
                   {client.companyName}
                 </Table.Cell>
                 <Table.Cell
-                  collapsing
+                  // collapsing
                   singleLine
                   onClick={() =>
                     history.push(
@@ -169,6 +217,7 @@ function Client() {
                 </Table.Cell>
                 <Table.Cell
                   singleLine
+                  // collapsing
                   onClick={() =>
                     history.push(
                       `/client/${client.firstName}/${client.companyName}/${client.id}`
@@ -181,35 +230,61 @@ function Client() {
                   <a
                     href={client.website}
                     target="_blank"
+                    rel="noreferrer"
                     className="clientListLink"
                   >
                     {client.website.slice(8)}
                   </a>
                 </Table.Cell>
-                <Table.Cell
-                  textAlign="center"
-                  onClick={() =>
-                    history.push(
-                      `/client/${client.firstName}/${client.companyName}/${client.id}`
-                    )
-                  }
-                >
-                  {client.country}
+                <Table.Cell textAlign="center">
+                  <div
+                    className="dFlex-fEnd-aCenter"
+                    style={{ width: "100%", paddingLeft: 0, marginLeft: 0 }}
+                  >
+                    <div
+                      basic
+                      fluid
+                      className="dFlex-fEnd-aCenter-width2"
+                      style={{ borderWidth: 0 }}
+                    >
+                      {client.country}
+                      <Button
+                        animated
+                        as={Segment}
+                        basic
+                        style={{
+                          borderWidth: 0,
+                          padding: 0,
+                          margin: 0,
+                          shadowBox: "none",
+                        }}
+                        size="large"
+                      >
+                        <Button.Content visible basic>
+                          <Icon name="ellipsis vertical" />
+                        </Button.Content>
+                        <Button.Content
+                          hidden
+                          basic
+                          borderless
+                          onClick={() => show(i)}
+                        >
+                          <Icon name="delete" color="red" />
+                        </Button.Content>
+                      </Button>
+                      <Confirm
+                        open={areYouSure}
+                        onCancel={handleCancel}
+                        onConfirm={() => handleConfirm(index)}
+                        content={
+                          <Header>
+                            {`Are you sure you want to get rid of ${clients[index]?.firstName} ${clients[index]?.lastName} ?`}
+                          </Header>
+                        }
+                      />
+                    </div>
+                  </div>
                 </Table.Cell>
-                {/* <Table.Cell
-                  onClick={() =>
-                    history.push(
-                      `/client/${client.firstName}/${client.companyName}/${client.id}`
-                    )
-                  }
-                >
-                  {client.campaigns.items?.map((campaign) => (
-                    <p key={campaign.id}>
-                      {campaign.endDate.split("-").reverse().join("-")}
-                    </p>
-                  ))}
-                </Table.Cell> */}
-                {/* <Radio toggle={client.status?true:false} /> */}
               </Table.Row>
             ))}
           </Table.Body>

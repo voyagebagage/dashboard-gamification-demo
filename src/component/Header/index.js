@@ -1,4 +1,4 @@
-import { Menu, Icon, Dropdown, Image, Button } from "semantic-ui-react";
+import { Menu, Icon, Dropdown, Image } from "semantic-ui-react";
 import { useLocation } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import {
@@ -10,12 +10,10 @@ import { useDropDownFilter } from "../../context/Provider";
 import SearchClients from "../SearchBars/SearchClients";
 import SearchCampaigns from "../SearchBars/SearchCampaigns";
 import logoDash from "../../img/logoDash.svg";
-import Cookies from "js-cookie";
 
 function Header({ handleSidebarItem, username, user }) {
   const { setFieldDropDown, setDirectionDropDown } = useDropDownFilter();
   let location = useLocation();
-  console.log(location.pathname, "location");
 
   return (
     <div>

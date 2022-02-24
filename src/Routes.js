@@ -63,7 +63,7 @@ export const Routes = [
   },
   {
     title: "Agent Report",
-    path: "/agent-report/:agentName/:campaignName/:id",
+    path: "/agent-report/:agentName/:agentId/:campaignName/:campaignId",
     component: AgentReport,
     cName: "nav-text",
   },

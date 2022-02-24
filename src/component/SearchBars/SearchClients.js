@@ -1,5 +1,5 @@
 import { Search } from "semantic-ui-react";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import { listClients } from "../../graphql/queries";
@@ -28,94 +28,57 @@ const SearchClients = () => {
 
   const fetchResults = async () => {
     try {
-      // if (search.value.length > 2) {
-      console.log(
-        "%csearch.value.charAt(0).toUpperCase()",
-        "color:red",
-        search.value.charAt(0).toUpperCase() + search.value.slice(1)
-      );
-      const filteredRes = await API.graphql(
-        graphqlOperation(listClients, {
-          filter: {
-            or: [
-              { firstName: { beginsWith: search.value } },
-              {
-                firstName: {
-                  beginsWith:
-                    search.value.charAt(0).toUpperCase() +
-                    search.value.slice(1),
+      if (search.value.length > 2) {
+        //DynamoDb doesn't support REGEX
+        let searchValueFirstCharInUpperCase =
+          search.value?.charAt(0).toUpperCase() + search.value?.slice(1);
+        const filteredRes = await API.graphql(
+          graphqlOperation(listClients, {
+            filter: {
+              or: [
+                { firstName: { beginsWith: search.value } },
+                { firstName: { beginsWith: searchValueFirstCharInUpperCase } },
+                { lastName: { beginsWith: search.value } },
+                { lastName: { beginsWith: searchValueFirstCharInUpperCase } },
+                { companyName: { beginsWith: search.value } },
+                {
+                  companyName: { beginsWith: searchValueFirstCharInUpperCase },
                 },
-              },
-              { lastName: { beginsWith: search.value } },
-              {
-                lastName: {
-                  beginsWith:
-                    search.value.charAt(0).toUpperCase() +
-                    search.value.slice(1),
-                },
-              },
-              { companyName: { beginsWith: search.value } },
-              {
-                companyName: {
-                  beginsWith:
-                    search.value.charAt(0).toUpperCase() +
-                    search.value.slice(1),
-                },
-              },
-              { phone: { beginsWith: search.value } },
-              {
-                phone: {
-                  beginsWith:
-                    search.value.charAt(0).toUpperCase() +
-                    search.value.slice(1),
-                },
-              },
-              { email: { beginsWith: search.value } },
-              {
-                email: {
-                  beginsWith:
-                    search.value.charAt(0).toUpperCase() +
-                    search.value.slice(1),
-                },
-              },
-              { website: { beginsWith: search.value } },
-              {
-                website: {
-                  beginsWith:
-                    search.value.charAt(0).toUpperCase() +
-                    search.value.slice(1),
-                },
-              },
-            ],
-          },
-          // limit: limit,
-        })
-      );
-      // }
-      console.log("filteredRes.data", filteredRes.data);
-      setFilteredResults(filteredRes.data.listClients.items);
-      setSearch({
-        results: filteredRes.data.listClients.items.map((result) => {
-          return {
-            //these are ONLY to display Suggestions
-            title: `${result.firstName}     ${result.lastName}`,
-            description: result.email,
-            // image: result.lastName, could add one in the future
-            price: result.companyName,
-            key: result.id,
-            //and the rest to setClientDetails, when go to the detail page
-            ...result,
-          };
-        }),
-        isLoading: false,
-      });
-      console.log(filteredRes.data.listClients.items, "filteredRes-IN");
-      // }
+                { phone: { beginsWith: search.value } },
+                { phone: { beginsWith: searchValueFirstCharInUpperCase } },
+                { email: { beginsWith: search.value } },
+                { email: { beginsWith: searchValueFirstCharInUpperCase } },
+                { website: { beginsWith: search.value } },
+                { website: { beginsWith: searchValueFirstCharInUpperCase } },
+              ],
+            },
+            // limit: limit,
+          })
+        );
+        // }
+        console.log("filteredRes.data", filteredRes.data);
+        setFilteredResults(filteredRes.data.listClients.items);
+        setSearch({
+          results: filteredRes.data.listClients.items.map((result) => {
+            return {
+              //these are ONLY to display Suggestions
+              title: `${result.firstName}     ${result.lastName}`,
+              description: result.email,
+              // image: result.lastName, could add one in the future
+              price: result.companyName,
+              key: result.id,
+              //and the rest to setClientDetails, when go to the detail page
+              ...result,
+            };
+          }),
+          isLoading: false,
+        });
+        console.log(filteredRes.data.listClients.items, "filteredRes-IN");
+      }
     } catch (error) {
       console.log("error with list clients :", error);
     }
   };
-  console.log(search.results, "search.results");
   useEffect(() => fetchResults(), [search.value]);
   //#################################################
   //           handleResultSelect

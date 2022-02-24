@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 
 import {
   Header,
-  Image,
   Menu,
   Label,
   Table,
@@ -24,8 +23,7 @@ import {
 } from "../graphql/queries";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import TimeComponent from "../component/TimeComponent";
-import { IconParkOutlineFullScreen } from "../lib/function";
-import Updates from "../component/Updates";
+
 //#################################################
 //           FUNCTION
 //################################################

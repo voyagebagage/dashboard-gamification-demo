@@ -389,18 +389,6 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
   //#########################################################
   //          END FUNCTION FINAL SUBMIT CAMPAIGN
   //#########################################################
-  console.log(
-    "newCampaign",
-    newCampaign,
-    "isSubmitting:",
-    isSubmitting,
-    "form:",
-    form,
-    "listKpi:",
-    listKpi,
-    "backbutton:",
-    backButton
-  );
   useEffect(() => {
     selectClient();
     selectAgent();
@@ -419,6 +407,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
     });
     return () => subscription.unsubscribe();
   }, []);
+
   return (
     <>
       <Segment
@@ -497,12 +486,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                         placeholder="Select Client"
                         name="clientCampaignsId"
                         value={form.clientCampaignsId || ""}
-                        onChange={
-                          onChange
-                          // (event, data) =>
-                          //   setForm({ clientCampaignsId: data.options[0].key })
-                          // console.log(data.options[0].key, "data")
-                        }
+                        onChange={onChange}
                         onFocus={selectClient}
                         disabled={step2}
                       />
@@ -564,11 +548,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                         onFocus={selectAgent}
                         name="agentCampaignsId"
                         value={form.agentCampaignsId || ""}
-                        onChange={
-                          onChange
-                          // (event, data) =>
-                          // (form.agentCampaignsId = data.options[0].key)
-                        }
+                        onChange={onChange}
                         disabled={step2}
                       />
                       {/* ---------------endDate------------------------- */}

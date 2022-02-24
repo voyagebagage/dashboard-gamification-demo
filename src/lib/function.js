@@ -14,10 +14,6 @@ export const setStatus = (start, end, status) => {
   const now = new Date().getTime();
   const startTime = new Date(start).getTime();
   const endTime = new Date(end).getTime();
-  // let statusIf;
-  console.log(now, "NOW");
-  console.log(startTime, "startTime");
-  console.log(endTime, "endTime");
   if (now >= startTime && now <= endTime) status = "true";
   if (now <= startTime || now >= endTime) status = "false";
 };
@@ -35,19 +31,9 @@ endWeekDate.setDate(lastDay);
 //--------
 
 export function toISOStr(date) {
-  console.log("toISOStr", new Date(date).toISOString().split("T")[0]);
   return new Date(date).toISOString().split("T")[0];
 }
 export function toISOStrDDMMYYYY(date) {
-  console.log(
-    "toISOStrDDMMYYYY",
-    new Date(`${date} GMT`)
-      .toISOString()
-      .split("T")[0]
-      .split("-")
-      .reverse()
-      .join("-")
-  );
   return new Date(`${date} GMT`)
     .toISOString()
     .split("T")[0]
@@ -88,26 +74,73 @@ export const updatePoints = async (agent, dailyPoints, dailyReportDate) => {
     );
   }
 };
+//#########################################################
+//                     DROPDOWNs
+//#########################################################
+export const selectPerson = async (category, query, formData) => {
+  // console.log(form.clientCampaignsId, "clientCampaignsId");
+  try {
+    const keyVariable = {
+      agent: { name: { beginsWith: formData } },
+      client: { firstName: { beginsWith: formData } },
+    };
+    let key;
+    if (category === "agent") key = keyVariable.agent;
+    if (category === "client") key = keyVariable.client;
 
+    const variable = {
+      category: category,
+      sortDirection: "ASC",
+      key,
+    };
+    const filteredNames = await API.graphql(
+      graphqlOperation(
+        query,
+        variable
+        //   {
+        //   category: category,
+        //   //getting ID as value because it is the required key to create Campaign
+
+        //   name: { beginsWith: formData },
+        //   // { firstName: { beginsWith: formData } },
+        //   // ],
+        //   sortDirection: "ASC",
+        // }
+      )
+    );
+    if (category === "client") {
+      console.log(filteredNames.data.clientByfirstName.items, "filteredNames");
+      return filteredNames.data.clientByfirstName.items;
+    }
+    if (category === "agent") {
+      console.log(filteredNames.data.agentByName.items, "filteredNames");
+      return filteredNames.data.agentByName.items;
+    }
+  } catch (error) {
+    console.log("E R R O R with select Person(Client/Agent)", error);
+  }
+};
+//----------------------------------------------------------
+// const selectAgent = async (e) => {
+//   try {
+//     const filteredAgentNames = await API.graphql(
+//       graphqlOperation(agentByName, {
+//         category: "agent",
+//         name: { beginsWith: form.agentCampaignsId },
+//         sortDirection: "ASC",
+//       })
+//     );
+
+//     setAgentName(filteredAgentNames.data.agentByName.items);
+
+//     console.log(
+//       filteredAgentNames.data.agentByName.items,
+//       "filteredAgentNames"
+//     );
+//   } catch (error) {
+//     console.log("Error with select AgentByName", error);
+//   }
+// };
 export function onChange(e) {
   e.persist();
 }
-
-// export function IconParkOutlineFullScreen(props) {
-//   return (
-//     <svg width="1em" height="1em" viewBox="0 0 48 48" {...props}>
-//       <g
-//         fill="none"
-//         stroke="currentColor"
-//         strokeWidth="5"
-//         strokeLinecap="round"
-//         strokeLinejoin="round"
-//       >
-//         <path d="M33 6h9v9"></path>
-//         <path d="M42 33v9h-9"></path>
-//         <path d="M15 42H6v-9"></path>
-//         <path d="M6 15V6h9"></path>
-//       </g>
-//     </svg>
-//   );
-// }

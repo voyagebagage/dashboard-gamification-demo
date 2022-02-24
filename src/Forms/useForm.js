@@ -2,7 +2,6 @@ import { useState } from "react";
 
 export default () => {
   const [form, setForm] = useState({});
-  const [array, setArray] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState("");
 
@@ -98,7 +97,6 @@ export default () => {
     form,
     setForm,
     onChange,
-    // array,
     clientFormValid,
     addKpiButtonValid,
     campaignFormValid,

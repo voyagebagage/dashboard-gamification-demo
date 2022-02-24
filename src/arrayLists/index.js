@@ -12,7 +12,8 @@ export const filterClientList = [
   { key: "1", text: "Last Name", value: "lastName" },
   { key: "2", text: "Company", value: "companyName" },
   { key: "3", text: "Email", value: "email" },
-  { key: "4", text: "Country", value: "country" },
+  { key: "4", text: "Website", value: "website" },
+  { key: "5", text: "Country", value: "country" },
 ];
 export const filterCampaignList = [
   { key: "00", text: "Name", value: "name" },

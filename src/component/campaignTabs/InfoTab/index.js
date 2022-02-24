@@ -1,3 +1,5 @@
+import API, { graphqlOperation } from "@aws-amplify/api";
+import { useState, useEffect } from "react";
 import {
   Card,
   Button,
@@ -7,29 +9,70 @@ import {
   Table,
   Icon,
 } from "semantic-ui-react";
+import { useCampaign } from "../../../context/Provider";
+import useForm from "../../../Forms/useForm";
+import { updateCampaign } from "../../../graphql/mutations";
+import { agentByName } from "../../../graphql/queries";
+import { selectPerson } from "../../../lib/function";
 
-const InfoTab = ({ setEdit, edit, campaignDetails }) => {
-  const {
+const InfoTab = ({
+  setEdit,
+  edit,
+  campaignDetails: {
+    id,
     name,
     length,
     startDate,
     endDate,
     updatedAt,
     createdAt,
-    notes,
     client,
     agent,
-    status,
-  } = campaignDetails;
+    notes,
+  },
+}) => {
+  const [state, setState] = useState([]);
   //++++
+  const { onChange, form, setForm, isSubmitting, setIsSubmitting } = useForm();
+  const { setCampaignDetails } = useCampaign();
+  //------------------------===========Update============---------------------
+  const editCampaign = async () => {
+    try {
+      setIsSubmitting(true);
+      form.id = id;
+      // //----------update
+      const campaignUpdate = await API.graphql(
+        graphqlOperation(updateCampaign, { input: form })
+      );
+      setCampaignDetails(campaignUpdate.data.updateCampaign);
+      setForm({});
+      setIsSubmitting(false);
+      console.log(campaignUpdate.data.updateCampaign, "response");
+      console.log("succes");
+      setEdit(false);
+    } catch (error) {
+      console.log("error updating a campaign", error);
+    }
+  };
+  const selectDropdown = async () => {
+    // console.log(form, agentByName, agent.category);
+    const arr = await selectPerson(
+      agent.category,
+      agentByName,
+      form.agentCampaignsId
+    );
+    setState(arr);
+  };
+  useEffect(() => selectPerson(), []);
 
   const timeStampSplit = (timeStamp) => {
     let separate = timeStamp.slice(0, 19).split("T");
     let date = separate[0].split("-").reverse().join("-");
     let time = separate[1];
-    console.log(date, time);
+    // console.log(date, time);
     return `on the ${date} at ${time}`;
   };
+
   return (
     <div className="dFlex-fEnd">
       <div className="dFlex" style={{ width: "30vw" }}>
@@ -42,7 +85,7 @@ const InfoTab = ({ setEdit, edit, campaignDetails }) => {
           className="dFlex-sBetween"
           // style={{ paddingLeft: 0 }}
         >
-          <Form size="mini">
+          <Form size="mini" onSubmit={editCampaign}>
             <Table
               padded
               inverted
@@ -103,34 +146,60 @@ const InfoTab = ({ setEdit, edit, campaignDetails }) => {
                   </Table.Cell>
                   {edit && (
                     <Table.Cell>
-                      {/* <Form.Input
-      type="text"
-      placeholder="ex: Matthew"
-      name="firstName"
-      value={form.firstName || ""}
-      onChange={onChange}
-    /> */}
+                      <Form.Input
+                        type="text"
+                        placeholder="Campaign Name"
+                        name="name"
+                        value={form.name || ""}
+                        onChange={onChange}
+                      />
                     </Table.Cell>
                   )}
                 </Table.Row>
+                {!edit && (
+                  <Table.Row>
+                    <Table.Cell>
+                      <Header as="h4" image>
+                        <Header.Content>
+                          {client?.companyName}
+                          <Header.Subheader>Company</Header.Subheader>
+                        </Header.Content>
+                      </Header>
+                    </Table.Cell>
+                  </Table.Row>
+                )}
                 <Table.Row>
                   <Table.Cell>
                     <Header as="h4" image>
                       <Header.Content>
-                        {client?.companyName}
-                        <Header.Subheader>Company</Header.Subheader>
+                        {agent?.name}
+                        <Header.Subheader>Agent in charge</Header.Subheader>
                       </Header.Content>
                     </Header>
                   </Table.Cell>
                   {edit && (
                     <Table.Cell>
-                      {/* <Form.Input
-      type="text"
-      placeholder="ex: Matthew"
-      name="firstName"
-      value={form.firstName || ""}
-      onChange={onChange}
-    /> */}
+                      {/* ---------------CampaignAgent------------------------- */}
+                      <Form.Dropdown
+                        clearable
+                        search
+                        selection
+                        compact
+                        options={state.map((item) => {
+                          return {
+                            key: item.id,
+                            value: item.id,
+                            text: item.name,
+                          };
+                        })}
+                        // label="Assign Agent"
+                        placeholder="Assign Agent"
+                        onFocus={selectDropdown}
+                        name="agentCampaignsId"
+                        value={form.agentCampaignsId || ""}
+                        onChange={onChange}
+                        // disabled={step2}
+                      />
                     </Table.Cell>
                   )}
                 </Table.Row>
@@ -145,13 +214,13 @@ const InfoTab = ({ setEdit, edit, campaignDetails }) => {
                   </Table.Cell>
                   {edit && (
                     <Table.Cell>
-                      {/* <Form.Input
-      type="text"
-      placeholder="ex: Dunn"
-      name="lastName"
-      value={form.lastName || ""}
-      onChange={onChange}
-    /> */}
+                      <Form.Input
+                        type="text"
+                        placeholder="Campaign length in months"
+                        name="length"
+                        value={form.length || ""}
+                        onChange={onChange}
+                      />
                     </Table.Cell>
                   )}
                 </Table.Row>
@@ -166,13 +235,13 @@ const InfoTab = ({ setEdit, edit, campaignDetails }) => {
                   </Table.Cell>
                   {edit && (
                     <Table.Cell>
-                      {/* <Form.Input
-      type="text"
-      placeholder="ex: +666..."
-      name="phone"
-      value={form.phone || ""}
-      onChange={onChange}
-    /> */}
+                      <Form.Input
+                        type="date"
+                        placeholder="ex: 21-12-2021"
+                        name="startDate"
+                        value={form.startDate || ""}
+                        onChange={onChange}
+                      />
                     </Table.Cell>
                   )}
                 </Table.Row>
@@ -187,59 +256,42 @@ const InfoTab = ({ setEdit, edit, campaignDetails }) => {
                   </Table.Cell>
                   {edit && (
                     <Table.Cell>
-                      {/* <Form.Input
-      type="text"
-      name="email"
-      value={form.email || ""}
-      onChange={onChange}
-    /> */}
+                      <Form.Input
+                        type="date"
+                        name="endDate"
+                        placeholder="ex: 21-12-2021"
+                        value={form.endDate || ""}
+                        onChange={onChange}
+                      />
                     </Table.Cell>
                   )}
                 </Table.Row>
-                <Table.Row>
-                  <Table.Cell>
-                    <Header as="h4" image>
-                      <Header.Content>
-                        {createdAt ? timeStampSplit(createdAt) : null}
-                        <Header.Subheader>Created at...</Header.Subheader>
-                      </Header.Content>
-                    </Header>
-                  </Table.Cell>
-                  {edit && (
-                    <Table.Cell>
-                      {/* <Form.Input
-      type="text"
-      name="companyName"
-      value={form.companyName || ""}
-      onChange={onChange}
-    /> */}
-                    </Table.Cell>
-                  )}
-                </Table.Row>
-                {createdAt !== updatedAt ? (
-                  //   timeStampSplit(createdAt) !== timeStampSplit(updatedAt)
-                  <Table.Row>
-                    <Table.Cell>
-                      <Header as="h4" image>
-                        <Header.Content>
-                          {updatedAt ? timeStampSplit(updatedAt) : null}
-                          <Header.Subheader>Updated at...</Header.Subheader>
-                        </Header.Content>
-                      </Header>
-                    </Table.Cell>
-                    {edit && (
+                {!edit && (
+                  <>
+                    <Table.Row>
                       <Table.Cell>
-                        {/* <Form.Input
-      type="text"
-      name="website"
-      value={form.website || ""}
-      onChange={onChange}
-      placeholder="https://"
-    /> */}
+                        <Header as="h4" image>
+                          <Header.Content>
+                            {createdAt ? timeStampSplit(createdAt) : null}
+                            <Header.Subheader>Created at...</Header.Subheader>
+                          </Header.Content>
+                        </Header>
                       </Table.Cell>
-                    )}
-                  </Table.Row>
-                ) : null}
+                    </Table.Row>
+                    <Table.Row>
+                      {createdAt !== updatedAt ? (
+                        <Table.Cell>
+                          <Header as="h4" image>
+                            <Header.Content>
+                              {updatedAt ? timeStampSplit(updatedAt) : null}
+                              <Header.Subheader>Updated at...</Header.Subheader>
+                            </Header.Content>
+                          </Header>
+                        </Table.Cell>
+                      ) : null}
+                    </Table.Row>
+                  </>
+                )}
 
                 <Table.Row>
                   <Table.Cell>
@@ -252,17 +304,18 @@ const InfoTab = ({ setEdit, edit, campaignDetails }) => {
                   </Table.Cell>
                   {edit && (
                     <Table.Row>
-                      <Table.Cell>
-                        {/* <Form.Dropdown
-      clearable
-      search
-      selection
-      options={countries}
-      name="country"
-      value={form.country || ""}
-      onChange={onChange}
-    /> */}
-                      </Table.Cell>
+                      {edit && (
+                        <Table.Cell>
+                          <Form.TextArea
+                            type="text"
+                            style={{ width: "17.28em" }}
+                            name="notes"
+                            value={form.notes || ""}
+                            onChange={onChange}
+                            placeholder="bla bla bla"
+                          />
+                        </Table.Cell>
+                      )}
                     </Table.Row>
                   )}
                 </Table.Row>
@@ -273,20 +326,18 @@ const InfoTab = ({ setEdit, edit, campaignDetails }) => {
                 {/* // <Form.Group widths="equal" fluid attached="bottom"> */}
                 <Button
                   fluid
-                  content="Delete"
+                  content="Discard"
                   inverted
-                  color="red"
+                  color="orange"
                   className="dFlex-1"
-                  style={{ marginRight: 0, marginLeft: 0 }}
-                  // onClick={show}
+                  style={{
+                    marginRight: 0,
+                    marginLeft: 0,
+                  }}
+                  onClick={() => setEdit(false)}
                 />
-                {/* //    <Confirm
-//     open={areYouSure}
-//     content="Are you sure you want to delete the client ?"
-//     onCancel={handleCancel}
-//     onConfirm={handleConfirm}
-//   />  */}
                 <Button
+                  type="submit"
                   fluid
                   content="Save"
                   style={{
@@ -295,12 +346,9 @@ const InfoTab = ({ setEdit, edit, campaignDetails }) => {
                     marginLeft: 0,
                   }}
                   className="dFlex-1"
-                  // loading={isSubmitting}
-                  // onClick={editClient}
-                  onClick={() => setEdit(!edit)}
-                  // style={{ backgroundColor: "#566A63" }}
+                  loading={isSubmitting}
+                  // onClick={editCampaigm}
                 />
-                {/* // </Form.Group> */}
               </div>
             )}
           </Form>

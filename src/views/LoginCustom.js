@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { Auth, Hub } from "aws-amplify";
-import { Form, Segment, Image, Icon, Button } from "semantic-ui-react";
+import React from "react";
+import { Auth } from "aws-amplify";
+import { Form, Segment, Image, Button } from "semantic-ui-react";
 // import useForm from "../Forms/useForm";
 import loginPic from "../img/loginPic.png";
 import logoDash from "../img/logoDash.svg";
 import { useHistory } from "react-router-dom";
 import "../animation.css";
-import useForm from "../Forms/useForm";
 
 function LoginCustom({
   setUser,
@@ -33,7 +32,7 @@ function LoginCustom({
         formState;
       console.log(formState);
       if (password === confirmPassword) {
-        const { user } = await Auth.signUp({
+        await Auth.signUp({
           username: email,
           password,
           attributes: {
@@ -279,8 +278,8 @@ function LoginCustom({
                     onClick={signIn}
                     onClick={() =>
                       updateFormState(() => ({
-                        ...formState,
                         formType: "signUp",
+                        ...formState,
                       }))
                     }
                   />

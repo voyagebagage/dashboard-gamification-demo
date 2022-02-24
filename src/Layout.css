@@ -38,6 +38,12 @@ html,
   justify-content: space-between;
   align-items: center;
 }
+.dFlex-fEnd-aCenter-width2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 105%;
+}
 .dFlex-fEnd-aCenter-width {
   display: flex;
   justify-content: space-between;

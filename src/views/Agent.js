@@ -4,21 +4,20 @@ import { Link } from "react-router-dom";
 import { PaginationLong } from "../component/Pagination";
 //------------------------graphQl----------------------
 import { API, graphqlOperation } from "aws-amplify";
-import { listAgents, agentByTotalPoints } from "../graphql/queries";
 import { agentByMonthlyPointsCustom } from "../graphql/custom-queries";
 /* ------------------------------------------------------------------
 -                               Main function                       -
 ------------------------------------------------------------------ */
 function Agent() {
-  const SORT = {
-    ASC: "ASC",
-    DESC: "DESC",
-  };
+  // const SORT = {
+  //   ASC: "ASC",
+  //   DESC: "DESC",
+  // };
   const limit = 20;
   //---------------------States------------------------------
   const [agents, setAgents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [sortDirection, setSortDirection] = useState(SORT.DESC);
+  // const [sortDirection, setSortDirection] = useState(SORT.DESC);
 
   const variables = {
     // nextToken,
@@ -79,11 +78,11 @@ function Agent() {
                   className="campaignsTagsUl"
                 >
                   {agent.campaigns.items.map((campaign) => {
-                    console.log(campaign);
-                    console.log(agent.campaigns.items, "agent.campaigns.items");
+                    // console.log(campaign);
+                    // console.log(agent.campaigns.items, "agent.campaigns.items");
                     return (
                       <Link
-                        to={`/agent-report/${agent.name}/${campaign.name}/${campaign.id}`}
+                        to={`/agent-report/${agent.name}/${agent.id}/${campaign.name}/${campaign.id}`}
                         key={campaign.id}
                       >
                         <Label

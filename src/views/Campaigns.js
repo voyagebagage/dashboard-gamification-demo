@@ -46,10 +46,8 @@ function Campaigns() {
     isLoading,
     setIsLoading,
     limit,
-    setLimit,
     from,
     setFrom,
-    totalClients,
     setTotalClients,
     targetPage,
     setTargetPage,
@@ -110,8 +108,6 @@ function Campaigns() {
         setMaxPages(Math.ceil(campaignData.data.searchCampaigns.total / limit));
       }
 
-      console.log("=========USEEFFECT==========");
-      console.log(campaigns, "CLIENT USEEFFECT");
       setFrom(limit * (targetPage - 1));
       setIsLoading(false);
     } catch (error) {
@@ -160,7 +156,7 @@ function Campaigns() {
     filteredCampaigns,
     maxPages,
   ]);
-  console.log(campaigns.length, "CAMPAIGNS");
+  console.log(campaigns, "CAMPAIGNS");
   //#################################################
   //           RENDER
   //################################################

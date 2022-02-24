@@ -1,4 +1,5 @@
 import API, { graphqlOperation } from "@aws-amplify/api";
+import { Auth } from "aws-amplify";
 import { useHistory, Route, useParams, NavLink } from "react-router-dom";
 // import { panes } from "../arrayLists/index";
 import { getCampaign } from "../graphql/queries";
@@ -10,9 +11,8 @@ import WeeklySummaryTab from "../component/campaignTabs/WeeklySummaryTab";
 import MonthlyTotalsTab from "../component/campaignTabs/MonthlyTotalsTab";
 import KpiPointsTab from "../component/campaignTabs/KpiPointsTab";
 import TargetSummaryTab from "../component/campaignTabs/TargetsSummaryTab";
-import { setStatus } from "../lib/function";
+// import { setStatus } from "../lib/function";
 import { useCampaign, useKpis } from "../context/Provider";
-import { onCreateDailyReport } from "../graphql/subscriptions";
 
 //x
 function CampaignDetails() {
@@ -36,7 +36,7 @@ function CampaignDetails() {
       const campaignData = await API.graphql(
         graphqlOperation(getCampaign, { id: id })
       );
-      console.log(campaignData.data.getCampaign, "status");
+      // console.log(campaignData.data.getCampaign, "status");
       setCampaignDetails(campaignData.data.getCampaign);
       setDailyReports(campaignData.data.getCampaign.dailyReports.items);
       setKpis(
@@ -46,7 +46,7 @@ function CampaignDetails() {
       );
       // setIsLoading(false);
       // setKpis(DRData.data.getDailyReport.kpis.items);
-      console.log(campaignData.data.getCampaign, "campaignData");
+      // console.log(campaignData.data.getCampaign, "campaignData");
       // console.log(DRData.data.getDailyReport, "getDailyReport");
       console.log("succes campaignData");
     } catch (error) {
@@ -57,7 +57,8 @@ function CampaignDetails() {
 
   const { weeklyReports, monthlyReports, client, agent, status } =
     campaignDetails;
-
+  // console.log(Auth.user.username, "Auth");
+  // console.log(agent?.id, "agent id");
   const panes = [
     {
       menuItem: {
@@ -94,6 +95,12 @@ function CampaignDetails() {
         }`,
         exact: true,
         key: "reports",
+        disabled:
+          agent?.id === Auth?.user?.username ||
+          Auth?.signInUserSession?.idToken?.payload["cognito:groups"][0] ===
+            "Admin"
+            ? false
+            : true,
       },
       pane: (
         <Route
@@ -120,6 +127,12 @@ function CampaignDetails() {
         to: `/campaign/${name}/${id}/weeklySummary/${weeklyReports?.items[0]?.id}`,
         exact: true,
         key: "weeklySummary",
+        disabled:
+          agent?.id === Auth?.user?.username ||
+          Auth?.signInUserSession?.idToken?.payload["cognito:groups"][0] ===
+            "Admin"
+            ? false
+            : true,
       },
       pane: (
         <Route
@@ -141,6 +154,12 @@ function CampaignDetails() {
         to: `/campaign/${name}/${id}/monthlyTotals/${monthlyReports?.items[0]?.id}`,
         exact: true,
         key: "monthlyTotals",
+        disabled:
+          agent?.id === Auth?.user?.username ||
+          Auth?.signInUserSession?.idToken?.payload["cognito:groups"][0] ===
+            "Admin"
+            ? false
+            : true,
       },
       pane: (
         <Route
@@ -162,6 +181,12 @@ function CampaignDetails() {
         to: `/campaign/${name}/${id}/targetsSummary`,
         exact: true,
         key: "targetsSummary",
+        disabled:
+          agent?.id === Auth?.user?.username ||
+          Auth?.signInUserSession?.idToken?.payload["cognito:groups"][0] ===
+            "Admin"
+            ? false
+            : true,
       },
       pane: (
         <Route
@@ -189,6 +214,12 @@ function CampaignDetails() {
         to: `/campaign/${name}/${id}/kpiPoints`,
         exact: true,
         key: "kpiPoints",
+        disabled:
+          agent?.id === Auth?.user?.username ||
+          Auth?.signInUserSession?.idToken?.payload["cognito:groups"][0] ===
+            "Admin"
+            ? false
+            : true,
       },
       pane: (
         <Route
@@ -204,10 +235,6 @@ function CampaignDetails() {
     },
   ];
   //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  console.log(
-    "dailyReports[dailyReports.length - 2]?.id",
-    dailyReports[dailyReports.length - 1]?.id
-  );
   //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
   return (
@@ -265,7 +292,7 @@ function CampaignDetails() {
         menu={{ fluid: true, vertical: true }}
         menuPosition="right"
         panes={panes}
-        onTabChange={(event, value) => console.log(value, "TAB")}
+        // onTabChange={(event, value) => console.log(value, "TAB")}
         // className="dFlex"
         // style={{ maxWidth: "80%", right: "80%" }}
       />

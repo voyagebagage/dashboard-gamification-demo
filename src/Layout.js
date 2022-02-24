@@ -17,7 +17,6 @@ import LoginCustom from "./views/LoginCustom";
 import { Auth, Hub } from "aws-amplify";
 
 //---------------------Semantic UI------------------------------
-import { Image } from "semantic-ui-react";
 //---------------------Context------------------------------
 import { GlobalProvider } from "./context/Provider";
 //---------------------Plugin------------------------------
@@ -25,8 +24,6 @@ import Cookies from "js-cookie";
 import useForm from "./Forms/useForm";
 
 //---------------------Assets------------------------------
-import loginPic from "./img/loginPic.png";
-import logoDash from "./img/logoDash.svg";
 import "./animation.css";
 
 function Layout() {
@@ -42,7 +39,6 @@ function Layout() {
   } = useForm();
   //---------------------States------------------------------
   const [sidebarItem, setSidebarItem] = useState(false);
-  const { formType, userType } = formState;
   const [token, setToken] = useState(Cookies.get("token") || null);
   const [username, setUsername] = useState(Cookies.get("username") || "");
   //-------------------Functions---------------------------
@@ -56,13 +52,13 @@ function Layout() {
     let rItem = JSON.parse(
       localStorage.getItem(user?.storage[user.userDataKey])
     );
-    rItem = rItem?.UserAttributes.filter((e) => e.Name !== "custom:admin_code");
+    rItem?.UserAttributes.filter((e) => e.Name !== "custom:admin_code");
   }
   async function setAuthListener() {
     Hub.listen("auth", (data) => {
       switch (data.payload.event) {
         case "signOut":
-          console.log("data from event:", data);
+          // console.log("data from event:", data);
           updateFormState(() => ({ ...formState, formType: "signIn" }));
           Cookies.remove("token");
           Cookies.remove("username");
@@ -98,11 +94,11 @@ function Layout() {
       );
       user.storage[user.userDataKey] = JSON.stringify(rItem);
       // console.log("checkUSER", user);
-      // if (!token)
-      //   setUser(
-      //     user?.signInUserSession?.idToken.jwtToken,
-      //     user?.attributes?.name
-      //   );
+      if (!token)
+        setUser(
+          user?.signInUserSession?.idToken.jwtToken,
+          user?.attributes?.name
+        );
       updateUser(user);
       updateFormState(() => ({ ...formState, formType: "signedIn" }));
       // console.log(

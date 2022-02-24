@@ -28,17 +28,24 @@ const SearchCampaigns = () => {
   const fetchResults = async () => {
     try {
       if (search.value.length > 2) {
+        //DynamoDb doesn't support REGEX
+        let searchValueFirstCharInUpperCase =
+          search.value.charAt(0).toUpperCase() + search.value.slice(1);
         const filteredRes = await API.graphql(
           graphqlOperation(listCampaigns, {
             filter: {
               or: [
                 { name: { beginsWith: search.value } },
+                { name: { beginsWith: searchValueFirstCharInUpperCase } },
                 // { client: { beginsWith: search.value } },
                 { startDate: { beginsWith: search.value } },
                 { endDate: { beginsWith: search.value } },
                 // { companyName: { beginsWith: search.value } },
                 { notes: { beginsWith: search.value } },
+                { notes: { beginsWith: searchValueFirstCharInUpperCase } },
                 { type: { beginsWith: search.value } },
+                { type: { beginsWith: searchValueFirstCharInUpperCase } },
+                { type: { beginsWith: search.value.toUpperCase() } },
               ],
             },
             // limit: limit,
@@ -53,8 +60,8 @@ const SearchCampaigns = () => {
               title: `${
                 result.name
               }   ${result.client.companyName.toUpperCase()}`,
-              description: `S:${result.startDate}    F: ${result.endDate} 
-              
+              description: `S:${result.startDate}    F: ${result.endDate}
+
               CLIENT:${result.client.firstName}   ${result.client.lastName}`,
               // image: result.lastName, could add one in the future
               price: result.type,

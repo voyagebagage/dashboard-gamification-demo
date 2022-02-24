@@ -1,8 +1,6 @@
 import API, { graphqlOperation } from "@aws-amplify/api";
-import { Auth } from "aws-amplify";
 import { useEffect, useState } from "react";
 import { getTimezone } from "../../graphql/queries";
-import axios from "axios";
 import { Icon, Dropdown, Statistic, Header, Segment } from "semantic-ui-react";
 const TimeComponent = () => {
   const [data, setData] = useState({});
@@ -53,10 +51,10 @@ const TimeComponent = () => {
         >{`${date[0]} ${date[2]}`}</Header>
         <Statistic size="small">
           <Statistic.Value style={{ color: "#8CABA0" }}>
-            {data.datetime.split("T")[1].slice(0, 8)}
+            {data.datetime.split("T")[1].slice(0, 5)}
           </Statistic.Value>
           <Statistic.Label style={{ color: "#566A63" }}>
-            {data.timezone}
+            {data.timezone === "Asia/Bangkok" ? "Koh Phangan" : data.timezone}
           </Statistic.Label>
         </Statistic>
         <Dropdown

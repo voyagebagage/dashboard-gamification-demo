@@ -9,12 +9,11 @@ import {
   Form,
   Table,
   List,
-  Confirm,
   Sidebar,
   Select,
 } from "semantic-ui-react";
 import { countries } from "../arrayLists/index";
-import { useClient, useSearch, useVisible } from "../context/Provider";
+import { useClient, useVisible } from "../context/Provider";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useForm from "../Forms/useForm";
@@ -28,21 +27,16 @@ import CampaignForm from "../Forms/CampaignForm";
 
 function ClientDetails() {
   const { firstName, companyName, id } = useParams();
-  console.log({ firstName, companyName, id }, "params");
-  const { search, setSearch, filteredResults } = useSearch();
-  const { clientDetails, setClientDetails, setClients } = useClient();
+  const { clientDetails, setClientDetails } = useClient();
   const { onChange, form, setForm } = useForm();
   const { setVisible } = useVisible();
   let history = useHistory();
-  // let location= useLocation();
   //---------------------States---------------------------------
   const [textArea, setTextArea] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [text, setText] = useState("");
   const [edit, setEdit] = useState(false);
-  const [areYouSure, setAreYouSure] = useState(false);
   const [campaign, setCampaign] = useState({});
-  // const [upClient, setUpClient] = useState({});
   //------------------------------------------------
   const fetchClient = async () => {
     try {
@@ -56,28 +50,11 @@ function ClientDetails() {
     }
   };
   useEffect(() => fetchClient(), []);
-  const {
-    // id,
-    // firstName,
-    lastName,
-    // companyName,
-    email,
-    phone,
-    website,
-    country,
-    notes,
-    campaigns,
-  } = clientDetails;
+  const { lastName, email, phone, website, country, notes, campaigns } =
+    clientDetails;
 
   //---------------------Functions------------------------------
-  const show = () => setAreYouSure(true);
-  const handleConfirm = () => {
-    setIsSubmitting(true);
-    removeClient();
-    setAreYouSure(false);
-  };
-  const handleCancel = () => setAreYouSure(false);
-  //------------------------------------------------
+
   const editNotes = async () => {
     try {
       //--cannot have fields that aren't in the schema
@@ -100,22 +77,7 @@ function ClientDetails() {
       console.log("error adding notes to a client", error);
     }
   };
-  //------------------------===========Del============---------------------
-  const removeClient = async () => {
-    try {
-      const inputDel = { id: clientDetails.id };
-      const clientDelete = await API.graphql(
-        graphqlOperation(deleteClient, {
-          input: inputDel,
-        })
-      );
-      console.log(clientDelete, "clientDelete");
-      console.log("succes");
-      history.push("/client-list");
-    } catch (error) {
-      console.log("error erasing a client", error);
-    }
-  };
+
   //------------------------===========Up============---------------------
   const editClient = async () => {
     try {
@@ -142,7 +104,6 @@ function ClientDetails() {
       clientDetails.campaigns = campaigns;
       setForm({});
       setIsSubmitting(false);
-      console.log(clientDetails, "clientDetails AFTER UP");
       console.log(clientUpdate.data.updateClient, "response");
       console.log("succes");
       setEdit(false);
@@ -150,9 +111,6 @@ function ClientDetails() {
       console.log("error updating a client", error);
     }
   };
-  console.log(clientDetails, "clientDetails");
-  console.log(campaigns, "campaigns");
-  console.log(campaign, "campaign = - _ +");
 
   return (
     <>
@@ -164,17 +122,7 @@ function ClientDetails() {
                 ? "/client-list"
                 : `/client/${firstName}/${companyName}/${id}`
             }
-            onClick={
-              edit
-                ? () => {
-                    setEdit(false);
-                    // setSearch({ value: "" });
-                    // if (filteredResults.length) {
-                    //   setClients(filteredResults);
-                    // }
-                  }
-                : null
-            }
+            onClick={edit ? () => setEdit(false) : null}
             style={{ color: "#566A63" }}
           >
             <Icon name="arrow left" size="large" />
@@ -287,10 +235,7 @@ function ClientDetails() {
               </SidebarForm>
             </>
           ) : (
-            <div
-              className="dFlex-center"
-              // style={{ backgroundColor: "purple" }}
-            >
+            <div className="dFlex-center">
               <div className="dFlex" style={{ width: "30vw" }}>
                 <Segment
                   as={Card}
@@ -301,10 +246,9 @@ function ClientDetails() {
                   className="dFlex-sBetween"
                   // style={{ paddingLeft: 0 }}
                 >
-                  <Form>
+                  <Form size="small">
                     <Table
                       padded
-                      // size="large"
                       inverted
                       celled
                       fluid
@@ -315,7 +259,9 @@ function ClientDetails() {
                     >
                       <Table.Row>
                         <Table.HeaderCell>Current info</Table.HeaderCell>
-                        <Table.HeaderCell>Update to...</Table.HeaderCell>
+                        <Table.HeaderCell style={{ width: "50%" }}>
+                          Update to...
+                        </Table.HeaderCell>
                       </Table.Row>
                       <Table.Body>
                         <Table.Row>
@@ -415,7 +361,7 @@ function ClientDetails() {
                           <Table.Cell>
                             <Header as="h4" image>
                               <Header.Content>
-                                {website}
+                                {website.slice(8)}
                                 <Header.Subheader>Website</Header.Subheader>
                               </Header.Content>
                             </Header>
@@ -456,19 +402,18 @@ function ClientDetails() {
                     <div className="dFlex">
                       <Button
                         fluid
-                        content="Delete"
+                        content="Discard"
                         inverted
                         className="dFlex-1"
-                        color="red"
-                        onClick={show}
-                        style={{ marginRight: 0, marginLeft: 0 }}
+                        color="orange"
+                        onClick={() => setEdit(false)}
+                        style={{
+                          marginRight: 0,
+                          marginLeft: 0,
+                          // width: "45%",
+                        }}
                       />
-                      <Confirm
-                        open={areYouSure}
-                        content="Are you sure you want to delete the client ?"
-                        onCancel={handleCancel}
-                        onConfirm={handleConfirm}
-                      />
+
                       <Button
                         content="Save"
                         fluid
@@ -479,6 +424,7 @@ function ClientDetails() {
                           backgroundColor: "#566A63",
                           marginRight: 0,
                           marginLeft: 0,
+                          // width: "55%",
                         }}
                       />
                     </div>
