@@ -39,7 +39,7 @@ import { deleteClient } from "../graphql/mutations";
 ------------------------------------------------------------- */
 function Client() {
   let history = useHistory();
-  //------------------------context & custom hooks----------------------
+  //--------------------------  context & custom hooks  ----------------------
   const { clients, setClients } = useClient();
   //xxxxxxxxxxxxxxxxxxxx
   const { setVisible } = useVisible();
@@ -68,7 +68,7 @@ function Client() {
   const [areYouSure, setAreYouSure] = useState(false);
   const [index, setIndex] = useState(0);
 
-  //------------------------function----------------------
+  //------------------------functions----------------------
   const show = (idx) => {
     setAreYouSure(true);
     setIndex(idx);
@@ -95,11 +95,8 @@ function Client() {
   const fetchClients = async () => {
     try {
       setIsLoading(true);
-      // setLimit(10);
-      // setFieldDropDown("companyName");
       const clientData = await API.graphql(
         graphqlOperation(searchClients, variables)
-        // listClients, variables)
       );
       //----------------------setStates-----------
       setClients(clientData.data.searchClients.items);
@@ -117,29 +114,23 @@ function Client() {
       setFrom(limit * (targetPage - 1));
       setIsLoading(false);
     } catch (error) {
-      console.log("error with get clients :", error);
+      console.log("error with get clients :", error.errors[0].message);
     }
   };
   const removeClient = async (idx) => {
     try {
-      console.log("idx", idx);
-      console.log("clients[idx].id", clients[idx].id);
-
       const inputDel = { id: clients[idx].id };
-      console.log("inputDel", inputDel);
       const clientDelete = await API.graphql(
         graphqlOperation(deleteClient, {
           input: inputDel,
         })
       );
-      console.log(clientDelete, "clientDelete");
-      console.log("clients", clients);
       console.log("succes");
-      // history.push("/client-list");
     } catch (error) {
       console.log("error erasing a Campaign", error);
     }
   };
+  //~~~~~~~~~-----~~~~~~~~ use Effect ~~~~~~~~~~~~~~~~~~~~~~~~~~
   useEffect(() => {
     fetchClients();
     const subscription = API.graphql(
@@ -187,7 +178,6 @@ function Client() {
           <Table.Body>
             {clients.map((client, i) => (
               <Table.Row key={i} style={{ cursor: "pointer" }}>
-                {/* <Table.Cell singleLine>{i}</Table.Cell> */}
                 <Table.Cell
                   singleLine
                   onClick={() =>
@@ -301,7 +291,6 @@ function Client() {
         -                                 FORM                        -
       ------------------------------------------------------------------ */}
           <NewClientForm
-            // updateList={fetchClients}
             setVisible={setVisible}
             clients={clients}
             setClients={setClients}
@@ -312,12 +301,7 @@ function Client() {
   ) : !isLoading && clients.length === 0 ? (
     <>
       <Sidebar.Pushable as={List}>
-        <Segment
-          basic
-          fluid
-          className="centerSizedDirection"
-          // style={{ alignItems : "center" }}
-        >
+        <Segment basic fluid className="centerSizedDirection">
           <Header as="h2">Clients</Header>
           <AddIcon setVisible={setVisible} size="big" />
         </Segment>
@@ -335,7 +319,6 @@ function Client() {
             New Client
           </Segment>
           <NewClientForm
-            // updateList={fetchClients}
             setVisible={setVisible}
             clients={clients}
             setClients={setClients}

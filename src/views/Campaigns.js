@@ -32,7 +32,6 @@ import { deleteCampaign } from "../graphql/mutations";
 import useForm from "../Forms/useForm";
 import { onDeleteCampaign } from "../graphql/subscriptions";
 
-// import { fetchClients } from "../fetch/FetchClients";
 //#################################################
 //           FUNCTION
 //################################################
@@ -58,26 +57,15 @@ function Campaigns() {
   const { filteredCampaigns, campaigns, setCampaigns } = useCampaign();
   //xxxxxxxxxxxxxxxxxxxx
   const { fieldDropDown, directionDropDown } = useDropDownFilter();
-  const [areYouSure, setAreYouSure] = useState(false);
-  const show = () => setAreYouSure(true);
-  const handleCancel = () => setAreYouSure(false);
-  const handleConfirm = (idx) => {
-    setIsSubmitting(true);
-    removeCampaign(idx);
-    setAreYouSure(false);
-  };
   //---------------------States------------------------------
-  // const [activeCampaign, setActiveCampaign] = useState(false);
-  // const [campaigns, setCampaigns] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
-  //---------------------~~~~~~~~~~~----------------------------
+  const [areYouSure, setAreYouSure] = useState(false);
+  //---------------------Objects------------------------------
   const variables = {
     //filter
     from: from,
     limit: limit,
     sort: { direction: directionDropDown, field: fieldDropDown.campaign },
   };
-
   const colorCode = {
     blue: "The campaign has NOT STARTED yet",
     green: "The campaign is ON",
@@ -85,6 +73,14 @@ function Campaigns() {
     grey: "The Campaign is NOT ON",
   };
   //---------------------Functions------------------------------
+  const show = () => setAreYouSure(true);
+  const handleCancel = () => setAreYouSure(false);
+  const handleConfirm = (idx) => {
+    setIsSubmitting(true);
+    removeCampaign(idx);
+    setAreYouSure(false);
+  };
+  //---------------------~~~~~~~~~~~----------------------------
   const fetchCampaigns = async () => {
     try {
       setIsLoading(true);
@@ -115,10 +111,7 @@ function Campaigns() {
   //------------------------===========Del============---------------------
   const removeCampaign = async (idx) => {
     try {
-      console.log("campaigns", campaigns);
-
       const inputDel = { id: campaigns[idx].id };
-      console.log("inputDel", inputDel);
       const campaignDelete = await API.graphql(
         graphqlOperation(deleteCampaign, {
           input: inputDel,
@@ -126,7 +119,7 @@ function Campaigns() {
       );
       console.log("succes");
     } catch (error) {
-      console.log("error erasing a Campaign", error);
+      console.log("error erasing a Campaign", error.errors[0].message);
     }
   };
   useEffect(() => {
@@ -171,26 +164,15 @@ function Campaigns() {
               <Table.HeaderCell textAlign="center">AGENT</Table.HeaderCell>
               <Table.HeaderCell collapsing>START</Table.HeaderCell>
               <Table.HeaderCell collapsing>END</Table.HeaderCell>
-              <Table.HeaderCell
-                textAlign="center"
-                colSpan="2"
-                // style={{ maxWidth: "10vw", marginRight: 0 }}
-              >
+              <Table.HeaderCell textAlign="center" colSpan="2">
                 STATUS
               </Table.HeaderCell>
-              {/* <Table.HeaderCell collapsing>ON CAMPAIGN</Table.HeaderCell> */}
             </Table.Row>
           </Table.Header>
           {/* -----------------TABLE BODY--------------------- */}
           <Table.Body>
             {campaigns.map((campaign, idx) => (
-              <Table.Row
-                key={campaign.id}
-                style={{ cursor: "pointer" }}
-                // onClick={() =>
-                //   history.push(`/campaign/${campaign.name}/${campaign.id}/info`)
-                // }
-              >
+              <Table.Row key={campaign.id} style={{ cursor: "pointer" }}>
                 <Table.Cell
                   onClick={() =>
                     history.push(
@@ -339,7 +321,6 @@ function Campaigns() {
       <SidebarForm>
         <CampaignForm campaigns={campaigns} setCampaigns={setCampaigns} />
       </SidebarForm>
-      {/* </div> */}
     </Sidebar.Pushable>
   ) : (
     <Segment>

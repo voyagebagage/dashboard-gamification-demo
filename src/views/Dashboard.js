@@ -28,6 +28,7 @@ import TimeComponent from "../component/TimeComponent";
 //           FUNCTION
 //################################################
 function Dashboard() {
+  //--------------------------------------  Objects  -----------------
   const SORT = {
     ASC: "ASC",
     DESC: "DESC",
@@ -39,17 +40,15 @@ function Dashboard() {
     DAY: agentByDailyPoints,
   };
 
-  // const limit = 12;
-  const [activeItem, setActiveItem] = useState("");
-
   const handle = useFullScreenHandle();
+  //--------------------------------------  States  -------------------
+  const [activeItem, setActiveItem] = useState("");
   const [agents, setAgents] = useState([]);
   const [sortDirection, setSortDirection] = useState(SORT.DESC);
   const [query, setQuery] = useState(QUERY.DAY);
   const [isLoading, setIsLoading] = useState(true);
-  //##
-  //##
-  //--------------------------------Fetch-----------------
+
+  //--------------------------------------  Fetch  --------------------
   const fetchAgent = async () => {
     try {
       // console.log(query, "query");
@@ -72,7 +71,10 @@ function Dashboard() {
 
       console.log(agents, "agents");
     } catch (error) {
-      console.log(error);
+      console.log(
+        "there is an Error with agentByMon/Week/Daily points:",
+        error.errors[0].message
+      );
     }
   };
   useEffect(() => fetchAgent(), [activeItem, query]);
@@ -86,8 +88,6 @@ function Dashboard() {
 
         <div className="dFlex-sBetween">
           <Header as="h2">Leaderboard</Header>
-
-          {/* <IconParkOutlineFullScreen  onClick={handle.enter}/> */}
           <Icon
             name="expand arrows alternate"
             color="grey"
@@ -137,14 +137,10 @@ function Dashboard() {
                   <Table.HeaderCell>RANK</Table.HeaderCell>
                   <Table.HeaderCell>NINJA</Table.HeaderCell>
                   <Table.HeaderCell>POINTS</Table.HeaderCell>
-                  {/* <Table.HeaderCell>% TO TARGET</Table.HeaderCell> */}
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {agents.map((agent, idx) => {
-                  // if (agent.dailyPoints === null) {
-                  //   agent.noPoints = "not updated";
-                  // }
                   return (
                     <Table.Row
                       key={agent.id}
