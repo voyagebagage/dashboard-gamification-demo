@@ -40,7 +40,7 @@ function Campaigns() {
   let history = useHistory();
 
   const { setVisible } = useVisible();
-  const { setIsSubmitting } = useForm();
+  const { setIsSubmitting, setForm } = useForm();
   //xxxxxxxxxxxxxxxxxxxx
   const {
     isLoading,
@@ -334,7 +334,11 @@ function Campaigns() {
     </Sidebar.Pushable>
   ) : !isLoading && campaigns.length === 0 ? (
     <Sidebar.Pushable as={List}>
-      <Segment basic className="centerSizedDirection">
+      <Segment
+        basic
+        className="centerSizedDirection"
+        onClick={() => setForm({})}
+      >
         <Header as="h2">Campaigns</Header>
         <AddIcon setVisible={setVisible} size="big" />
       </Segment>

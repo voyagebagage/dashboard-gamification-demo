@@ -66,7 +66,7 @@ export const updatePoints = async (agent, dailyPoints, dailyReportDate) => {
         },
       })
     );
-    console.log("NEXT:", updateDailyPoints.data.updateAgent);
+    console.log(" update points NEXT:", updateDailyPoints.data.updateAgent);
   } catch (error) {
     console.log(
       "there is a suscribtion issue onUpdateDailyReport (updatePoints function):",

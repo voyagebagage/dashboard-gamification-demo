@@ -194,8 +194,6 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
   const newDailyReport = async (e) => {
     e.preventDefault();
     try {
-      console.log("DR ID", dailyReport.id);
-      console.log("KPI", kpis);
       //~~~~~~~~~ CREATE NEW KPIS ~~~~~~~~~~
       let total = 0;
       let target = 0;
@@ -203,10 +201,11 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
       for (let i = 0; i < kpis.length; i++) {
         delete kpis[i].createdAt;
         delete kpis[i].updatedAt;
+        delete kpis[i].dailyReport;
+        delete kpis[i].dailyReportKpisId;
         delete kpis[i].id;
         total += kpis[i].result * kpis[i].coeff;
         target += (kpis[i].result * 100) / kpis[i].target;
-        console.log("DR ID", i, dailyReport.id);
         const newKpi = await API.graphql(
           graphqlOperation(createKpi, {
             input: {
@@ -222,6 +221,8 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
       }
       // setKpis(elem);
       setKpis(elem.reverse());
+      //    ===============================================
+      console.log("DR ID3", dailyReport.id);
       //    ===============================================
       const updateDailyPoints = await API.graphql(
         graphqlOperation(updateDailyReport, {
@@ -262,12 +263,13 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
         const dailyReportDate = eventData.value.data.onUpdateDailyReport.date;
         fetchDailyReport();
         updatePoints(agent, dailyPoints, dailyReportDate);
+        console.log("END NEXT ");
       },
     });
     return () => subscription.unsubscribe();
   }, []);
   //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  console.log("%cdReportCount", "color:purple", dReportCount);
+  // console.log("%cdReportCount", "color:purple", dReportCount);
   console.log("%c<==***KPIS**==", "color:gray;", kpis);
   console.log("%cdailyReport", "color:red", dailyReport);
   console.log(
@@ -275,7 +277,7 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
     "color:green",
     dailyReports
   );
-  console.log("%cweekArray:-=-=-=-=-=", "color:olive", weekArray);
+  // console.log("%cweekArray:-=-=-=-=-=", "color:olive", weekArray);
   //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   return !isLoading && campId && weekArray ? (
     <Form onSubmit={newDailyReport}>

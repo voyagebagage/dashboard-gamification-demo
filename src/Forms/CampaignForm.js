@@ -1,4 +1,12 @@
-import { Header, Segment, Form, Icon, Label, Grid } from "semantic-ui-react";
+import {
+  Header,
+  Segment,
+  Form,
+  Icon,
+  Label,
+  Grid,
+  Button,
+} from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import { useVisible } from "../context/Provider";
 import { API, graphqlOperation } from "aws-amplify";
@@ -46,8 +54,8 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
   const disabledStep2Button = !backButton
     ? campaignFormValid || step2
     : campaignFormUpdateValid;
-  //-------------------Functions------------------------------
 
+  //-------------------Functions------------------------------
   //#########################################################
   //                     DROPDOWNs
   //#########################################################
@@ -180,7 +188,6 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
         delete form.kpis;
         delete form.createdAt;
         delete form.updatedAt;
-        form.name = "";
         if (form.coeff || form.target) {
           delete form.coeff;
           delete form.target;
@@ -417,9 +424,37 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
         style={{
           borderRightWidth: 0,
           borderRadius: 0,
+          gap: 20,
         }}
       >
-        Setting up a new Campaign
+        Setting up a new Campaign{" "}
+        <Button
+          animated
+          as={Segment}
+          basic
+          style={{
+            borderWidth: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            // margin: 0,
+            shadowBox: "none",
+          }}
+          size="large"
+        >
+          <Button.Content visible basic>
+            <Icon name="delete" />
+          </Button.Content>
+          <Button.Content
+            hidden
+            basic
+            onClick={() => {
+              setForm({});
+              setVisible(false);
+            }}
+          >
+            Abort
+          </Button.Content>
+        </Button>
       </Segment>
       <Segment basic style={{ paddingRight: 0 }}>
         <Grid
