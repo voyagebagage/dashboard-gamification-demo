@@ -52,7 +52,6 @@ function Dashboard() {
   //--------------------------------Fetch-----------------
   const fetchAgent = async () => {
     try {
-      console.log("-------FETCH------");
       // console.log(query, "query");
       const agentData = await API.graphql(
         graphqlOperation(
@@ -82,7 +81,7 @@ function Dashboard() {
   //################################################
   return !isLoading ? (
     <>
-      <Segment basic style={{ width: "50vw", height: "100%" }}>
+      <Segment basic style={{ width: "50vw", height: "100vh" }}>
         <TimeComponent />
 
         <div className="dFlex-sBetween">

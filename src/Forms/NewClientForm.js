@@ -71,7 +71,7 @@ const NewClientForm = ({ setVisible, clients, setClients }) => {
           borderRadius: 0,
         }}
       >
-        New Client
+        New Client{" "}
         <Button
           animated
           as={Segment}
