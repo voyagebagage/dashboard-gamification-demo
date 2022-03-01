@@ -54,7 +54,6 @@ export function getDateOfISOWeek(w, y) {
 export const updatePoints = async (agent, dailyPoints, dailyReportDate) => {
   try {
     let date = new Date();
-    console.log("agent in updatePoints", agent);
     date = toISOStr(date);
     const updateDailyPoints = await API.graphql(
       graphqlOperation(updateAgentForUpdatePoints, {

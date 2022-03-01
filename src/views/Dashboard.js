@@ -133,20 +133,7 @@ function Dashboard() {
 
             <Table striped style={{ marginTop: "2vh" }}>
               <Table.Header>
-                <Segment
-                  as="div"
-                  fluid="true"
-                  className="dFlex-fEnd"
-                  // floated="rigth"
-                  style={{
-                    position: "absolute",
-                    // top: "2%",
-                    left: "105%",
-                    backgroundColor: "cyan",
-                  }}
-                >
-                  {/* <Updates /> */}
-                </Segment>
+                {/* <Updates /> */}
                 <Table.Row>
                   <Table.HeaderCell>RANK</Table.HeaderCell>
                   <Table.HeaderCell>NINJA</Table.HeaderCell>

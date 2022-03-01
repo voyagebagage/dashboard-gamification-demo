@@ -212,6 +212,7 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
               agentID: agent.id,
               campaignKpisId: id,
               dailyReportKpisId: dailyReport.id,
+              target: kpis[i].nextWeekTarget,
               ...kpis[i],
             },
           })
@@ -221,8 +222,6 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
       }
       // setKpis(elem);
       setKpis(elem.reverse());
-      //    ===============================================
-      console.log("DR ID3", dailyReport.id);
       //    ===============================================
       const updateDailyPoints = await API.graphql(
         graphqlOperation(updateDailyReport, {
@@ -255,8 +254,6 @@ const ReportTab = ({ campaignDetails, dailyReports, setDailyReports }) => {
       graphqlOperation(onUpdateDailyReport)
     ).subscribe({
       next: (eventData) => {
-        console.log("N   E  X  T");
-        console.log(eventData.value.data.onUpdateDailyReport);
         const agent = eventData.value.data.onUpdateDailyReport.campaign.agent;
         const dailyPoints =
           eventData.value.data.onUpdateDailyReport.dailyPoints;

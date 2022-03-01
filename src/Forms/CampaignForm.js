@@ -436,7 +436,6 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
             borderWidth: 0,
             paddingTop: 0,
             paddingBottom: 0,
-            // margin: 0,
             shadowBox: "none",
           }}
           size="large"
@@ -457,17 +456,8 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
         </Button>
       </Segment>
       <Segment basic style={{ paddingRight: 0 }}>
-        <Grid
-          columns={2}
-          // padded
-          divided
-          // stretched
-          // relaxed="very"
-        >
-          <Grid.Column
-            stretched
-            // width={8}
-          >
+        <Grid columns={2} divided>
+          <Grid.Column stretched>
             <Segment
               style={{
                 paddingRight: "7%",
@@ -482,15 +472,8 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                 <Header>Campaign Information</Header>
               </Segment>
               <Form onSubmit={addCampaign}>
-                <Grid
-                  relaxed="very"
-                  // padded
-                >
-                  {/* //################################
-                  //################################
-                  //######## COLUMN 1 FORM #########
-                  //################################
-                  //################################ */}
+                <Grid relaxed="very">
+                  {/* ~~~~~~~~~~~~~~~~ COLUMN 1 FORM ~~~~~~~~~~~~~~~ */}
                   {/* ------------------------name-------------------------- */}
                   <Grid.Row columns={2}>
                     <Grid.Column stretched>
@@ -514,7 +497,6 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                             key: item.id,
                             value: item.id,
                             text: `${item.firstName}(${item.companyName})`,
-                            // clientName: `${item.firstName} ${item.lastName}`,
                           };
                         })}
                         label="Client Name"
@@ -537,11 +519,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
                         disabled={step2}
                       />
                     </Grid.Column>
-                    {/* //########################
-                  //################################
-                  //######## COLUMN 2 FORM #########
-                   //################################
-                  //################################ */}
+                    {/* ~~~~~~~~~~~~~~~~ COLUMN 2 FORM ~~~~~~~~~~~~~~~ */}
                     <Grid.Column stretched>
                       <Form.Group widths="equal" fluid>
                         {/* ------------Campaign-Type------------------------- */}
@@ -634,11 +612,7 @@ const CampaignForm = ({ campaigns, setCampaigns }) => {
           </Grid.Column>
 
           {/* //####################################################
-          //####################################################
-          //####################################################
-          //###################### STEP 2 ######################
-          //####################################################
-          //####################################################
+                                    STEP 2
           //#################################################### */}
 
           <Grid.Column

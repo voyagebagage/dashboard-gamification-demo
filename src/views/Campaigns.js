@@ -91,9 +91,6 @@ function Campaigns() {
       const campaignData = await API.graphql(
         graphqlOperation(searchCampaigns, variables)
       );
-      // console.log(await campaignData.data.searchCampaigns.items, "campaing");
-      // console.log(await campaignData.data.searchCampaigns.items, "campaing");
-      // console.log(campaignData.data.searchCampaigns.items.length, "campaing");
 
       //----------------------setStates-----------
       setCampaigns(campaignData.data.searchCampaigns.items);
@@ -127,10 +124,7 @@ function Campaigns() {
           input: inputDel,
         })
       );
-      console.log(campaignDelete, "campaignDelete");
-      console.log("campaigns", campaigns);
       console.log("succes");
-      // history.push("/client-list");
     } catch (error) {
       console.log("error erasing a Campaign", error);
     }
@@ -324,9 +318,9 @@ function Campaigns() {
             setTargetPage={setTargetPage}
           />
         </div>
-        {/* ----------------------------------------------------
-        -                             SIDEBAR - FORM                        -
-        ----------------------------------------------------- */}
+        {/* --------------------------------------------------------------
+        -                       SIDEBAR - FORM                          -
+        ----------------------------------------------------------------- */}
         <SidebarForm>
           <CampaignForm campaigns={campaigns} setCampaigns={setCampaigns} />
         </SidebarForm>

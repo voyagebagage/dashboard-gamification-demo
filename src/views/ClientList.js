@@ -3,8 +3,7 @@ import { useHistory } from "react-router-dom";
 import AddIcon from "../component/AddIcon";
 import { PaginationShortCentered } from "../component/Pagination";
 import SidebarForm from "../component/SidebarForm";
-// import ClientDetails from "./views/ClientDetails";
-// import { fetchClients } from "../fetch/FetchClients";
+
 //------------------------graphQl----------------------
 import { API, graphqlOperation } from "aws-amplify";
 import { searchClients } from "../graphql/queries";
@@ -15,6 +14,7 @@ import {
   useDropDownFilter,
   useSearch,
 } from "../context/Provider";
+
 import {
   List,
   Segment,
@@ -33,8 +33,6 @@ import NewClientForm from "../Forms/NewClientForm";
 import useForm from "../Forms/useForm";
 import { onDeleteClient } from "../graphql/subscriptions";
 import { deleteClient } from "../graphql/mutations";
-
-//------------------------context & custom hooks----------------------
 
 /* -----------------------------------------------------------
 -                      Main FUNCTION                      -
@@ -69,6 +67,8 @@ function Client() {
   //------------------------States------------------------------
   const [areYouSure, setAreYouSure] = useState(false);
   const [index, setIndex] = useState(0);
+
+  //------------------------function----------------------
   const show = (idx) => {
     setAreYouSure(true);
     setIndex(idx);
@@ -161,32 +161,26 @@ function Client() {
     filteredResults,
     maxPages,
   ]);
-
   console.log(clients, "CLIENT ");
-  // console.log(index, "INDEX ");
-
   //#################################################
   //           RENDER
   //################################################
   return !isLoading && clients.length !== 0 ? (
-    <div style={{ width: "83%", height: "100vh" }}>
-      <Sidebar.Pushable as={List}>
+    <Sidebar.Pushable as={List}>
+      <div style={{ width: "83%" }}>
         <Segment basic className="dFlex-sBetween">
           <Header as="h2">Clients</Header>
           <AddIcon setVisible={setVisible} />
         </Segment>
-
         <Table striped>
           {/* ---------------------TABLE HEADER-------------------- */}
           <Table.Header>
             <Table.Row singleLine>
-              {/* <Table.HeaderCell>index</Table.HeaderCell> */}
               <Table.HeaderCell>COMPANY</Table.HeaderCell>
               <Table.HeaderCell>NAME</Table.HeaderCell>
               <Table.HeaderCell>E-mail</Table.HeaderCell>
               <Table.HeaderCell>WEBSITE</Table.HeaderCell>
               <Table.HeaderCell colSpan="2">LOCATION</Table.HeaderCell>
-              {/* <Table.HeaderCell>ON CAMPAIGN</Table.HeaderCell> */}
             </Table.Row>
           </Table.Header>
           {/* ---------------------TABLE BODY------------------------ */}
@@ -303,18 +297,6 @@ function Client() {
         -                                 SIDEBAR                        -
         ------------------------------------------------------------------ */}
         <SidebarForm>
-          <Segment
-            as="h3"
-            padded
-            fluid
-            size="huge"
-            style={{
-              borderRightWidth: 0,
-              borderRadius: 0,
-            }}
-          >
-            New Client
-          </Segment>
           {/* ------------------------------------------------------------------
         -                                 FORM                        -
       ------------------------------------------------------------------ */}
@@ -325,8 +307,8 @@ function Client() {
             setClients={setClients}
           />
         </SidebarForm>
-      </Sidebar.Pushable>
-    </div>
+      </div>
+    </Sidebar.Pushable>
   ) : !isLoading && clients.length === 0 ? (
     <>
       <Sidebar.Pushable as={List}>

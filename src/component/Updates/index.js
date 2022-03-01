@@ -54,11 +54,22 @@ const Updates = () => {
     };
   }, []);
   return (
-    <>
+    <Segment
+      as="div"
+      fluid="true"
+      className="dFlex-fEnd"
+      // floated="rigth"
+      style={{
+        position: "absolute",
+        // top: "2%",
+        left: "105%",
+        backgroundColor: "cyan",
+      }}
+    >
       {newCampaign && <strong>a new campaign: {newCampaign} was added</strong>}
       {newAgent && <strong>a new Agent: {newAgent} was added</strong>}
       {newClient && <strong>a new Client: {newClient} was added</strong>}
-    </>
+    </Segment>
   );
 };
 

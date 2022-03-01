@@ -20,7 +20,7 @@ import useForm from "../Forms/useForm";
 
 //------------------------graphQl----------------------
 import { API, graphqlOperation } from "aws-amplify";
-import { updateClient, deleteClient } from "../graphql/mutations";
+import { updateClient } from "../graphql/mutations";
 import { getClient } from "../graphql/queries";
 import SidebarForm from "../component/SidebarForm";
 import CampaignForm from "../Forms/CampaignForm";

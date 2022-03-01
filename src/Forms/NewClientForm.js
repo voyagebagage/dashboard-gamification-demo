@@ -1,5 +1,5 @@
-import { Segment, Form, Message, Grid } from "semantic-ui-react";
-import { useState, useEffect } from "react";
+import { Segment, Form, Message, Grid, Button, Icon } from "semantic-ui-react";
+import { useEffect } from "react";
 import { countries } from "../arrayLists/index";
 
 import { API, graphqlOperation } from "aws-amplify";
@@ -61,6 +61,45 @@ const NewClientForm = ({ setVisible, clients, setClients }) => {
   };
   return (
     <>
+      <Segment
+        as="h3"
+        padded
+        fluid
+        size="huge"
+        style={{
+          borderRightWidth: 0,
+          borderRadius: 0,
+        }}
+      >
+        New Client
+        <Button
+          animated
+          as={Segment}
+          basic
+          style={{
+            borderWidth: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            shadowBox: "none",
+          }}
+          size="large"
+        >
+          <Button.Content visible basic>
+            <Icon name="delete" />
+          </Button.Content>
+          <Button.Content
+            hidden
+            basic
+            onClick={() => {
+              setForm({});
+              setVisible(false);
+            }}
+          >
+            Abort
+          </Button.Content>
+        </Button>
+      </Segment>
+
       <Segment style={{ padding: "9%" }} padded basic>
         <Form widths="equal" onSubmit={(e) => createNewClient(e)}>
           <Grid>
