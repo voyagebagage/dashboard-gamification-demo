@@ -17,7 +17,7 @@ function LoginCustom({
   signInValid,
 }) {
   let history = useHistory();
-  console.log("signUpValid", signUpValid);
+  // console.log("signUpValid", signUpValid);
   const {
     formType,
     userType,
@@ -78,7 +78,7 @@ function LoginCustom({
     }
   }
   // console.log("Auth OUT", Auth);
-  // console.log("%cFORM TYPE LOGIN", "background-color:crimson", formType);
+  console.log("%cFORM TYPE LOGIN", "background-color:crimson", formType);
 
   return (
     <>
@@ -203,14 +203,15 @@ function LoginCustom({
                     label="Admin Code"
                   />
                 )}
-                <Form.Group>
-                  <Form.Button
-                    disabled={signUpValid}
-                    content="Sign up"
-                    primary
-                    onClick={signUp}
-                  />
-                  <Form.Button
+                {/* <Form.Group> */}
+                <Form.Button
+                  disabled={signUpValid}
+                  content="Sign up"
+                  primary
+                  fluid
+                  onClick={signUp}
+                />
+                {/* <Form.Button
                     secondary
                     content="Sign in"
                     onClick={() =>
@@ -219,8 +220,8 @@ function LoginCustom({
                         formType: "signIn",
                       }))
                     }
-                  />
-                </Form.Group>
+                  /> */}
+                {/* </Form.Group> */}
               </Segment>
             )}
             {formType === "confirmSignUp" && (
@@ -278,8 +279,8 @@ function LoginCustom({
                     onClick={signIn}
                     onClick={() =>
                       updateFormState(() => ({
-                        formType: "signUp",
                         ...formState,
+                        formType: "signUp",
                       }))
                     }
                   />

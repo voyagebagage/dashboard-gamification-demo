@@ -64,6 +64,7 @@ function Dashboard() {
       if (activeItem === "") setActiveItem("daily");
       if (activeItem === "monthly")
         setAgents(agentData.data.agentByMonthlyPoints.items);
+      // console.log("ABMP", agentData.data.agentByMonthlyPoints.items.length);
       if (activeItem === "weekly")
         setAgents(agentData.data.agentByWeeklyPoints.items);
       if (activeItem === "daily")

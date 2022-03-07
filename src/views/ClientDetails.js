@@ -84,13 +84,15 @@ function ClientDetails() {
       setIsSubmitting(true);
       let campaigns = clientDetails.campaigns;
       //--I really should use a reducer!--------
-      clientDetails.firstName = form.firstName;
-      clientDetails.lastName = form.lastName;
-      clientDetails.phone = form.phone;
-      clientDetails.website = form.website && `https://${form.website}`;
-      clientDetails.email = form.email;
-      clientDetails.companyName = form.companyName;
-      clientDetails.country = form.country;
+      // clientDetails.firstName = form.firstName;
+      // clientDetails.lastName = form.lastName;
+      // clientDetails.phone = form.phone;
+      // clientDetails.website = form.website && `https://${form.website}`;
+      form.website = form.website && `https://${form.website}`;
+      form.id = clientDetails.id;
+      // clientDetails.email = form.email;
+      // clientDetails.companyName = form.companyName;
+      // clientDetails.country = form.country;
       //------removing fields
       delete clientDetails.createdAt;
       delete clientDetails.updatedAt;
@@ -98,7 +100,7 @@ function ClientDetails() {
 
       //----------update
       const clientUpdate = await API.graphql(
-        graphqlOperation(updateClient, { input: clientDetails })
+        graphqlOperation(updateClient, { input: form })
       );
       setClientDetails(clientUpdate.data.updateClient);
       clientDetails.campaigns = campaigns;

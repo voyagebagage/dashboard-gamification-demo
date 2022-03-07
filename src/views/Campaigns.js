@@ -26,9 +26,9 @@ import {
   useCampaign,
 } from "../context/Provider";
 import { API, graphqlOperation } from "aws-amplify";
-import { searchCampaigns } from "../graphql/queries";
+import { listCampaigns, searchCampaigns } from "../graphql/queries";
 import CampaignForm from "../Forms/CampaignForm";
-import { deleteCampaign } from "../graphql/mutations";
+import { createCampaign, deleteCampaign } from "../graphql/mutations";
 import useForm from "../Forms/useForm";
 import { onDeleteCampaign } from "../graphql/subscriptions";
 
@@ -87,7 +87,34 @@ function Campaigns() {
       const campaignData = await API.graphql(
         graphqlOperation(searchCampaigns, variables)
       );
-
+      // console.log("!");
+      // if (campaignData.data.searchCampaigns.items.length === 0) {
+      //   const campaignListData = await API.graphql(
+      //     graphqlOperation(listCampaigns)
+      //   );
+      //   console.log(
+      //     "campaignListData",
+      //     campaignListData.data.listCampaigns.items
+      //   );
+      //   // if (campaignListData.data.listCampaigns.items.length !== 0) {
+      //   //   campaignListData.data.listCampaigns.items.forEach(async (element) => {
+      //   //     console.log(element);
+      //   //     delete element.clientCampaignsId;
+      //   //     // delete element.client;
+      //   //     delete element.updatedAt;
+      //   //     delete element.createdAt;
+      //   //     let replaceId = element.id;
+      //   //     delete element.id;
+      //   //     const reCreateSearch = await API.graphql(
+      //   //       graphqlOperation(createCampaign, { input: element })
+      //   //     );
+      //   //     console.log("reCreateSearch", reCreateSearch);
+      //   //     const delPreviousSearch = await API.graphql(
+      //   //       graphqlOperation(deleteCampaign, { input: { id: replaceId } })
+      //   //     );
+      //   //   });
+      //   // }
+      // }
       //----------------------setStates-----------
       setCampaigns(campaignData.data.searchCampaigns.items);
       //----onKeyPress === "Enter"---------------

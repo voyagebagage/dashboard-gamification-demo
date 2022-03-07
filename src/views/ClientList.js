@@ -6,7 +6,7 @@ import SidebarForm from "../component/SidebarForm";
 
 //------------------------graphQl----------------------
 import { API, graphqlOperation } from "aws-amplify";
-import { searchClients } from "../graphql/queries";
+import { listClients, searchClients } from "../graphql/queries";
 import {
   useClient,
   useVisible,
@@ -32,7 +32,7 @@ import {
 import NewClientForm from "../Forms/NewClientForm";
 import useForm from "../Forms/useForm";
 import { onDeleteClient } from "../graphql/subscriptions";
-import { deleteClient } from "../graphql/mutations";
+import { createClient, deleteClient } from "../graphql/mutations";
 
 /* -----------------------------------------------------------
 -                      Main FUNCTION                      -
@@ -98,9 +98,30 @@ function Client() {
       const clientData = await API.graphql(
         graphqlOperation(searchClients, variables)
       );
+      if (clientData.data.searchClients.items.length === 0) {
+        const clientListData = await API.graphql(graphqlOperation(listClients));
+        console.log("clientListData", clientListData.data.listClients.items);
+        if (clientListData.data.listClients.items.length !== 0) {
+          clientListData.data.listClients.items.forEach(async (element) => {
+            console.log(element);
+            delete element.campaigns;
+            delete element.updatedAt;
+            delete element.createdAt;
+            let replaceId = element.id;
+            delete element.id;
+            const reCreateSearch = await API.graphql(
+              graphqlOperation(createClient, { input: element })
+            );
+            console.log("reCreateSearch", reCreateSearch);
+            const delPreviousSearch = await API.graphql(
+              graphqlOperation(deleteClient, { input: { id: replaceId } })
+            );
+          });
+        }
+      }
       //----------------------setStates-----------
       setClients(clientData.data.searchClients.items);
-      // console.lo(clientData.data.searchClients.items);
+      console.log("fetch CLient:", clientData.data.searchClients.items);
       //----onKeyPress === "Enter"---------------
       if (filteredResults.length) {
         setTotalClients(filteredResults.length);
@@ -114,7 +135,7 @@ function Client() {
       setFrom(limit * (targetPage - 1));
       setIsLoading(false);
     } catch (error) {
-      console.log("error with get clients :", error.errors[0].message);
+      console.log("error with get clients :", error);
     }
   };
   const removeClient = async (idx) => {
@@ -146,6 +167,7 @@ function Client() {
     return () => subscription.unsubscribe();
   }, [
     from,
+    limit,
     targetPage,
     fieldDropDown,
     directionDropDown,

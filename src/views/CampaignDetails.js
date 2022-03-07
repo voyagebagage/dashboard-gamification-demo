@@ -29,7 +29,7 @@ function CampaignDetails() {
   // const [status, setStatus] = useState(false);
   // console.log({ name, id }, "params");
   // var currentWeekNumber = require("current-week-number");
-
+  console.log("auth", Auth);
   //--
   const fetchCampaign = async () => {
     try {
@@ -59,6 +59,33 @@ function CampaignDetails() {
     campaignDetails;
   // console.log(Auth.user.username, "Auth");
   // console.log(agent?.id, "agent id");
+  const singlePane = [
+    {
+      menuItem: {
+        as: NavLink,
+        id: "tab1",
+        content: "Info",
+        to: `/campaign/${name}/${id}/info`,
+        exact: true,
+        key: "info",
+      },
+      pane: (
+        <Route
+          path={`/campaign/${name}/${id}/info`}
+          exact
+          render={() => (
+            <Tab.Pane basic attached={false}>
+              <InfoTab
+                edit={edit}
+                setEdit={setEdit}
+                campaignDetails={campaignDetails}
+              />
+            </Tab.Pane>
+          )}
+        />
+      ),
+    },
+  ];
   const panes = [
     {
       menuItem: {
@@ -291,7 +318,14 @@ function CampaignDetails() {
         activeIndex={-1}
         menu={{ fluid: true, vertical: true }}
         menuPosition="right"
-        panes={panes}
+        panes={
+          agent?.id === Auth?.user?.username ||
+          Auth.user?.signInUserSession?.idToken?.payload[
+            "cognito:groups"
+          ][0] === "Admin"
+            ? panes
+            : singlePane
+        }
         // onTabChange={(event, value) => console.log(value, "TAB")}
         // className="dFlex"
         // style={{ maxWidth: "80%", right: "80%" }}
