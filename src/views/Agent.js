@@ -87,7 +87,15 @@ function Agent() {
                       >
                         <Label
                           basic
-                          color="black"
+                          color={
+                            campaign.status === "true"
+                              ? "green"
+                              : campaign.status === "not yet"
+                              ? "blue"
+                              : campaign.status === "done"
+                              ? "red"
+                              : "black"
+                          }
                           style={{ marginRight: "1.5%" }}
                           // className="campaignsTagsli"
                         >

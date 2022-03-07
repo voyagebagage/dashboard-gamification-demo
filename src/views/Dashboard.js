@@ -94,6 +94,7 @@ function Dashboard() {
             color="grey"
             size="large"
             onClick={handle.enter}
+            style={{ height: "0.5em" }}
           />
         </div>
         <FullScreen handle={handle}>

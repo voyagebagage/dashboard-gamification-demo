@@ -27,33 +27,45 @@ const TimeComponent = () => {
   return !isLoading ? (
     <Segment
       as="div"
+      basic
       fluid="true"
       className="dFlex-fEnd"
-      // floated="rigth"
       style={{
         position: "absolute",
-        left: "105%",
-        paddingTop: "1%",
-        paddingBottom: 0,
-        // backgroundColor: "brown",
+        left: "104%",
+        top: "2.5em",
+        padding: 0,
       }}
     >
-      <div className="dFlex">
+      <div
+        className="dFlex-aCenter"
+        style={{
+          margin: 0,
+          padding: 0,
+        }}
+      >
         <Header
           as={Segment}
-          className="dFlex-aCenter"
+          className="dFlex"
           style={{
             color: "#566A63",
             backgroundColor: "#8CABA0",
             paddingBottom: 0,
             paddingTop: 0,
+            marginBottom: 0,
           }}
-        >{`${date[0]} ${date[2]}`}</Header>
-        <Statistic size="small">
-          <Statistic.Value style={{ color: "#8CABA0" }}>
+        >{`${date[0]}  ${date[2]}`}</Header>
+        <Statistic size="tiny">
+          <Statistic.Value
+            style={{
+              color: "#8CABA0",
+              fontSize: "0.9em",
+              minWidth: "7vw",
+            }}
+          >
             {data.datetime.split("T")[1].slice(0, 5)}
           </Statistic.Value>
-          <Statistic.Label style={{ color: "#566A63" }}>
+          <Statistic.Label style={{ color: "#566A63", fontSize: "0.9em" }}>
             {data.timezone === "Asia/Bangkok" ? "Koh Phangan" : data.timezone}
           </Statistic.Label>
         </Statistic>
@@ -108,7 +120,7 @@ const TimeComponent = () => {
             {/* <Dropdown.Divider /> */}
           </Dropdown.Menu>
         </Dropdown>
-      </div>{" "}
+      </div>
     </Segment>
   ) : (
     <div>Loading</div>

@@ -61,6 +61,7 @@ export const agentByMonthlyPointsCustom = /* GraphQL */ `
           items {
             id
             name
+            status
           }
           nextToken
         }
