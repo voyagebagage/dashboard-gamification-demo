@@ -268,26 +268,30 @@ function LoginCustom({
                   onChange={onChangeSignUp}
                   placeholder="confirmation code"
                 />
-                <Form.Button
-                  disabled={confirmSignUpValid}
-                  content="confirm sign up"
-                  loading={isSubmitting}
-                  onClick={confirmSignUp}
-                />
-                {errors && (
+                <Form.Group widths="equal">
                   <Form.Button
-                    content="Sign Up"
-                    secondary
-                    // onClick={signIn}
-                    onClick={() => {
-                      setErrors("");
-                      updateFormState(() => ({
-                        ...formState,
-                        formType: "signUp",
-                      }));
-                    }}
+                    fluid
+                    disabled={confirmSignUpValid}
+                    content="confirm sign up"
+                    loading={isSubmitting}
+                    onClick={confirmSignUp}
                   />
-                )}
+                  {errors && (
+                    <Form.Button
+                      fluid
+                      content="Sign Up"
+                      secondary
+                      // onClick={signIn}
+                      onClick={() => {
+                        setErrors("");
+                        updateFormState(() => ({
+                          ...formState,
+                          formType: "signUp",
+                        }));
+                      }}
+                    />
+                  )}
+                </Form.Group>
               </Segment>
             )}
             {/* //******************--------------------SIGN IN----------------******************** */}

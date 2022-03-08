@@ -21,7 +21,7 @@
         "dashboardninjademoautPostConfirmation": {
           "GROUP": "",
           "deploymentBucketName": "amplify-dashboardninjademo-dev-213406-deployment",
-          "s3Key": "amplify-builds/dashboardninjademoautPostConfirmation-473558656b4264684c6f-build.zip"
+          "s3Key": "amplify-builds/dashboardninjademoautPostConfirmation-723152444168794a5369-build.zip"
         },
         "timeApi": {
           "deploymentBucketName": "amplify-dashboardninjademo-dev-213406-deployment",
