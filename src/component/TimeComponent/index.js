@@ -20,20 +20,21 @@ const TimeComponent = () => {
       );
       setIsLoading(false);
     } catch (error) {
-      let errorObject = JSON.parse(JSON.stringify(error));
-      console.log("there is an error with timezones", errorObject);
+      console.log("there is an error with timezones", error);
     }
   };
   return !isLoading ? (
     <Segment
       as="div"
       basic
+      // compact
+      secondary
       fluid="true"
       className="dFlex-fEnd"
       style={{
         position: "absolute",
         left: "104%",
-        top: "2.5em",
+        top: "3.5em",
         padding: 0,
       }}
     >
@@ -53,9 +54,10 @@ const TimeComponent = () => {
             paddingBottom: 0,
             paddingTop: 0,
             marginBottom: 0,
+            margin: 0,
           }}
         >{`${date[0]}  ${date[2]}`}</Header>
-        <Statistic size="tiny">
+        <Statistic size="tiny" style={{ margin: 0 }}>
           <Statistic.Value
             style={{
               color: "#8CABA0",

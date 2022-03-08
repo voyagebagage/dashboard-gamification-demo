@@ -1,11 +1,20 @@
 import React from "react";
 import { Auth } from "aws-amplify";
-import { Form, Segment, Image, Button } from "semantic-ui-react";
+import {
+  Form,
+  Segment,
+  Image,
+  Button,
+  Message,
+  Checkbox,
+} from "semantic-ui-react";
 // import useForm from "../Forms/useForm";
 import loginPic from "../img/loginPic.png";
 import logoDash from "../img/logoDash.svg";
 import { useHistory } from "react-router-dom";
 import "../animation.css";
+import useForm from "../Forms/useForm";
+import { Link } from "aws-amplify-react";
 
 function LoginCustom({
   setUser,
@@ -17,7 +26,7 @@ function LoginCustom({
   signInValid,
 }) {
   let history = useHistory();
-  // console.log("signUpValid", signUpValid);
+  const { errors, setErrors, setIsSubmitting, isSubmitting } = useForm();
   const {
     formType,
     userType,
@@ -31,6 +40,7 @@ function LoginCustom({
       const { name, password, confirmPassword, email, adminCode, userType } =
         formState;
       console.log(formState);
+      setIsSubmitting(true);
       if (password === confirmPassword) {
         await Auth.signUp({
           username: email,
@@ -42,11 +52,19 @@ function LoginCustom({
             "custom:admin_code": adminCode,
           },
         });
-        // console.log("user:", user);
         updateFormState(() => ({ ...formState, formType: "confirmSignUp" }));
+        setIsSubmitting(false);
+        setErrors("");
+        // console.log("user:", user);
+      }
+      if (password !== confirmPassword) {
+        setErrors("Passwords aren't the same");
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.log("error w/ signUp", error);
+      setErrors(error.message);
+      setIsSubmitting(false);
     }
   }
   async function confirmSignUp() {
@@ -54,27 +72,37 @@ function LoginCustom({
       const { email, authCode } = formState;
       const { confirm } = await Auth.confirmSignUp(email, authCode);
       console.log(confirm);
+      setIsSubmitting(true);
       updateFormState(() => ({
         ...formState,
         formType: "signIn",
       }));
+      setIsSubmitting(false);
+      setErrors("");
     } catch (error) {
       console.log("confirmSignUp error", error);
+      setErrors(error.message);
+      setIsSubmitting(false);
     }
   }
   async function signIn() {
     try {
       const { email, password } = formState;
+      setIsSubmitting(true);
       await Auth.signIn({ username: email, password });
       setUser(
         await Auth.user?.signInUserSession?.idToken.jwtToken,
         await Auth.user?.attributes?.name
       );
       updateFormState(() => ({ ...formState, formType: "signedIn" }));
-      console.log("Auth", Auth);
+      // console.log("Auth", Auth);
+      setIsSubmitting(false);
+      setErrors("");
       history.push("/");
     } catch (error) {
       console.log("signIn error", error);
+      setErrors(error.message);
+      setIsSubmitting(false);
     }
   }
   // console.log("Auth OUT", Auth);
@@ -104,7 +132,14 @@ function LoginCustom({
           }}
         >
           <Image src={logoDash} size="medium" className="logo-log-in" />
+          {errors ? (
+            <Message negative basic>
+              <Message.Header>Something went wrong</Message.Header>
+              <p>{errors}</p>
+            </Message>
+          ) : null}
           <Form className="log-in-form">
+            {/* //******************--------------------SIGN UP----------------******************** */}
             {formType === "signUp" && (
               <Segment centered fitted padded basic>
                 <Form.Input
@@ -203,27 +238,28 @@ function LoginCustom({
                     label="Admin Code"
                   />
                 )}
-                {/* <Form.Group> */}
                 <Form.Button
                   disabled={signUpValid}
                   content="Sign up"
+                  loading={isSubmitting}
                   primary
                   fluid
                   onClick={signUp}
                 />
-                {/* <Form.Button
-                    secondary
-                    content="Sign in"
-                    onClick={() =>
-                      updateFormState(() => ({
-                        ...formState,
-                        formType: "signIn",
-                      }))
-                    }
-                  /> */}
-                {/* </Form.Group> */}
+                <div
+                  onClick={() => {
+                    setErrors("");
+                    updateFormState(() => ({
+                      ...formState,
+                      formType: "signIn",
+                    }));
+                  }}
+                >
+                  back to <Link>Sign in</Link>
+                </div>
               </Segment>
             )}
+            {/* //******************--------------------CONFRIMATION----------------******************** */}
             {formType === "confirmSignUp" && (
               <Segment centered fitted padded basic>
                 <Form.Input
@@ -235,11 +271,26 @@ function LoginCustom({
                 <Form.Button
                   disabled={confirmSignUpValid}
                   content="confirm sign up"
+                  loading={isSubmitting}
                   onClick={confirmSignUp}
                 />
+                {errors && (
+                  <Form.Button
+                    content="Sign Up"
+                    secondary
+                    // onClick={signIn}
+                    onClick={() => {
+                      setErrors("");
+                      updateFormState(() => ({
+                        ...formState,
+                        formType: "signUp",
+                      }));
+                    }}
+                  />
+                )}
               </Segment>
             )}
-            {/* //******************SIGN IN******************** */}
+            {/* //******************--------------------SIGN IN----------------******************** */}
             {formType === "signIn" && (
               <Segment centered fitted padded basic>
                 <Form.Input
@@ -266,25 +317,32 @@ function LoginCustom({
                   onChange={onChangeSignUp}
                   label="Password"
                 />
-                <Form.Group>
-                  <Form.Button
-                    content="Log in"
-                    primary
-                    onClick={signIn}
-                    disabled={signInValid}
-                  />
-                  <Form.Button
-                    content="Sign Up"
-                    secondary
-                    onClick={signIn}
-                    onClick={() =>
-                      updateFormState(() => ({
-                        ...formState,
-                        formType: "signUp",
-                      }))
-                    }
-                  />
-                </Form.Group>
+                <Checkbox label="Remember me" defaultChecked />
+                <div style={{ marginTop: "8%" }}>
+                  <Form.Group widths="equal">
+                    <Form.Button
+                      content="Log in"
+                      primary
+                      fluid
+                      loading={isSubmitting}
+                      onClick={signIn}
+                      disabled={signInValid}
+                    />
+                    <Form.Button
+                      content="Sign Up"
+                      secondary
+                      fluid
+                      // onClick={signIn}
+                      onClick={() => {
+                        setErrors("");
+                        updateFormState(() => ({
+                          ...formState,
+                          formType: "signUp",
+                        }));
+                      }}
+                    />
+                  </Form.Group>
+                </div>
               </Segment>
             )}
           </Form>
