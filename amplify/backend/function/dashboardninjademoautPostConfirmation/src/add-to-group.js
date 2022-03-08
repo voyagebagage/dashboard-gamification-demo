@@ -40,10 +40,7 @@ exports.handler = async (event) => {
     ) {
       params = setParams(event, "Agent", userType, process.env.AGENTTABLE);
     }
-    if (
-      userType === "agent" ||
-      (userType === "admin" && adminCode !== process.env.ADMIN_CODE)
-    ) {
+    if (userType === "admin" && adminCode !== process.env.ADMIN_CODE) {
       throw new Error("You guessed it wrong, that is NOT the admin code");
     }
 

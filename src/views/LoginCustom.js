@@ -8,7 +8,7 @@ import {
   Message,
   Checkbox,
 } from "semantic-ui-react";
-// import useForm from "../Forms/useForm";
+
 import loginPic from "../img/loginPic.png";
 import logoDash from "../img/logoDash.svg";
 import { useHistory } from "react-router-dom";
@@ -39,9 +39,13 @@ function LoginCustom({
     try {
       const { name, password, confirmPassword, email, adminCode, userType } =
         formState;
-      console.log(formState);
       setIsSubmitting(true);
-      if (password === confirmPassword) {
+      if (
+        password === confirmPassword &&
+        adminCode.length &&
+        adminCode === process.env.REACT_APP_ADMIN_CODE
+      ) {
+        // setErrors("");
         await Auth.signUp({
           username: email,
           password,
@@ -55,7 +59,30 @@ function LoginCustom({
         updateFormState(() => ({ ...formState, formType: "confirmSignUp" }));
         setIsSubmitting(false);
         setErrors("");
-        // console.log("user:", user);
+      }
+      if (
+        password === confirmPassword &&
+        adminCode.length &&
+        adminCode !== process.env.REACT_APP_ADMIN_CODE
+      ) {
+        setIsSubmitting(false);
+        throw new Error("Admin Code is not correct");
+      }
+      if (password === confirmPassword && !adminCode.length) {
+        // setErrors("");
+        await Auth.signUp({
+          username: email,
+          password,
+          attributes: {
+            name,
+            email,
+            "custom:user_type": userType,
+            // "custom:admin_code": adminCode,
+          },
+        });
+        updateFormState(() => ({ ...formState, formType: "confirmSignUp" }));
+        setIsSubmitting(false);
+        setErrors("");
       }
       if (password !== confirmPassword) {
         setErrors("Passwords aren't the same");
@@ -198,6 +225,7 @@ function LoginCustom({
                     name="userType"
                     checked={userType === "agent"}
                     onClick={onChangeSignUp}
+                    onChange={() => setErrors("")}
                     value="agent"
                     label="Agent"
                   />
@@ -206,11 +234,11 @@ function LoginCustom({
                     name="userType"
                     checked={userType === "client"}
                     onClick={onChangeSignUp}
+                    onChange={() => setErrors("")}
                     value="client"
                     label="Client"
                   />
                   <Form.Radio
-                    // disabled
                     radio
                     name="userType"
                     checked={userType === "admin"}
@@ -234,6 +262,7 @@ function LoginCustom({
                         }
                       />
                     }
+                    value={formState.adminCode || ""}
                     onChange={onChangeSignUp}
                     label="Admin Code"
                   />
@@ -284,6 +313,7 @@ function LoginCustom({
                       // onClick={signIn}
                       onClick={() => {
                         setErrors("");
+                        updateFormState({});
                         updateFormState(() => ({
                           ...formState,
                           formType: "signUp",
@@ -357,3 +387,58 @@ function LoginCustom({
 }
 
 export default LoginCustom;
+
+// try {
+//   const { name, password, confirmPassword, email, adminCode, userType } =
+//     formState;
+//   setIsSubmitting(true);
+//   if (password === confirmPassword) {
+//     if (userType === "admin") {
+//       if (adminCode === process.env.REACT_APP_ADMIN_CODE) {
+//         await Auth.signUp({
+//           username: email,
+//           password,
+//           attributes: {
+//             name,
+//             email,
+//             "custom:user_type": userType,
+//             "custom:admin_code": adminCode,
+//           },
+//         });
+//         updateFormState(() => ({
+//           ...formState,
+//           formType: "confirmSignUp",
+//         }));
+//         setIsSubmitting(false);
+//         setErrors("");
+//       }
+//       if (adminCode !== process.env.REACT_APP_ADMIN_CODE) {
+//         setErrors("Admin Code is not correct");
+//         setIsSubmitting(false);
+//       }
+//     }
+//     if (userType === "agent" || userType === "client") {
+//       await Auth.signUp({
+//         username: email,
+//         password,
+//         attributes: {
+//           name,
+//           email,
+//           "custom:user_type": userType,
+//           // "custom:admin_code": adminCode,
+//         },
+//       });
+//       updateFormState(() => ({ ...formState, formType: "confirmSignUp" }));
+//       setIsSubmitting(false);
+//       setErrors("");
+//     }
+//   }
+//   if (password !== confirmPassword) {
+//     setErrors("Passwords aren't the same");
+//     setIsSubmitting(false);
+//   }
+// } catch (error) {
+//   console.log("error w/ signUp", error);
+//   setErrors(error.message);
+//   setIsSubmitting(false);
+// }
