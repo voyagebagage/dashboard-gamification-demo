@@ -1,71 +1,14 @@
-# Getting Started with Create React App
+![LOGIN](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/ccf1b7cb-a2df-4737-8595-743229bbcf5b)
+![DASHBOARD](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/f3d77329-e5b5-4b91-b160-7586c0415de1)
+![CLIENTS LISTING](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/f62ee2e6-fcae-4694-ab50-b98f763b7e83)
+![AGENT LISTING](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/7ad9b4ce-03f1-4227-9caa-73e29e4a1b76)
+![AGENT LISTING](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/0e9f8cd0-33a2-4bf9-aa54-3edd9b8709b0)
+![CLIENTS LISTING](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/cbbcc704-4273-447b-997a-eadda4ad8a15)
+![ADD CLIENTS](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/1cbe7c38-8557-4ebf-b946-98df225dd1d4)
+![AGENT DETAIL PAGE](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/2ad807c2-b3a1-4660-9936-edb58b55ed75)
+![Add campaign](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/2457ff62-d2b4-49df-be32-c925f1570377)
+![Add KPI](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/1cb33b06-ae06-45a7-bacf-59da16237aea)
+![AGENT DETAIL PAGE](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/23ef9ab5-33c6-4916-bde4-5f4470321e75)
+![REPORT LISTING](https://github.com/voyagebagage/dashboard-gamification-demo/assets/81431557/6eff53a5-98be-49e5-ad63-06efe157b991)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# dashboard-gamification-demo
